@@ -26,7 +26,6 @@
       --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
       --radius-lg: 28px;
       --radius-md: 20px;
-      --radius-sm: 14px;
     }
 
     * { box-sizing: border-box; }
@@ -179,7 +178,8 @@
       border-color: #059669;
     }
 
-    button:hover:not(:disabled), .button-link:hover {
+    button:hover:not(:disabled),
+    .button-link:hover {
       opacity: 0.96;
     }
 
@@ -343,7 +343,6 @@
 <body>
   <div class="page">
 
-    <!-- INTRO -->
     <div id="introScreen" class="screen active">
       <div class="card">
         <div style="max-width: 1020px; margin: 0 auto;">
@@ -404,7 +403,6 @@
       </div>
     </div>
 
-    <!-- GUIDE -->
     <div id="guideScreen" class="screen">
       <div class="card">
         <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:18px; align-items:end;">
@@ -469,7 +467,6 @@
       </div>
     </div>
 
-    <!-- LAB -->
     <div id="labScreen" class="screen">
       <div class="card" style="margin-bottom: 24px;">
         <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:20px; align-items:end;">
@@ -613,7 +610,6 @@
       </div>
     </div>
 
-    <!-- COMPLETE -->
     <div id="completeScreen" class="screen">
       <div class="card">
         <div style="max-width: 980px; margin: 0 auto;">
@@ -643,7 +639,7 @@
           <div class="soft-box" style="margin-top: 28px;">
             <h2>Submission reflection</h2>
             <p id="reflectionPromptText"></p>
-            <textarea id="reflectionBox" class="field" rows="5" placeholder="Type a short reflection here before copying it into Brightspace or email."></textarea>
+            <textarea id="reflectionBox" class="field" rows="5" placeholder="Type a short reflection here before submitting."></textarea>
           </div>
         </div>
       </div>
@@ -727,7 +723,7 @@
           compareExact(results, values.pages, this.answers.pages, "Page range");
           compareUrlLike(results, values.doi, this.answers.doi, "DOI / URL");
           finalizeResults(results, values, ["author", "year", "title", "journal", "volume", "issue", "pages", "doi"]);
-          return results;
+          return dedupeResults(results);
         }
       },
       {
@@ -785,13 +781,75 @@
         },
         validate(values) {
           const results = [];
-          compareExact(results, values.author, this.answers.author, "Author");
-          compareExact(results, values.date, this.answers.date, "Date");
-          compareExact(results, values.title, this.answers.title, "Page title");
-          compareExact(results, values.site, this.answers.site, "Website name");
-          compareUrlLike(results, values.url, this.answers.url, "URL");
-          finalizeResults(results, values, ["author", "date", "title", "site", "url"]);
-          return results;
+
+          const author = String(values.author || "").trim();
+          const date = String(values.date || "").trim();
+          const title = String(values.title || "").trim();
+          const site = String(values.site || "").trim();
+          const url = String(values.url || "").trim();
+
+          if (!author) {
+            results.push({ type: "structural", message: "Author is missing." });
+          } else {
+            const authorLooksIdentified =
+              normalizeString(author) === normalizeString(this.answers.author) ||
+              normalizeString(author) === normalizeString("Maria Chen") ||
+              normalizeString(author) === normalizeString("Chen, Maria") ||
+              normalizeString(author) === normalizeString("Chen, Marie") ||
+              normalizeString(author) === normalizeString("Marie Chen");
+
+            if (authorLooksIdentified) {
+              if (normalizeString(author) === normalizeString(this.answers.author)) {
+                results.push({ type: "success", message: "Author is identified and formatted in APA style." });
+              } else {
+                results.push({
+                  type: "formatting",
+                  message: "You identified the correct author, but convert it to APA initials format: Chen, M."
+                });
+              }
+            } else {
+              results.push({ type: "formatting", message: "Author does not look correct for this source." });
+            }
+          }
+
+          if (!date) {
+            results.push({ type: "structural", message: "Date is missing." });
+          } else {
+            const dateLooksIdentified =
+              normalizeString(date) === normalizeString(this.answers.date) ||
+              normalizeString(date) === normalizeString("March 12, 2024");
+
+            if (dateLooksIdentified) {
+              if (normalizeString(date) === normalizeString(this.answers.date)) {
+                results.push({ type: "success", message: "Date is identified and formatted in APA style." });
+              } else {
+                results.push({
+                  type: "formatting",
+                  message: "You identified the correct date, but convert it to APA order: 2024, March 12."
+                });
+              }
+            } else {
+              results.push({ type: "formatting", message: "Date does not look correct for this source." });
+            }
+          }
+
+          compareExact(results, title, this.answers.title, "Page title");
+          compareExact(results, site, this.answers.site, "Website name");
+          compareUrlLike(results, url, this.answers.url, "URL");
+
+          const requiredFilled = [author, date, title, site, url].every(Boolean);
+          const blockingIssues = results.some(
+            item => item.type === "structural" || item.message.includes("does not look correct")
+          );
+          const stillNeedsConversion = results.some(
+            item => item.message.includes("convert it to APA")
+          );
+
+          if (requiredFilled && !blockingIssues && !stillNeedsConversion) {
+            results.push({ type: "success", message: "This entry looks structurally correct for this source type." });
+          }
+
+          return dedupeResults(results);
         }
       },
       {
@@ -850,7 +908,7 @@
           compareExact(results, values.title, this.answers.title, "Book title");
           compareExact(results, values.publisher, this.answers.publisher, "Publisher");
           finalizeResults(results, values, ["author", "year", "title", "publisher"]);
-          return results;
+          return dedupeResults(results);
         }
       },
       {
@@ -905,7 +963,29 @@
         validate(values) {
           const results = [];
           compareExact(results, values.title, this.answers.title, "Page title");
-          compareExact(results, values.date, this.answers.date, "Date");
+
+          const date = String(values.date || "").trim();
+          if (!date) {
+            results.push({ type: "structural", message: "Date is missing." });
+          } else {
+            const dateLooksIdentified =
+              normalizeString(date) === normalizeString(this.answers.date) ||
+              normalizeString(date) === normalizeString("January 8, 2025");
+
+            if (dateLooksIdentified) {
+              if (normalizeString(date) === normalizeString(this.answers.date)) {
+                results.push({ type: "success", message: "Date is identified and formatted in APA style." });
+              } else {
+                results.push({
+                  type: "formatting",
+                  message: "You identified the correct date, but convert it to APA order: 2025, January 8."
+                });
+              }
+            } else {
+              results.push({ type: "formatting", message: "Date does not look correct for this source." });
+            }
+          }
+
           compareExact(results, values.site, this.answers.site, "Website name");
           compareUrlLike(results, values.url, this.answers.url, "URL");
 
@@ -918,7 +998,18 @@
             });
           }
 
-          finalizeResults(results, values, ["title", "date", "site", "url"]);
+          const requiredFilled = ["title", "date", "site", "url"].every(key => String(values[key] || "").trim());
+          const blockingIssues = results.some(
+            item => item.type === "structural" || item.message.includes("does not look correct")
+          );
+          const stillNeedsConversion = results.some(
+            item => item.message.includes("convert it to APA")
+          );
+
+          if (requiredFilled && !blockingIssues && !stillNeedsConversion && built === expected) {
+            results.push({ type: "success", message: "This entry looks structurally correct for this source type." });
+          }
+
           return dedupeResults(results);
         }
       },
@@ -1114,9 +1205,12 @@
         return;
       }
 
-      if (normalizeString(a) !== normalizeString(e)) {
-        results.push({ type: "formatting", message: `${label} does not look correct for this source.` });
+      if (normalizeString(a) === normalizeString(e)) {
+        results.push({ type: "success", message: `${label} looks correct.` });
+        return;
       }
+
+      results.push({ type: "formatting", message: `${label} does not look correct for this source.` });
     }
 
     function compareUrlLike(results, actual, expected, label) {
@@ -1130,19 +1224,29 @@
 
       if (!/^https?:\/\//.test(a)) {
         results.push({ type: "formatting", message: `${label} should begin with http:// or https://.` });
+        return;
       }
 
-      if (normalizeString(a) !== normalizeString(e)) {
-        results.push({ type: "formatting", message: `${label} does not match the source evidence.` });
+      if (normalizeString(a) === normalizeString(e)) {
+        results.push({ type: "success", message: `${label} looks correct.` });
+        return;
       }
+
+      results.push({ type: "formatting", message: `${label} does not match the source evidence.` });
     }
 
     function finalizeResults(results, values, requiredKeys) {
       const allPresent = requiredKeys.every(key => String(values[key] || "").trim());
       const hasStructural = results.some(item => item.type === "structural");
-      const hasFormatting = results.some(item => item.type === "formatting");
+      const hasBlockingFormatting = results.some(item =>
+        item.type === "formatting" &&
+        !item.message.includes("convert it to APA")
+      );
+      const hasConversionFormatting = results.some(item =>
+        item.message.includes("convert it to APA")
+      );
 
-      if (allPresent && !hasStructural && !hasFormatting) {
+      if (allPresent && !hasStructural && !hasBlockingFormatting && !hasConversionFormatting) {
         results.push({ type: "success", message: "This entry looks structurally correct for this source type." });
       }
     }
@@ -1653,7 +1757,10 @@
     markCompleteBtn.addEventListener("click", () => {
       const source = getCurrentSource();
       const checks = source.validate(formValues);
-      const successfulCheck = checks.some(check => check.type === "success");
+      const successfulCheck = checks.some(check =>
+        check.type === "success" &&
+        check.message.includes("structurally correct")
+      );
 
       renderFeedback();
 
