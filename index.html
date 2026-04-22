@@ -6,1693 +6,1405 @@
   <title>APA Reference Builder Lab</title>
   <style>
     :root {
-      --bg: #e8edf3;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #475569;
-      --border: #cbd5e1;
-      --soft: #f8fafc;
-      --soft-2: #f1f5f9;
-      --blue-soft: #e0f2fe;
-      --blue-border: #7dd3fc;
-      --amber-soft: #fef3c7;
-      --amber-border: #fbbf24;
-      --green-soft: #dcfce7;
-      --green-border: #86efac;
-      --red-soft: #fee2e2;
-      --red-border: #fca5a5;
-      --indigo-soft: #e0e7ff;
-      --indigo-border: #a5b4fc;
-      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-      --radius-lg: 28px;
-      --radius-md: 20px;
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #d7deea;
+      --accent: #23408e;
+      --accent-2: #3b82f6;
+      --soft: #eaf1ff;
+      --success: #1f7a42;
+      --success-bg: #e9f8ef;
+      --warn: #9a6700;
+      --warn-bg: #fff6dd;
+      --danger: #a4282a;
+      --danger-bg: #fdeeee;
+      --shadow: 0 10px 30px rgba(35, 64, 142, 0.08);
+      --radius: 18px;
     }
 
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
-    .page {
-      max-width: 1320px;
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    .app {
+      max-width: 1180px;
       margin: 0 auto;
       padding: 22px;
     }
 
-    .screen { display: none; }
-    .screen.active { display: block; }
-
-    .card, .section-card {
-      background: var(--card);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-      padding: 24px;
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
+    .title-block h1 {
+      margin: 0;
+      font-size: 1.95rem;
     }
 
-    .grid-3 {
-      display: grid;
-      grid-template-columns: 1.06fr 1.18fr 1.08fr;
-      gap: 24px;
-    }
-
-    .guide-grid {
-      display: grid;
-      grid-template-columns: 0.95fr 1.1fr 1fr;
-      gap: 24px;
-    }
-
-    h1, h2, h3, h4, p { margin-top: 0; }
-
-    .eyebrow {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-weight: 700;
-      color: #64748b;
-      margin-bottom: 8px;
-    }
-
-    .muted { color: var(--muted); }
-
-    .soft-box, .blue-box, .amber-box, .green-box, .red-box, .indigo-box {
-      border-radius: var(--radius-md);
-      padding: 16px;
-      border: 1px solid var(--border);
-    }
-
-    .soft-box {
-      background: var(--soft);
-      border-color: var(--border);
-    }
-
-    .blue-box {
-      background: var(--blue-soft);
-      border-color: var(--blue-border);
-    }
-
-    .amber-box {
-      background: var(--amber-soft);
-      border-color: var(--amber-border);
-    }
-
-    .green-box {
-      background: var(--green-soft);
-      border-color: var(--green-border);
-    }
-
-    .red-box {
-      background: var(--red-soft);
-      border-color: var(--red-border);
-    }
-
-    .indigo-box {
-      background: var(--indigo-soft);
-      border-color: var(--indigo-border);
-    }
-
-    .pill {
-      display: inline-block;
-      background: var(--soft-2);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #475569;
+    .title-block p {
+      margin: 4px 0 0;
+      color: var(--muted);
     }
 
     .controls {
       display: flex;
+      align-items: center;
+      gap: 10px;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 20px;
     }
 
-    button, select, input, textarea, a.button-link {
-      font: inherit;
-    }
-
-    button, .button-link {
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px 16px;
+    .btn {
+      border: 1px solid var(--line);
       background: white;
       color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
       cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
+      transition: 0.18s ease;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.02);
     }
 
-    button.primary {
-      background: #0f172a;
-      color: white;
-      border-color: #0f172a;
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: #c2cde0;
     }
 
-    button.sky {
-      background: var(--blue-soft);
-      color: #0c4a6e;
-      border-color: var(--blue-border);
-    }
-
-    button.indigo {
-      background: var(--indigo-soft);
-      color: #312e81;
-      border-color: var(--indigo-border);
-    }
-
-    button.green {
-      background: #059669;
-      color: white;
-      border-color: #059669;
-    }
-
-    button:hover:not(:disabled),
-    .button-link:hover {
-      opacity: 0.96;
-    }
-
-    button:disabled {
+    .btn:disabled {
       opacity: 0.55;
       cursor: not-allowed;
     }
 
-    label {
-      display: block;
-      margin-bottom: 14px;
-      font-weight: 700;
-      font-size: 14px;
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
     }
 
-    .field {
-      width: 100%;
-      margin-top: 6px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px 14px;
-      background: white;
-      color: var(--text);
+    .btn-secondary {
+      background: var(--soft);
+      border-color: #c8d8ff;
+      color: var(--accent);
     }
 
-    textarea.field {
-      min-height: 90px;
-      resize: vertical;
+    .btn-ghost {
+      background: transparent;
     }
 
-    .snapshot-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .snapshot-list li {
-      background: white;
-      border-radius: 14px;
-      padding: 10px 12px;
-      margin-bottom: 10px;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
-    }
-
-    .preview-box {
-      min-height: 120px;
-      background: white;
-      border-radius: 18px;
+    .progress-shell {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
       padding: 16px;
-      font-family: Georgia, "Times New Roman", serif;
-      line-height: 1.8;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
+      margin-bottom: 18px;
     }
 
-    .feedback-item {
-      border-radius: 18px;
-      padding: 12px 14px;
-      border: 1px solid var(--border);
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
       margin-bottom: 10px;
-      font-size: 14px;
     }
 
-    .feedback-structural {
-      background: var(--red-soft);
-      border-color: var(--red-border);
-      color: #7f1d1d;
-    }
-
-    .feedback-formatting {
-      background: #fef3c7;
-      border-color: #fcd34d;
-      color: #78350f;
-    }
-
-    .feedback-success {
-      background: var(--green-soft);
-      border-color: var(--green-border);
-      color: #166534;
-    }
-
-    .preview-window {
-      overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: white;
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
-    }
-
-    .preview-window-top {
-      background: #e2e8f0;
-      border-bottom: 1px solid var(--border);
-      padding: 10px 14px;
-      font-size: 12px;
-      color: #64748b;
-    }
-
-    .dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #94a3b8;
-      margin-right: 6px;
-    }
-
-    .option-btn {
-      display: block;
+    .progress-track {
       width: 100%;
-      text-align: left;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px 14px;
-      background: white;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-
-    .option-btn.selected {
-      border-color: #0f172a;
-      background: var(--soft-2);
-    }
-
-    .progress-wrap {
       height: 12px;
+      background: #e8edf7;
       border-radius: 999px;
-      background: #e2e8f0;
       overflow: hidden;
-      margin-top: 8px;
     }
 
     .progress-bar {
       height: 100%;
-      background: #0f172a;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
       width: 0%;
+      transition: width 0.25s ease;
     }
 
-    .badge-shell {
-      display: grid;
-      place-items: center;
-      margin-top: 24px;
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
 
-    #badgeCanvas {
-      max-width: 100%;
-      border-radius: 24px;
+    .chip {
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #f8faff;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .chip.active {
+      background: var(--soft);
+      color: var(--accent);
+      border-color: #bfd2ff;
+      font-weight: bold;
+    }
+
+    .chip.done {
+      background: #ebfff3;
+      color: var(--success);
+      border-color: #bce5cb;
+      font-weight: bold;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .panel h2, .panel h3 {
+      margin-top: 0;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff, #f9fbff);
+    }
+
+    .hero-card ul {
+      margin-bottom: 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 18px;
+    }
+
+    .artifact-wrap {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fbfcff;
+      padding: 16px;
+      min-height: 360px;
+    }
+
+    .artifact-label {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: #edf3ff;
+      border: 1px solid #d6e4ff;
+      border-radius: 999px;
+      padding: 6px 10px;
+    }
+
+    .artifact {
+      background: white;
+      border: 1px solid #dfe5f0;
+      border-radius: 14px;
+      padding: 16px;
+      color: #1e293b;
+    }
+
+    .artifact .meta-faint {
+      color: #64748b;
+      font-size: 0.94rem;
+    }
+
+    .artifact .source-title {
+      font-size: 1.5rem;
+      margin: 10px 0 6px;
+      font-weight: bold;
+    }
+
+    .artifact .journal-title {
+      font-size: 1.18rem;
+      font-style: italic;
+      margin: 8px 0;
+    }
+
+    .artifact .book-title {
+      font-size: 1.35rem;
+      margin: 10px 0 8px;
+      font-weight: bold;
+    }
+
+    .artifact .webpage-title {
+      font-size: 1.5rem;
+      margin: 10px 0 6px;
+      font-weight: bold;
+    }
+
+    .artifact .rule {
+      border-top: 1px solid #e6ebf4;
+      margin: 12px 0;
+    }
+
+    .task-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: white;
+      margin-bottom: 16px;
+    }
+
+    .task-box h4 {
+      margin: 0 0 10px;
+    }
+
+    .option-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fcfdff;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .option:hover {
+      border-color: #bfd2ff;
+      background: #f7faff;
+    }
+
+    .option input {
+      margin-right: 10px;
+    }
+
+    .builder-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      font-weight: bold;
+      font-size: 0.96rem;
+    }
+
+    .field input, .field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 12px;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 84px;
+      resize: vertical;
+    }
+
+    .helper {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .feedback-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .feedback-card {
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      min-height: 170px;
+    }
+
+    .feedback-card h4 {
+      margin-top: 0;
+    }
+
+    .feedback-card.success {
+      background: var(--success-bg);
+      border-color: #bce5cb;
+    }
+
+    .feedback-card.warn {
+      background: var(--warn-bg);
+      border-color: #ead18d;
+    }
+
+    .feedback-card.danger {
+      background: var(--danger-bg);
+      border-color: #efc0c2;
+    }
+
+    .feedback-card ul {
+      margin-bottom: 0;
+      padding-left: 18px;
+    }
+
+    .verify-panel {
+      margin-top: 16px;
+      border: 1px dashed #b7c7e8;
+      border-radius: 16px;
+      padding: 16px;
+      background: #f8fbff;
+    }
+
+    .reference-preview {
+      background: white;
+      border: 1px solid #d9e3f4;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+
+    .reference-preview .ital {
+      font-style: italic;
+    }
+
+    .example-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: white;
+      margin-bottom: 16px;
+    }
+
+    .example-card .prompt {
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .example-options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .example-option {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fcfdff;
+      cursor: pointer;
+    }
+
+    .example-option:hover {
+      background: #f7faff;
+      border-color: #bed1ff;
+    }
+
+    .example-option input {
+      margin-right: 10px;
+    }
+
+    .status-line {
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    .callout {
+      border-left: 5px solid var(--accent);
+      background: #f7faff;
+      padding: 14px 16px;
+      border-radius: 12px;
+    }
+
+    .mini-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    .badge-stage {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .badge-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      background: white;
+      text-align: center;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+      border-radius: 14px;
+      border: 1px solid #dfe5f0;
       background: white;
     }
 
-    .hidden { display: none; }
+    .inline-code {
+      font-family: Consolas, Monaco, monospace;
+      background: #eef3fb;
+      border-radius: 6px;
+      padding: 2px 6px;
+    }
 
-    ul.compact, ol.compact { margin-bottom: 0; }
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
 
-    @media (max-width: 1040px) {
-      .grid-2, .grid-3, .guide-grid {
+    .small {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 960px) {
+      .hero, .grid-2, .feedback-columns, .badge-stage, .field-grid {
         grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-
-    <div id="introScreen" class="screen active">
-      <div class="card">
-        <div style="max-width: 1020px; margin: 0 auto;">
-          <div class="eyebrow">Before You Begin</div>
-          <h1>Welcome to the APA Reference Builder Lab</h1>
-          <p class="muted" style="font-size: 18px; line-height: 1.8;">
-            This activity is designed to help you learn how APA reference entries are built and how to use APA Style as a problem-solving resource. Instead of memorizing rules in the abstract, you will identify source details, build references, verify your decisions, and document completion.
-          </p>
-
-          <div class="grid-2" style="margin-top: 28px;">
-            <div class="soft-box">
-              <h2>What you are learning</h2>
-              <ul class="compact">
-                <li><strong>Identify source information:</strong> locate author, date, title, source, and publication details.</li>
-                <li><strong>Build an APA reference:</strong> assemble those elements into the correct APA sequence.</li>
-                <li><strong>Use APA Style strategically:</strong> find the right example when a source is unfamiliar.</li>
-                <li><strong>Track completion:</strong> finish all source types and generate a badge image.</li>
-              </ul>
-            </div>
-
-            <div class="blue-box">
-              <h2>Why this matters</h2>
-              <p>Reference pages make research traceable and show readers where evidence comes from.</p>
-              <p>This lab teaches you how to use an authoritative resource when you are unsure, which is more durable than memorizing isolated examples.</p>
-              <p>The goal is not perfection on the first try. The goal is to build a repeatable process for recognizing source types, checking conventions, and revising with confidence.</p>
-            </div>
-          </div>
-
-          <div class="grid-2" style="margin-top: 24px;">
-            <div class="amber-box">
-              <h2>How the lab works</h2>
-              <ol class="compact">
-                <li>Enter your name so the completion badge can be personalized.</li>
-                <li>Practice finding the right APA example.</li>
-                <li>Choose a source type and inspect the source snapshot.</li>
-                <li>Build the reference and check the diagnostic feedback.</li>
-                <li>Verify your work against the APA model.</li>
-                <li>Mark each source complete and unlock the badge image.</li>
-              </ol>
-            </div>
-
-            <div class="indigo-box">
-              <h2>Badge setup</h2>
-              <label for="studentNameInput">Student name</label>
-              <input id="studentNameInput" class="field" type="text" placeholder="Enter your name" />
-              <p style="margin-top: 12px;">
-                You can explore the lab without entering a name, but a name is required before the final badge can be generated.
-              </p>
-            </div>
-          </div>
-
-          <div class="controls" style="margin-top: 28px;">
-            <button id="goGuideBtn" class="primary">Practice using APA Style</button>
-            <button id="skipToLabBtn" class="indigo">Go directly to the builder</button>
-            <a class="button-link" href="https://apastyle.apa.org/style-grammar-guidelines/references/examples" target="_blank" rel="noreferrer">Visit APA Style examples</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="guideScreen" class="screen">
-      <div class="card">
-        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:18px; align-items:end;">
-          <div>
-            <div class="eyebrow">Guide</div>
-            <h1>Find the Right APA Example</h1>
-            <p class="muted" style="max-width: 760px;">
-              This screen helps you practice the same decision-making process you should use on the APA Style examples page.
-            </p>
-          </div>
-          <div class="soft-box" style="min-width: 260px;">
-            Current source:
-            <div id="guideCurrentSource" style="font-weight: bold; margin-top: 4px;"></div>
-          </div>
-        </div>
-
-        <div class="controls" style="margin-top: 12px;">
-          <button id="guideBackBtn">Back</button>
-          <button id="guideToBuilderBtn" class="indigo">Go to builder</button>
-        </div>
-
-        <div class="guide-grid" style="margin-top: 24px;">
-          <section class="section-card" style="padding: 20px;">
-            <h2>Your task</h2>
-            <p id="guideTaskText"></p>
-            <div class="indigo-box" style="margin-top: 18px;">
-              <p><strong>Goal</strong></p>
-              <p>Pick the right section, choose the closest example, and identify the pattern you need.</p>
-            </div>
-          </section>
-
-          <section class="section-card" style="padding: 20px;">
-            <h2 id="guideStepHeading">Step 1 of 4</h2>
-            <div id="guideStepBody" style="margin-top: 16px;"></div>
-            <div id="guideFeedback" class="hidden" style="margin-top: 16px;"></div>
-          </section>
-
-          <section class="section-card" style="padding: 20px;">
-            <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
-              <h2>APA Style map</h2>
-              <a class="button-link" href="https://apastyle.apa.org/style-grammar-guidelines/references/examples" target="_blank" rel="noreferrer">Open the real page</a>
-            </div>
-
-            <div class="preview-window" style="margin-top: 16px;">
-              <div class="preview-window-top">
-                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-                APA Style examples page (simulated)
-              </div>
-              <div style="padding: 16px;">
-                <div class="eyebrow">Reference categories</div>
-                <ul id="guideCategoryList"></ul>
-
-                <div class="soft-box" style="margin-top: 14px;">
-                  <div class="eyebrow">Closest matching example</div>
-                  <p id="guideExampleLabel" style="font-weight: bold; margin-bottom: 10px;"></p>
-                  <div id="guideModelReference" class="preview-box" style="min-height: auto;"></div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-    </div>
-
-    <div id="labScreen" class="screen">
-      <div class="card" style="margin-bottom: 24px;">
-        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:20px; align-items:end;">
-          <div>
-            <div class="eyebrow">Builder Lab</div>
-            <h1>Build the Reference</h1>
-            <p class="muted" style="max-width: 760px;">
-              Inspect the source, make decisions about what belongs where, verify with APA Style, and mark each source complete.
-            </p>
-          </div>
-
-          <div style="display:grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap:12px; width:100%; max-width: 740px;">
-            <div class="soft-box">
-              <div style="font-weight:bold;">Student</div>
-              <div id="studentNameDisplay" class="muted" style="margin-top: 6px;">Name not entered yet</div>
-            </div>
-            <div class="soft-box">
-              <div style="font-weight:bold;">Progress</div>
-              <div id="progressText" class="muted" style="margin-top: 6px;"></div>
-            </div>
-            <div class="soft-box">
-              <div style="font-weight:bold;">Completion meter</div>
-              <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
-              <div id="progressPercentText" class="muted" style="margin-top: 6px;"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="controls" style="margin-top: 14px;">
-          <button id="labBackBtn">Back</button>
-        </div>
-      </div>
-
-      <div class="card" style="margin-bottom: 24px;">
-        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; align-items:end;">
-          <div>
-            <div class="eyebrow">Source selection</div>
-            <label for="sourceSelect" style="margin-bottom: 8px;">Choose a source type</label>
-            <select id="sourceSelect" class="field" style="margin-top: 0; min-width: 320px;"></select>
-          </div>
-
-          <div class="controls" style="margin-top: 0;">
-            <button id="openGuideBtn" class="indigo">Practice using APA Style</button>
-            <button id="unlockBadgeBtn" class="green" disabled>Generate badge image</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid-3">
-        <section class="section-card">
-          <div style="display:flex; justify-content:space-between; gap:16px; align-items:center; margin-bottom:16px;">
-            <h2>1. Inspect the source</h2>
-            <span id="sourceTypePill" class="pill"></span>
-          </div>
-
-          <div class="soft-box">
-            <h3 id="snapshotHeading" class="eyebrow" style="margin-bottom: 14px;">Source Snapshot</h3>
-            <ul id="snapshotList" class="snapshot-list"></ul>
-          </div>
-
-          <div class="blue-box" style="margin-top: 20px;">
-            <p><strong>Task</strong></p>
-            <p>
-              Use the source evidence to decide what belongs in each field. This should feel like sorting and interpreting, not copying line by line.
-            </p>
-          </div>
-
-          <div class="soft-box" style="margin-top: 16px;">
-            <p><strong>Guide status for this source</strong></p>
-            <p id="guideStatusText" style="margin-bottom: 0;"></p>
-          </div>
-        </section>
-
-        <section class="section-card">
-          <div style="display:flex; justify-content:space-between; gap:16px; align-items:center; margin-bottom:16px;">
-            <h2>2. Build the reference</h2>
-            <button id="resetBtn">Reset fields</button>
-          </div>
-
-          <div id="formFields"></div>
-
-          <div class="controls">
-            <button id="checkBtn" class="primary">Check my reference</button>
-            <button id="verifyBtn" class="sky">Verify with APA Style</button>
-            <button id="markCompleteBtn" class="green">Mark source complete</button>
-          </div>
-        </section>
-
-        <section class="section-card">
-          <h2 style="margin-bottom: 16px;">3. Review the output</h2>
-
-          <div class="soft-box">
-            <div class="eyebrow" style="margin-bottom: 10px;">Live Preview</div>
-            <div id="referencePreview" class="preview-box">Your APA reference will appear here.</div>
-          </div>
-
-          <div id="feedbackBox" class="hidden" style="margin-top: 16px;">
-            <div class="soft-box">
-              <div class="eyebrow" style="margin-bottom: 10px;">Diagnostic Feedback</div>
-              <div id="feedbackItems"></div>
-            </div>
-          </div>
-
-          <div id="sourceCompleteBox" class="hidden" style="margin-top: 16px;">
-            <div class="green-box">
-              <p><strong>Source complete</strong></p>
-              <p style="margin-bottom: 0;">This source has been marked complete and counted toward the final badge.</p>
-            </div>
-          </div>
-
-          <div id="apaPreviewBox" class="hidden" style="margin-top: 16px;">
-            <div class="blue-box">
-              <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom: 12px;">
-                <div>
-                  <div class="eyebrow" style="color:#0369a1;">APA Style Verification</div>
-                  <h3 id="apaExampleTitle" style="margin-bottom: 0;"></h3>
-                </div>
-                <a id="apaLinkBtn" class="button-link" target="_blank" rel="noreferrer">Open APA Style</a>
-              </div>
-
-              <div class="preview-window">
-                <div class="preview-window-top">
-                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-                  APA Style example preview
-                </div>
-                <div style="padding: 16px;">
-                  <div class="soft-box">
-                    <div class="eyebrow" style="margin-bottom: 10px;">Reference Example</div>
-                    <div id="apaModelPreview" class="preview-box" style="min-height: auto;"></div>
-                    <p id="apaExampleNote" class="muted" style="margin-top: 12px;"></p>
-                  </div>
-                </div>
-              </div>
-
-              <p class="muted" style="font-size: 12px; margin-top: 12px;">
-                This panel shows the correctly formatted APA example, including italics where APA uses them.
-              </p>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-
-    <div id="completeScreen" class="screen">
-      <div class="card">
-        <div style="max-width: 980px; margin: 0 auto;">
-          <div class="eyebrow">Completion badge</div>
-          <h1>Your badge image is ready</h1>
-          <p class="muted" style="font-size: 18px; line-height: 1.8;">
-            Copy or download this image and submit it wherever your instructor asks you to show completion.
-          </p>
-
-          <div class="controls" style="margin-top: 10px;">
-            <button id="completeBackBtn">Back</button>
-          </div>
-
-          <div class="badge-shell">
-            <canvas id="badgeCanvas" width="1200" height="700"></canvas>
-          </div>
-
-          <div class="controls">
-            <button id="copyBadgeBtn" class="primary">Copy badge image</button>
-            <button id="downloadBadgeBtn" class="green">Download badge PNG</button>
-          </div>
-
-          <div id="copyMessage" class="green-box hidden" style="margin-top: 16px;">
-            Badge image copied.
-          </div>
-
-          <div class="soft-box" style="margin-top: 28px;">
-            <h2>Submission reflection</h2>
-            <p id="reflectionPromptText"></p>
-            <textarea id="reflectionBox" class="field" rows="5" placeholder="Type a short reflection here before submitting."></textarea>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
+  <div class="app" id="app"></div>
 
   <script>
-    const sources = [
-      {
-        id: "journal",
-        label: "Journal Article",
-        instructionalType: "journal article",
-        snapshotHeading: "Source Evidence",
-        snapshotLines: [
-          "Jordan Smith",
-          "Social media habits among first-year students",
-          "Journal of College Learning",
-          "2023 · Volume 12, Issue 3",
-          "Pages 45–67",
-          "DOI: https://doi.org/10.1234/jcl.2023.5678"
-        ],
-        fields: [
-          { key: "author", label: "Author" },
-          { key: "year", label: "Year" },
-          { key: "title", label: "Article title", type: "textarea" },
-          { key: "journal", label: "Journal title" },
-          { key: "volume", label: "Volume" },
-          { key: "issue", label: "Issue" },
-          { key: "pages", label: "Page range" },
-          { key: "doi", label: "DOI / URL" }
-        ],
-        blankValues: {
-          author: "",
-          year: "",
-          title: "",
-          journal: "",
-          volume: "",
-          issue: "",
-          pages: "",
-          doi: ""
-        },
-        answers: {
-          author: "Smith, J.",
-          year: "2023",
-          title: "Social media habits among first-year students",
-          journal: "Journal of College Learning",
-          volume: "12",
-          issue: "3",
-          pages: "45–67",
-          doi: "https://doi.org/10.1234/jcl.2023.5678"
-        },
-        buildReference(values) {
-          return `${values.author} (${values.year}). ${ensurePeriod(values.title)} <em>${values.journal}</em>, <em>${values.volume}</em>(${values.issue}), ${values.pages}. ${values.doi}`.replace(/\s+/g, " ").trim();
-        },
-        plainReference(values) {
-          return `${values.author} (${values.year}). ${ensurePeriod(values.title)} ${values.journal}, ${values.volume}(${values.issue}), ${values.pages}. ${values.doi}`.replace(/\s+/g, " ").trim();
-        },
-        apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/journal-article-references",
-        apaExampleTitle: "APA Style example: journal article reference",
-        apaExampleNote: "Use this model to check author order, article title capitalization, journal italics, volume italics, issue placement, and DOI placement.",
-        guideTask: "You have a journal article with one author, a year, a journal title, volume and issue information, a page range, and a DOI.",
-        guideChoices: {
-          categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
-          correctCategory: "Journal Articles",
-          exampleOptions: ["Standard journal article", "Journal article with no DOI", "Magazine article"],
-          correctExample: "Standard journal article",
-          patternPrompt: "Which source element appears after the article title in this reference?",
-          patternOptions: ["Journal title and volume", "Publisher only", "Website name"],
-          correctPattern: "Journal title and volume",
-          successMessage: "Correct. For a standard journal article, the article title is followed by the journal title, volume(issue), page range, and DOI."
-        },
-        validate(values) {
-          const results = [];
-          compareExact(results, values.author, this.answers.author, "Author");
-          compareExact(results, values.year, this.answers.year, "Year");
-          compareExact(results, values.title, this.answers.title, "Article title");
-          compareExact(results, values.journal, this.answers.journal, "Journal title");
-          compareExact(results, values.volume, this.answers.volume, "Volume");
-          compareExact(results, values.issue, this.answers.issue, "Issue");
-          if (String(values.pages || "").trim()) {
-  const actualPages = String(values.pages || "").trim();
-  const expectedPages = String(this.answers.pages || "").trim();
+    const APA_LINK = 'https://apastyle.apa.org/style-grammar-guidelines/references/examples';
 
-  const normalizedActualPages = normalizeString(actualPages).replace(/-/g, "–");
-  const normalizedExpectedPages = normalizeString(expectedPages).replace(/-/g, "–");
-
-  if (normalizedActualPages === normalizedExpectedPages) {
-    if (actualPages.includes("-") && !actualPages.includes("–")) {
-      results.push({
-        type: "formatting",
-        message: "You identified the correct page range, but APA uses an en dash (–) instead of a hyphen (-)."
-      });
-    } else {
-      results.push({
-        type: "success",
-        message: "Page range looks correct."
-      });
-    }
-  } else {
-    results.push({
-      type: "formatting",
-      message: "Page range does not look correct for this source."
-    });
-  }
-} else {
-  results.push({
-    type: "structural",
-    message: "Page range is missing."
-  });
-}
-          compareUrlLike(results, values.doi, this.answers.doi, "DOI / URL");
-          finalizeResults(results, values, ["author", "year", "title", "journal", "volume", "issue", "pages", "doi"]);
-          return dedupeResults(results);
-        }
-      },
-      {
-        id: "webpage",
-        label: "Webpage",
-        instructionalType: "webpage",
-        snapshotHeading: "Source Evidence",
-        snapshotLines: [
-          "Maria Chen",
-          "Why sleep matters in college",
-          "Student Health Hub",
-          "Published March 12, 2024",
-          "https://www.studenthealthhub.org/sleep-college"
-        ],
-        fields: [
-          { key: "author", label: "Author" },
-          { key: "date", label: "Date" },
-          { key: "title", label: "Page title", type: "textarea" },
-          { key: "site", label: "Website name" },
-          { key: "url", label: "URL" }
-        ],
-        blankValues: {
-          author: "",
-          date: "",
-          title: "",
-          site: "",
-          url: ""
-        },
-        answers: {
-          author: "Chen, M.",
-          date: "2024, March 12",
-          title: "Why sleep matters in college",
-          site: "Student Health Hub",
-          url: "https://www.studenthealthhub.org/sleep-college"
-        },
-        buildReference(values) {
-          return `${values.author} (${values.date}). ${ensurePeriod(values.title)} <em>${values.site}</em>. ${values.url}`.replace(/\s+/g, " ").trim();
-        },
-        plainReference(values) {
-          return `${values.author} (${values.date}). ${ensurePeriod(values.title)} ${values.site}. ${values.url}`.replace(/\s+/g, " ").trim();
-        },
-        apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references",
-        apaExampleTitle: "APA Style example: webpage reference",
-        apaExampleNote: "Use this model to check date formatting, title capitalization, website name placement, and URL placement.",
-        guideTask: "You have a webpage with an author, a full date, a page title, a website name, and a URL.",
-        guideChoices: {
-          categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
-          correctCategory: "Webpages",
-          exampleOptions: ["Webpage with author", "Webpage with no author", "Social media post"],
-          correctExample: "Webpage with author",
-          patternPrompt: "Which element comes after the webpage title?",
-          patternOptions: ["Website name", "Journal title", "Volume(issue)"],
-          correctPattern: "Website name",
-          successMessage: "Correct. In this webpage model, the website name follows the title before the URL."
-        },
-        validate(values) {
-          const results = [];
-
-          const author = String(values.author || "").trim();
-          const date = String(values.date || "").trim();
-          const title = String(values.title || "").trim();
-          const site = String(values.site || "").trim();
-          const url = String(values.url || "").trim();
-
-          if (!author) {
-            results.push({ type: "structural", message: "Author is missing." });
-          } else {
-            const authorLooksIdentified =
-              normalizeString(author) === normalizeString(this.answers.author) ||
-              normalizeString(author) === normalizeString("Maria Chen") ||
-              normalizeString(author) === normalizeString("Chen, Maria") ||
-              normalizeString(author) === normalizeString("Chen, Marie") ||
-              normalizeString(author) === normalizeString("Marie Chen");
-
-            if (authorLooksIdentified) {
-              if (normalizeString(author) === normalizeString(this.answers.author)) {
-                results.push({ type: "success", message: "Author is identified and formatted in APA style." });
-              } else {
-                results.push({
-                  type: "formatting",
-                  message: "You identified the correct author, but convert it to APA initials format: Chen, M."
-                });
-              }
-            } else {
-              results.push({ type: "formatting", message: "Author does not look correct for this source." });
-            }
-          }
-
-          if (!date) {
-            results.push({ type: "structural", message: "Date is missing." });
-          } else {
-            const dateLooksIdentified =
-              normalizeString(date) === normalizeString(this.answers.date) ||
-              normalizeString(date) === normalizeString("March 12, 2024");
-
-            if (dateLooksIdentified) {
-              if (normalizeString(date) === normalizeString(this.answers.date)) {
-                results.push({ type: "success", message: "Date is identified and formatted in APA style." });
-              } else {
-                results.push({
-                  type: "formatting",
-                  message: "You identified the correct date, but convert it to APA order: 2024, March 12."
-                });
-              }
-            } else {
-              results.push({ type: "formatting", message: "Date does not look correct for this source." });
-            }
-          }
-
-          compareExact(results, title, this.answers.title, "Page title");
-          compareExact(results, site, this.answers.site, "Website name");
-          compareUrlLike(results, url, this.answers.url, "URL");
-
-          const requiredFilled = [author, date, title, site, url].every(Boolean);
-          const blockingIssues = results.some(
-            item => item.type === "structural" || item.message.includes("does not look correct")
-          );
-          const stillNeedsConversion = results.some(
-            item => item.message.includes("convert it to APA")
-          );
-
-          if (requiredFilled && !blockingIssues && !stillNeedsConversion) {
-            results.push({ type: "success", message: "This entry looks structurally correct for this source type." });
-          }
-
-          return dedupeResults(results);
-        }
-      },
-      {
-        id: "book",
-        label: "Book",
-        instructionalType: "book",
-        snapshotHeading: "Source Evidence",
-        snapshotLines: [
-          "Alicia Rivera",
-          "Writing in college contexts",
-          "Copyright 2021",
-          "Northeastern Academic Press"
-        ],
-        fields: [
-          { key: "author", label: "Author" },
-          { key: "year", label: "Year" },
-          { key: "title", label: "Book title", type: "textarea" },
-          { key: "publisher", label: "Publisher" }
-        ],
-        blankValues: {
-          author: "",
-          year: "",
-          title: "",
-          publisher: ""
-        },
-        answers: {
-          author: "Rivera, A.",
-          year: "2021",
-          title: "Writing in college contexts",
-          publisher: "Northeastern Academic Press"
-        },
-        buildReference(values) {
-          return `${values.author} (${values.year}). <em>${values.title}</em>. ${values.publisher}.`.replace(/\s+/g, " ").trim();
-        },
-        plainReference(values) {
-          return `${values.author} (${values.year}). ${values.title}. ${values.publisher}.`.replace(/\s+/g, " ").trim();
-        },
-        apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/book-references",
-        apaExampleTitle: "APA Style example: book reference",
-        apaExampleNote: "Use this model to check author formatting, year placement, title italics, and publisher placement.",
-        guideTask: "You have a book with one author, a year, a title, and a publisher.",
-        guideChoices: {
-          categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
-          correctCategory: "Books",
-          exampleOptions: ["Book", "Edited book chapter", "Reference work entry"],
-          correctExample: "Book",
-          patternPrompt: "Which element usually closes this reference?",
-          patternOptions: ["Publisher", "Website name", "Page range"],
-          correctPattern: "Publisher",
-          successMessage: "Correct. A standard book reference typically ends with the publisher."
-        },
-        validate(values) {
-          const results = [];
-          compareExact(results, values.author, this.answers.author, "Author");
-          compareExact(results, values.year, this.answers.year, "Year");
-          compareExact(results, values.title, this.answers.title, "Book title");
-          compareExact(results, values.publisher, this.answers.publisher, "Publisher");
-          finalizeResults(results, values, ["author", "year", "title", "publisher"]);
-          return dedupeResults(results);
-        }
-      },
-      {
-        id: "webpage-no-author",
-        label: "Webpage (No Author)",
-        instructionalType: "webpage without an author",
-        snapshotHeading: "Source Evidence",
-        snapshotLines: [
-          "Campus tutoring resources",
-          "Elmwood College Success Center",
-          "Updated January 8, 2025",
-          "https://www.elmwood.edu/tutoring-resources"
-        ],
-        fields: [
-          { key: "title", label: "Page title", type: "textarea" },
-          { key: "date", label: "Date" },
-          { key: "site", label: "Website name" },
-          { key: "url", label: "URL" }
-        ],
-        blankValues: {
-          title: "",
-          date: "",
-          site: "",
-          url: ""
-        },
-        answers: {
-          title: "Campus tutoring resources",
-          date: "2025, January 8",
-          site: "Elmwood College Success Center",
-          url: "https://www.elmwood.edu/tutoring-resources"
-        },
-        buildReference(values) {
-          return `${ensurePeriod(values.title)} (${values.date}). <em>${values.site}</em>. ${values.url}`.replace(/\s+/g, " ").trim();
-        },
-        plainReference(values) {
-          return `${ensurePeriod(values.title)} (${values.date}). ${values.site}. ${values.url}`.replace(/\s+/g, " ").trim();
-        },
-        apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references",
-        apaExampleTitle: "APA Style example: webpage reference with no author",
-        apaExampleNote: "Use this model to notice that when no author is available, the title moves into the author position and the date comes immediately after it.",
-        guideTask: "You have a webpage with no listed author but a date, page title, website name, and URL.",
-        guideChoices: {
-          categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
-          correctCategory: "Webpages",
-          exampleOptions: ["Webpage with author", "Webpage with no author", "Webpage with group author"],
-          correctExample: "Webpage with no author",
-          patternPrompt: "When no author is listed, what moves into the author position?",
-          patternOptions: ["Title", "Website name", "URL"],
-          correctPattern: "Title",
-          successMessage: "Correct. When there is no author, the title shifts into the author position and the date follows it."
-        },
-        validate(values) {
-          const results = [];
-          compareExact(results, values.title, this.answers.title, "Page title");
-
-          const date = String(values.date || "").trim();
-          if (!date) {
-            results.push({ type: "structural", message: "Date is missing." });
-          } else {
-            const dateLooksIdentified =
-              normalizeString(date) === normalizeString(this.answers.date) ||
-              normalizeString(date) === normalizeString("January 8, 2025");
-
-            if (dateLooksIdentified) {
-              if (normalizeString(date) === normalizeString(this.answers.date)) {
-                results.push({ type: "success", message: "Date is identified and formatted in APA style." });
-              } else {
-                results.push({
-                  type: "formatting",
-                  message: "You identified the correct date, but convert it to APA order: 2025, January 8."
-                });
-              }
-            } else {
-              results.push({ type: "formatting", message: "Date does not look correct for this source." });
-            }
-          }
-
-          compareExact(results, values.site, this.answers.site, "Website name");
-          compareUrlLike(results, values.url, this.answers.url, "URL");
-
-          const built = normalizeString(this.plainReference(values));
-          const expected = normalizeString(this.plainReference(this.answers));
-          if (built !== expected) {
-            results.push({
-              type: "formatting",
-              message: "This source type is order-sensitive. For a webpage with no author, the title should come first and the date should appear immediately after it."
-            });
-          }
-
-          const requiredFilled = ["title", "date", "site", "url"].every(key => String(values[key] || "").trim());
-          const blockingIssues = results.some(
-            item => item.type === "structural" || item.message.includes("does not look correct")
-          );
-          const stillNeedsConversion = results.some(
-            item => item.message.includes("convert it to APA")
-          );
-
-          if (requiredFilled && !blockingIssues && !stillNeedsConversion && built === expected) {
-            results.push({ type: "success", message: "This entry looks structurally correct for this source type." });
-          }
-
-          return dedupeResults(results);
-        }
-      },
-      {
-        id: "chapter",
-        label: "Chapter in Edited Book",
-        instructionalType: "chapter in an edited book",
-        snapshotHeading: "Source Evidence",
-        snapshotLines: [
-          "Priya Nair",
-          "Revising with digital tools",
-          "In Teaching writing today",
-          "Edited by L. Gomez",
-          "Pages 88–106",
-          "2022",
-          "North Bridge Press"
-        ],
-        fields: [
-          { key: "chapterAuthor", label: "Chapter author" },
-          { key: "year", label: "Year" },
-          { key: "chapterTitle", label: "Chapter title", type: "textarea" },
-          { key: "editor", label: "Editor" },
-          { key: "bookTitle", label: "Book title" },
-          { key: "pageRange", label: "Page range" },
-          { key: "publisher", label: "Publisher" }
-        ],
-        blankValues: {
-          chapterAuthor: "",
-          year: "",
-          chapterTitle: "",
-          editor: "",
-          bookTitle: "",
-          pageRange: "",
-          publisher: ""
-        },
-        answers: {
-          chapterAuthor: "Nair, P.",
-          year: "2022",
-          chapterTitle: "Revising with digital tools",
-          editor: "L. Gomez",
-          bookTitle: "Teaching writing today",
-          pageRange: "88–106",
-          publisher: "North Bridge Press"
-        },
-        buildReference(values) {
-          return `${values.chapterAuthor} (${values.year}). ${ensurePeriod(values.chapterTitle)} In ${values.editor} (Ed.), <em>${values.bookTitle}</em> (pp. ${values.pageRange}). ${values.publisher}.`.replace(/\s+/g, " ").trim();
-        },
-        plainReference(values) {
-          return `${values.chapterAuthor} (${values.year}). ${ensurePeriod(values.chapterTitle)} In ${values.editor} (Ed.), ${values.bookTitle} (pp. ${values.pageRange}). ${values.publisher}.`.replace(/\s+/g, " ").trim();
-        },
-        apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/edited-book-chapter-references",
-        apaExampleTitle: "APA Style example: chapter in an edited book",
-        apaExampleNote: "Use this model to notice the editor, the In phrase, the book title in italics, the page range, and the publisher.",
-        guideTask: "You have a chapter author, a chapter title, an editor, a book title, a page range, and a publisher.",
-        guideChoices: {
-          categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
-          correctCategory: "Chapters / Anthologies",
-          exampleOptions: ["Book", "Edited book chapter", "Webpage with author"],
-          correctExample: "Edited book chapter",
-          patternPrompt: "What phrase signals the larger source for the chapter?",
-          patternOptions: ["In + editor information", "Retrieved from", "Website name"],
-          correctPattern: "In + editor information",
-          successMessage: "Correct. Edited-book chapter references use an In phrase followed by editor and book information."
-        },
-        validate(values) {
-          const results = [];
-          compareExact(results, values.chapterAuthor, this.answers.chapterAuthor, "Chapter author");
-          compareExact(results, values.year, this.answers.year, "Year");
-          compareExact(results, values.chapterTitle, this.answers.chapterTitle, "Chapter title");
-          compareExact(results, values.editor, this.answers.editor, "Editor");
-          compareExact(results, values.bookTitle, this.answers.bookTitle, "Book title");
-          compareExact(results, values.pageRange, this.answers.pageRange, "Page range");
-          compareExact(results, values.publisher, this.answers.publisher, "Publisher");
-
-          const built = normalizeString(this.plainReference(values));
-          const expected = normalizeString(this.plainReference(this.answers));
-          if (built !== expected) {
-            results.push({
-              type: "formatting",
-              message: "This source type is sequence-sensitive. A chapter reference should include the editor and the In phrase before the book title."
-            });
-          }
-
-          finalizeResults(results, values, ["chapterAuthor", "year", "chapterTitle", "editor", "bookTitle", "pageRange", "publisher"]);
-          return dedupeResults(results);
-        }
-      }
-    ];
-
-    const completionPrompts = [
-      "What source element was hardest for you to identify, and why?",
-      "What did the APA Style example help you notice?",
-      "What rule or pattern will you pay closer attention to next time?",
-      "What was the most useful part of the verification process?"
-    ];
-
-    let currentSourceId = sources[0].id;
-    let studentName = "";
-    let completedSources = [];
-    let formValues = {};
-    let guideState = {
-      category: null,
-      example: null,
-      pattern: null,
-      passedBySource: {}
+    const appState = {
+      currentView: 'orientation',
+      historyStack: [],
+      userName: '',
+      examplePhaseComplete: false,
+      currentExampleIndex: 0,
+      currentSourceIndex: 0,
+      exampleResponses: {},
+      builderProgress: {},
+      decisionResponses: {},
+      formResponses: {},
+      feedbackBySource: {},
+      verifyOpen: {},
+      completionReady: false
     };
-    let navHistory = ["intro"];
-    let completionDate = "";
-    let lastBadgeDataUrl = "";
 
-    const introScreen = document.getElementById("introScreen");
-    const guideScreen = document.getElementById("guideScreen");
-    const labScreen = document.getElementById("labScreen");
-    const completeScreen = document.getElementById("completeScreen");
+    const sourceOrder = ['journal_article', 'webpage_author', 'book', 'webpage_no_author', 'chapter_edited_book'];
 
-    const studentNameInput = document.getElementById("studentNameInput");
-    const goGuideBtn = document.getElementById("goGuideBtn");
-    const skipToLabBtn = document.getElementById("skipToLabBtn");
+    const sourceLibrary = {
+      journal_article: {
+        id: 'journal_article',
+        label: 'Journal Article',
+        shortLabel: 'Journal',
+        artifactLabel: 'Article First Page',
+        artifactHtml: `
+          <div class="artifact">
+            <div class="meta-faint">Digital Communication Review</div>
+            <div class="source-title">How Interface Friction Shapes Student Citation Accuracy</div>
+            <div>John A. Smith and Priya R. Lee</div>
+            <div class="meta-faint">Department of Communication, Great Lakes University</div>
+            <div class="rule"></div>
+            <div class="journal-title">Digital Communication Review</div>
+            <div>2021, Vol. 14, No. 2, 123-135</div>
+            <div class="meta-faint">Received March 10, 2020 • Accepted January 4, 2021</div>
+            <div class="rule"></div>
+            <p class="meta-faint">Abstract. This study examines interface design and citation learning...</p>
+          </div>
+        `,
+        decisions: [
+          {
+            id: 'author_choice',
+            prompt: 'Which names should be treated as the article authors in the reference?',
+            options: [
+              { value: 'authors', label: 'John A. Smith and Priya R. Lee' },
+              { value: 'journal', label: 'Digital Communication Review' },
+              { value: 'department', label: 'Department of Communication, Great Lakes University' }
+            ],
+            correct: 'authors',
+            blockIfWrong: true,
+            success: 'You identified the correct article authors.',
+            correction: 'Use the people who wrote the article, not the journal title or department.'
+          },
+          {
+            id: 'date_choice',
+            prompt: 'Which date belongs in the reference?',
+            options: [
+              { value: 'publication_year', label: '2021' },
+              { value: 'received', label: 'March 10, 2020' },
+              { value: 'accepted', label: 'January 4, 2021' }
+            ],
+            correct: 'publication_year',
+            blockIfWrong: true,
+            success: 'You selected the publication date used in the reference.',
+            correction: 'Use the publication year, not received or accepted dates.'
+          }
+        ],
+        fields: [
+          { key: 'author', label: 'Author', placeholder: 'Enter authors as they should appear in the reference' },
+          { key: 'year', label: 'Year', placeholder: 'Example: 2021' },
+          { key: 'title', label: 'Article title', placeholder: 'Enter the article title' },
+          { key: 'journal', label: 'Journal title', placeholder: 'Enter the journal title' },
+          { key: 'volumeIssue', label: 'Volume(issue)', placeholder: 'Example: 14(2)' },
+          { key: 'pages', label: 'Page range', placeholder: 'Example: 123–135' }
+        ],
+        correctData: {
+          authorRaw: 'John A. Smith and Priya R. Lee',
+          authorAPA: 'Smith, J. A., & Lee, P. R.',
+          yearRaw: '2021',
+          yearAPA: '(2021).',
+          titleRaw: 'How Interface Friction Shapes Student Citation Accuracy',
+          titleAPA: 'How interface friction shapes student citation accuracy.',
+          journalRaw: 'Digital Communication Review',
+          journalAPA: 'Digital Communication Review',
+          volumeIssueRaw: '14, 2',
+          volumeIssueAPA: '14(2)',
+          pagesRaw: '123-135',
+          pagesAPA: '123–135'
+        },
+        buildReference() {
+          return `${this.correctData.authorAPA} ${this.correctData.yearAPA} ${this.correctData.titleAPA} <span class="ital">${this.correctData.journalAPA}</span>, <span class="ital">${this.correctData.volumeIssueAPA.split('(')[0]}</span>(${this.correctData.volumeIssueAPA.match(/\((.*)\)/)[1]}), ${this.correctData.pagesAPA}.`;
+        }
+      },
 
-    const guideCurrentSource = document.getElementById("guideCurrentSource");
-    const guideTaskText = document.getElementById("guideTaskText");
-    const guideStepHeading = document.getElementById("guideStepHeading");
-    const guideStepBody = document.getElementById("guideStepBody");
-    const guideFeedback = document.getElementById("guideFeedback");
-    const guideCategoryList = document.getElementById("guideCategoryList");
-    const guideExampleLabel = document.getElementById("guideExampleLabel");
-    const guideModelReference = document.getElementById("guideModelReference");
-    const guideBackBtn = document.getElementById("guideBackBtn");
-    const guideToBuilderBtn = document.getElementById("guideToBuilderBtn");
+      webpage_author: {
+        id: 'webpage_author',
+        label: 'Webpage with Author',
+        shortLabel: 'Webpage + Author',
+        artifactLabel: 'Webpage Header',
+        artifactHtml: `
+          <div class="artifact">
+            <div class="meta-faint">The Learning Lab</div>
+            <div class="webpage-title">Why Students Misread Source Details Online</div>
+            <div>By Maya Patel</div>
+            <div class="meta-faint">Updated July 18, 2023</div>
+            <div class="meta-faint">First published May 9, 2022</div>
+            <div class="rule"></div>
+            <div class="meta-faint">Home / Teaching Strategies / Research Writing</div>
+            <p>This guide explains common mistakes students make when interpreting online source information...</p>
+            <div class="rule"></div>
+            <div class="meta-faint">https://www.thelearninglab.org/teaching/why-students-misread-source-details</div>
+          </div>
+        `,
+        decisions: [
+          {
+            id: 'author_choice',
+            prompt: 'Which person should be listed as the author in the reference?',
+            options: [
+              { value: 'maya', label: 'Maya Patel' },
+              { value: 'site', label: 'The Learning Lab' },
+              { value: 'section', label: 'Teaching Strategies' }
+            ],
+            correct: 'maya',
+            blockIfWrong: true,
+            success: 'You identified the webpage author correctly.',
+            correction: 'Use the named author, not the site name or section label.'
+          },
+          {
+            id: 'date_choice',
+            prompt: 'Which date is the best choice for the reference?',
+            options: [
+              { value: 'updated', label: 'July 18, 2023' },
+              { value: 'published', label: 'May 9, 2022' },
+              { value: 'none', label: 'No date should be used' }
+            ],
+            correct: 'updated',
+            blockIfWrong: true,
+            success: 'You selected the most relevant webpage date.',
+            correction: 'Use the current page date shown on the webpage for this exercise.'
+          }
+        ],
+        fields: [
+          { key: 'author', label: 'Author', placeholder: 'Enter the author name' },
+          { key: 'date', label: 'Date', placeholder: 'Example: July 18, 2023' },
+          { key: 'title', label: 'Page title', placeholder: 'Enter the page title' },
+          { key: 'siteName', label: 'Website name', placeholder: 'Enter the website name' },
+          { key: 'url', label: 'URL', placeholder: 'Enter the URL' }
+        ],
+        correctData: {
+          authorRaw: 'Maya Patel',
+          authorAPA: 'Patel, M.',
+          dateRaw: 'July 18, 2023',
+          dateAPA: '(2023, July 18).',
+          titleRaw: 'Why Students Misread Source Details Online',
+          titleAPA: 'Why students misread source details online.',
+          siteNameRaw: 'The Learning Lab',
+          siteNameAPA: 'The Learning Lab',
+          urlRaw: 'https://www.thelearninglab.org/teaching/why-students-misread-source-details'
+        },
+        buildReference() {
+          return `${this.correctData.authorAPA} ${this.correctData.dateAPA} ${this.correctData.titleAPA} <span class="ital">${this.correctData.siteNameAPA}</span>. ${this.correctData.urlRaw}`;
+        }
+      },
 
-    const studentNameDisplay = document.getElementById("studentNameDisplay");
-    const progressText = document.getElementById("progressText");
-    const progressBar = document.getElementById("progressBar");
-    const progressPercentText = document.getElementById("progressPercentText");
-    const sourceSelect = document.getElementById("sourceSelect");
-    const openGuideBtn = document.getElementById("openGuideBtn");
-    const unlockBadgeBtn = document.getElementById("unlockBadgeBtn");
-    const labBackBtn = document.getElementById("labBackBtn");
+      book: {
+        id: 'book',
+        label: 'Book',
+        shortLabel: 'Book',
+        artifactLabel: 'Book Front Matter',
+        artifactHtml: `
+          <div class="artifact">
+            <div class="book-title">Writing Research in Everyday Contexts</div>
+            <div>Elena Martinez</div>
+            <div class="meta-faint">Second edition</div>
+            <div class="rule"></div>
+            <div>Riverbend Academic Press</div>
+            <div class="meta-faint">Boston</div>
+            <div class="meta-faint">Copyright © 2020</div>
+            <div class="meta-faint">Library of Congress data available on request</div>
+          </div>
+        `,
+        decisions: [
+          {
+            id: 'author_choice',
+            prompt: 'Who should be treated as the author of this source?',
+            options: [
+              { value: 'martinez', label: 'Elena Martinez' },
+              { value: 'publisher', label: 'Riverbend Academic Press' },
+              { value: 'location', label: 'Boston' }
+            ],
+            correct: 'martinez',
+            blockIfWrong: true,
+            success: 'You identified the book author correctly.',
+            correction: 'Use the person who wrote the book, not the publisher or place.'
+          }
+        ],
+        fields: [
+          { key: 'author', label: 'Author', placeholder: 'Enter the author' },
+          { key: 'year', label: 'Year', placeholder: 'Example: 2020' },
+          { key: 'title', label: 'Book title', placeholder: 'Enter the book title' },
+          { key: 'publisher', label: 'Publisher', placeholder: 'Enter the publisher' }
+        ],
+        correctData: {
+          authorRaw: 'Elena Martinez',
+          authorAPA: 'Martinez, E.',
+          yearRaw: '2020',
+          yearAPA: '(2020).',
+          titleRaw: 'Writing Research in Everyday Contexts',
+          titleAPA: 'Writing research in everyday contexts',
+          publisherRaw: 'Riverbend Academic Press',
+          publisherAPA: 'Riverbend Academic Press'
+        },
+        buildReference() {
+          return `${this.correctData.authorAPA} ${this.correctData.yearAPA} <span class="ital">${this.correctData.titleAPA}</span>. ${this.correctData.publisherAPA}.`;
+        }
+      },
 
-    const sourceTypePill = document.getElementById("sourceTypePill");
-    const snapshotHeading = document.getElementById("snapshotHeading");
-    const snapshotList = document.getElementById("snapshotList");
-    const guideStatusText = document.getElementById("guideStatusText");
+      webpage_no_author: {
+        id: 'webpage_no_author',
+        label: 'Webpage with No Author',
+        shortLabel: 'Webpage No Author',
+        artifactLabel: 'Webpage Header',
+        artifactHtml: `
+          <div class="artifact">
+            <div class="meta-faint">Campus Writing Center</div>
+            <div class="webpage-title">Reference List Checklist</div>
+            <div class="meta-faint">Revised September 2, 2024</div>
+            <div class="meta-faint">Student Support Resources</div>
+            <div class="rule"></div>
+            <p>Use this checklist to review author order, titles, dates, and source elements before submitting your work.</p>
+            <div class="rule"></div>
+            <div class="meta-faint">https://campuswritingcenter.edu/reference-list-checklist</div>
+          </div>
+        `,
+        decisions: [
+          {
+            id: 'title_choice',
+            prompt: 'Because no author is listed, what should move into the author position?',
+            options: [
+              { value: 'page_title', label: 'Reference List Checklist' },
+              { value: 'site_name', label: 'Campus Writing Center' },
+              { value: 'section', label: 'Student Support Resources' }
+            ],
+            correct: 'page_title',
+            blockIfWrong: true,
+            success: 'You identified the correct element to begin the reference.',
+            correction: 'With no author, begin with the page title.'
+          },
+          {
+            id: 'date_choice',
+            prompt: 'Which date should you use?',
+            options: [
+              { value: 'revised', label: 'September 2, 2024' },
+              { value: 'none', label: 'No date' },
+              { value: 'site', label: 'Campus Writing Center' }
+            ],
+            correct: 'revised',
+            blockIfWrong: true,
+            success: 'You selected the date shown on the page.',
+            correction: 'Use the page date if it appears; do not invent n.d. when a date is provided.'
+          }
+        ],
+        fields: [
+          { key: 'title', label: 'Page title', placeholder: 'Enter the page title' },
+          { key: 'date', label: 'Date', placeholder: 'Example: September 2, 2024' },
+          { key: 'siteName', label: 'Website name', placeholder: 'Enter the website name' },
+          { key: 'url', label: 'URL', placeholder: 'Enter the URL' }
+        ],
+        correctData: {
+          titleRaw: 'Reference List Checklist',
+          titleAPA: 'Reference list checklist.',
+          dateRaw: 'September 2, 2024',
+          dateAPA: '(2024, September 2).',
+          siteNameRaw: 'Campus Writing Center',
+          siteNameAPA: 'Campus Writing Center',
+          urlRaw: 'https://campuswritingcenter.edu/reference-list-checklist'
+        },
+        buildReference() {
+          return `${this.correctData.titleAPA} ${this.correctData.dateAPA} <span class="ital">${this.correctData.siteNameAPA}</span>. ${this.correctData.urlRaw}`;
+        }
+      },
 
-    const formFields = document.getElementById("formFields");
-    const resetBtn = document.getElementById("resetBtn");
-    const checkBtn = document.getElementById("checkBtn");
-    const verifyBtn = document.getElementById("verifyBtn");
-    const markCompleteBtn = document.getElementById("markCompleteBtn");
+      chapter_edited_book: {
+        id: 'chapter_edited_book',
+        label: 'Chapter in an Edited Book',
+        shortLabel: 'Chapter',
+        artifactLabel: 'Book Contents + Chapter Opening',
+        artifactHtml: `
+          <div class="artifact">
+            <div class="meta-faint">From the book</div>
+            <div class="book-title">Teaching Writing Across Contexts</div>
+            <div>Edited by Morgan Chen and Felicia Gomez</div>
+            <div class="meta-faint">North Street Press • 2022</div>
+            <div class="rule"></div>
+            <div class="source-title" style="font-size:1.2rem;">Chapter 4. Learning Through Worked Examples</div>
+            <div>Janelle Brooks</div>
+            <div class="meta-faint">pp. 77-101</div>
+            <div class="rule"></div>
+            <p class="meta-faint">This chapter examines the relationship between guided models and transfer...</p>
+          </div>
+        `,
+        decisions: [
+          {
+            id: 'chapter_author_choice',
+            prompt: 'Which person is the chapter author?',
+            options: [
+              { value: 'brooks', label: 'Janelle Brooks' },
+              { value: 'chen', label: 'Morgan Chen' },
+              { value: 'gomez', label: 'Felicia Gomez' }
+            ],
+            correct: 'brooks',
+            blockIfWrong: true,
+            success: 'You identified the chapter author correctly.',
+            correction: 'Use the person who wrote the chapter, not the editors of the book.'
+          },
+          {
+            id: 'editor_choice',
+            prompt: 'Who are the editors of the book?',
+            options: [
+              { value: 'editors', label: 'Morgan Chen and Felicia Gomez' },
+              { value: 'author', label: 'Janelle Brooks' },
+              { value: 'publisher', label: 'North Street Press' }
+            ],
+            correct: 'editors',
+            blockIfWrong: true,
+            success: 'You identified the editors correctly.',
+            correction: 'The editors are the people responsible for the whole book.'
+          },
+          {
+            id: 'title_role_choice',
+            prompt: 'Which title is the chapter title?',
+            options: [
+              { value: 'chapter', label: 'Learning Through Worked Examples' },
+              { value: 'book', label: 'Teaching Writing Across Contexts' },
+              { value: 'chapter_number', label: 'Chapter 4' }
+            ],
+            correct: 'chapter',
+            blockIfWrong: true,
+            success: 'You distinguished the chapter title from the book title.',
+            correction: 'Use the chapter title for the chapter element and the book title for the container.'
+          }
+        ],
+        fields: [
+          { key: 'chapterAuthor', label: 'Chapter author', placeholder: 'Enter the chapter author' },
+          { key: 'year', label: 'Year', placeholder: 'Example: 2022' },
+          { key: 'chapterTitle', label: 'Chapter title', placeholder: 'Enter the chapter title' },
+          { key: 'editors', label: 'Editors', placeholder: 'Enter the editors' },
+          { key: 'bookTitle', label: 'Book title', placeholder: 'Enter the book title' },
+          { key: 'pages', label: 'Page range', placeholder: 'Example: 77–101' },
+          { key: 'publisher', label: 'Publisher', placeholder: 'Enter the publisher' }
+        ],
+        correctData: {
+          chapterAuthorRaw: 'Janelle Brooks',
+          chapterAuthorAPA: 'Brooks, J.',
+          yearRaw: '2022',
+          yearAPA: '(2022).',
+          chapterTitleRaw: 'Learning Through Worked Examples',
+          chapterTitleAPA: 'Learning through worked examples.',
+          editorsRaw: 'Morgan Chen and Felicia Gomez',
+          editorsAPA: 'M. Chen & F. Gomez',
+          bookTitleRaw: 'Teaching Writing Across Contexts',
+          bookTitleAPA: 'Teaching writing across contexts',
+          pagesRaw: '77-101',
+          pagesAPA: '77–101',
+          publisherRaw: 'North Street Press',
+          publisherAPA: 'North Street Press'
+        },
+        buildReference() {
+          return `${this.correctData.chapterAuthorAPA} ${this.correctData.yearAPA} ${this.correctData.chapterTitleAPA} In ${this.correctData.editorsAPA} (Eds.), <span class="ital">${this.correctData.bookTitleAPA}</span> (pp. ${this.correctData.pagesAPA}). ${this.correctData.publisherAPA}.`;
+        }
+      }
+    };
 
-    const referencePreview = document.getElementById("referencePreview");
-    const feedbackBox = document.getElementById("feedbackBox");
-    const feedbackItems = document.getElementById("feedbackItems");
-    const sourceCompleteBox = document.getElementById("sourceCompleteBox");
-    const apaPreviewBox = document.getElementById("apaPreviewBox");
-    const apaExampleTitle = document.getElementById("apaExampleTitle");
-    const apaLinkBtn = document.getElementById("apaLinkBtn");
-    const apaModelPreview = document.getElementById("apaModelPreview");
-    const apaExampleNote = document.getElementById("apaExampleNote");
+    const exampleBank = [
+      {
+        sourceId: 'journal_article',
+        prompt: 'Which reference best matches this journal article source type?',
+        artifactSnippet: 'Article with named authors, journal title, volume/issue, and page range.',
+        correct: 'Smith, J. A., & Lee, P. R. (2021). How interface friction shapes student citation accuracy. Digital Communication Review, 14(2), 123–135.',
+        distractors: [
+          'Smith, John A., and Priya R. Lee. 2021. “How Interface Friction Shapes Student Citation Accuracy.” Digital Communication Review 14(2): 123-135.',
+          'Smith, J. A., & Lee, P. R. (2021). Digital Communication Review. How interface friction shapes student citation accuracy, 14(2), 123–135.',
+          'How interface friction shapes student citation accuracy. (2021). Smith & Lee. Digital Communication Review, 14(2), 123–135.'
+        ]
+      },
+      {
+        sourceId: 'webpage_author',
+        prompt: 'Which reference best matches this webpage with a named author?',
+        artifactSnippet: 'Webpage with author, page title, website name, and URL.',
+        correct: 'Patel, M. (2023, July 18). Why students misread source details online. The Learning Lab. https://www.thelearninglab.org/teaching/why-students-misread-source-details',
+        distractors: [
+          'The Learning Lab. (2023, July 18). Why students misread source details online. Maya Patel. https://www.thelearninglab.org/teaching/why-students-misread-source-details',
+          'Patel, Maya. July 18, 2023. “Why Students Misread Source Details Online.” https://www.thelearninglab.org/teaching/why-students-misread-source-details',
+          'Patel, M. (2023). The Learning Lab: Why students misread source details online. https://www.thelearninglab.org/teaching/why-students-misread-source-details'
+        ]
+      },
+      {
+        sourceId: 'book',
+        prompt: 'Which reference best matches this whole book?',
+        artifactSnippet: 'Single-author book with year and publisher.',
+        correct: 'Martinez, E. (2020). Writing research in everyday contexts. Riverbend Academic Press.',
+        distractors: [
+          'Martinez, E. Writing research in everyday contexts. (2020). Riverbend Academic Press.',
+          'Riverbend Academic Press. (2020). Writing research in everyday contexts. Elena Martinez.',
+          'Martinez, Elena. (2020). Writing Research in Everyday Contexts. Boston: Riverbend Academic Press.'
+        ]
+      },
+      {
+        sourceId: 'webpage_no_author',
+        prompt: 'Which reference best matches this webpage with no named author?',
+        artifactSnippet: 'Webpage with title, date, website name, and no listed author.',
+        correct: 'Reference list checklist. (2024, September 2). Campus Writing Center. https://campuswritingcenter.edu/reference-list-checklist',
+        distractors: [
+          'Campus Writing Center. (2024, September 2). Reference list checklist. https://campuswritingcenter.edu/reference-list-checklist',
+          'Reference List Checklist. Campus Writing Center. (2024, September 2). https://campuswritingcenter.edu/reference-list-checklist',
+          'Reference list checklist. (n.d.). Campus Writing Center. https://campuswritingcenter.edu/reference-list-checklist'
+        ]
+      },
+      {
+        sourceId: 'chapter_edited_book',
+        prompt: 'Which reference best matches a chapter in an edited book?',
+        artifactSnippet: 'Chapter author, chapter title, editors, book title, page range, and publisher.',
+        correct: 'Brooks, J. (2022). Learning through worked examples. In M. Chen & F. Gomez (Eds.), Teaching writing across contexts (pp. 77–101). North Street Press.',
+        distractors: [
+          'Chen, M., & Gomez, F. (Eds.). (2022). Teaching writing across contexts. North Street Press.',
+          'Brooks, J. (2022). Teaching writing across contexts. In Learning through worked examples (pp. 77–101). North Street Press.',
+          'Brooks, J. (2022). Learning through worked examples. Teaching writing across contexts, 77–101. North Street Press.'
+        ]
+      }
+    ];
 
-    const badgeCanvas = document.getElementById("badgeCanvas");
-    const copyBadgeBtn = document.getElementById("copyBadgeBtn");
-    const downloadBadgeBtn = document.getElementById("downloadBadgeBtn");
-    const completeBackBtn = document.getElementById("completeBackBtn");
-    const copyMessage = document.getElementById("copyMessage");
-    const reflectionPromptText = document.getElementById("reflectionPromptText");
-    const reflectionBox = document.getElementById("reflectionBox");
-
-    function getCurrentSource() {
-      return sources.find(source => source.id === currentSourceId) || sources[0];
+    function shuffle(array) {
+      const clone = array.slice();
+      for (let i = clone.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [clone[i], clone[j]] = [clone[j], clone[i]];
+      }
+      return clone;
     }
 
-    function normalizeString(str) {
-      return String(str)
-        .replace(/\s+/g, " ")
-        .replace(/\s+\./g, ".")
-        .trim()
-        .toLowerCase();
-    }
+    const preparedExamples = exampleBank.map((item, idx) => {
+      const options = shuffle([
+        { text: item.correct, isCorrect: true },
+        ...item.distractors.map(text => ({ text, isCorrect: false }))
+      ]);
+      return { ...item, id: `example_${idx + 1}`, options };
+    });
 
-    function ensurePeriod(text) {
-      const trimmed = String(text || "").trim();
-      if (!trimmed) return "";
-      return /[.!?]$/.test(trimmed) ? trimmed : trimmed + ".";
-    }
-
-    function compareExact(results, actual, expected, label) {
-      const a = String(actual || "").trim();
-      const e = String(expected || "").trim();
-
-      if (!a) {
-        results.push({ type: "structural", message: `${label} is missing.` });
-        return;
-      }
-
-      if (normalizeString(a) === normalizeString(e)) {
-        results.push({ type: "success", message: `${label} looks correct.` });
-        return;
-      }
-
-      results.push({ type: "formatting", message: `${label} does not look correct for this source.` });
-    }
-
-    function compareUrlLike(results, actual, expected, label) {
-      const a = String(actual || "").trim();
-      const e = String(expected || "").trim();
-
-      if (!a) {
-        results.push({ type: "structural", message: `${label} is missing.` });
-        return;
-      }
-
-      if (!/^https?:\/\//.test(a)) {
-        results.push({ type: "formatting", message: `${label} should begin with http:// or https://.` });
-        return;
-      }
-
-      if (normalizeString(a) === normalizeString(e)) {
-        results.push({ type: "success", message: `${label} looks correct.` });
-        return;
-      }
-
-      results.push({ type: "formatting", message: `${label} does not match the source evidence.` });
-    }
-
-    function finalizeResults(results, values, requiredKeys) {
-      const allPresent = requiredKeys.every(key => String(values[key] || "").trim());
-      const hasStructural = results.some(item => item.type === "structural");
-      const hasBlockingFormatting = results.some(item =>
-        item.type === "formatting" &&
-        !item.message.includes("convert it to APA")
-      );
-      const hasConversionFormatting = results.some(item =>
-        item.message.includes("convert it to APA")
-      );
-
-      if (allPresent && !hasStructural && !hasBlockingFormatting && !hasConversionFormatting) {
-        results.push({ type: "success", message: "This entry looks structurally correct for this source type." });
-      }
-    }
-
-    function dedupeResults(results) {
-      const seen = new Set();
-      return results.filter(item => {
-        const key = item.type + "|" + item.message;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-    }
-
-    function navigateTo(screenName, push = true) {
-      introScreen.classList.remove("active");
-      guideScreen.classList.remove("active");
-      labScreen.classList.remove("active");
-      completeScreen.classList.remove("active");
-
-      if (screenName === "intro") introScreen.classList.add("active");
-      if (screenName === "guide") guideScreen.classList.add("active");
-      if (screenName === "lab") labScreen.classList.add("active");
-      if (screenName === "complete") completeScreen.classList.add("active");
-
-      if (push) {
-        const last = navHistory[navHistory.length - 1];
-        if (last !== screenName) navHistory.push(screenName);
-      }
+    function navigateTo(view) {
+      appState.historyStack.push(appState.currentView);
+      appState.currentView = view;
+      render();
     }
 
     function goBack() {
-      if (navHistory.length > 1) {
-        navHistory.pop();
-        const prev = navHistory[navHistory.length - 1];
-        navigateTo(prev, false);
-      } else {
-        navigateTo("intro", false);
+      appState.currentView = appState.historyStack.pop() || 'orientation';
+      render();
+    }
+
+    function currentSourceId() {
+      return sourceOrder[appState.currentSourceIndex];
+    }
+
+    function currentSource() {
+      return sourceLibrary[currentSourceId()];
+    }
+
+    function sanitize(value) {
+      return (value || '').trim().replace(/\s+/g, ' ');
+    }
+
+    function normalizeForCompare(value) {
+      return sanitize(value)
+        .toLowerCase()
+        .replace(/[“”"'.,:;!?()]/g, '')
+        .replace(/–/g, '-')
+        .replace(/&/g, 'and');
+    }
+
+    function normalizePages(value) {
+      return sanitize(value).replace(/–/g, '-').replace(/\s+/g, '');
+    }
+
+    function sentenceCase(str) {
+      const clean = sanitize(str);
+      if (!clean) return '';
+      return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
+    }
+
+    function hasInitialsPattern(value) {
+      return /\b[A-Z]\./.test(value);
+    }
+
+    function titleLooksSentenceCase(value) {
+      const clean = sanitize(value);
+      if (!clean) return false;
+      const words = clean.split(' ');
+      return words.slice(1).filter(Boolean).every(word => {
+        const stripped = word.replace(/[^A-Za-z]/g, '');
+        if (!stripped) return true;
+        return stripped[0] === stripped[0].toLowerCase();
+      });
+    }
+
+    function getBuilderFormValues(sourceId) {
+      return appState.formResponses[sourceId] || {};
+    }
+
+    function updateBuilderField(sourceId, key, value) {
+      if (!appState.formResponses[sourceId]) appState.formResponses[sourceId] = {};
+      appState.formResponses[sourceId][key] = value;
+    }
+
+    function updateDecision(sourceId, decisionId, value) {
+      if (!appState.decisionResponses[sourceId]) appState.decisionResponses[sourceId] = {};
+      appState.decisionResponses[sourceId][decisionId] = value;
+    }
+
+    function selectExampleOption(exampleId, optionIndex) {
+      appState.exampleResponses[exampleId] = optionIndex;
+      render();
+    }
+
+    function submitExample() {
+      const example = preparedExamples[appState.currentExampleIndex];
+      const selected = appState.exampleResponses[example.id];
+      if (selected === undefined) {
+        alert('Choose an answer before checking.');
+        return;
+      }
+      const isCorrect = example.options[selected].isCorrect;
+      example.result = isCorrect;
+      if (isCorrect && appState.currentExampleIndex < preparedExamples.length - 1) {
+        appState.currentExampleIndex += 1;
+      } else if (isCorrect && appState.currentExampleIndex === preparedExamples.length - 1) {
+        appState.examplePhaseComplete = true;
+        navigateTo('builder');
+        return;
+      }
+      render();
+    }
+
+    function buildFeedback(sourceId) {
+      const source = sourceLibrary[sourceId];
+      const values = getBuilderFormValues(sourceId);
+      const decisions = appState.decisionResponses[sourceId] || {};
+
+      const tier1 = [];
+      const tier2 = [];
+      const tier3 = [];
+
+      source.decisions.forEach(decision => {
+        const userChoice = decisions[decision.id];
+        if (userChoice === decision.correct) {
+          tier1.push(decision.success);
+        } else if (decision.blockIfWrong) {
+          tier3.push(decision.correction);
+        }
+      });
+
+      if (sourceId === 'journal_article') {
+        if (normalizeForCompare(values.author).includes('smith') && normalizeForCompare(values.author).includes('lee')) {
+          tier1.push('You identified the correct authors.');
+          if (!hasInitialsPattern(values.author) || !normalizeForCompare(values.author).includes('smith j a')) {
+            tier2.push('Convert full first names to APA initials for the authors.');
+          }
+        } else if (sanitize(values.author)) {
+          tier3.push('The author field does not identify the article authors correctly.');
+        }
+
+        if (normalizeForCompare(values.year) === '2021') {
+          tier1.push('You identified the correct year.');
+        } else if (sanitize(values.year)) {
+          tier3.push('The year is incorrect for this article.');
+        }
+
+        if (normalizeForCompare(values.title) === normalizeForCompare(source.correctData.titleRaw)) {
+          tier1.push('You identified the correct article title.');
+          if (!titleLooksSentenceCase(values.title)) {
+            tier2.push('Convert the article title to sentence case.');
+          }
+        } else if (sanitize(values.title)) {
+          tier3.push('The article title is incorrect.');
+        }
+
+        if (normalizeForCompare(values.journal) === normalizeForCompare(source.correctData.journalRaw)) {
+          tier1.push('You identified the correct journal title.');
+        } else if (sanitize(values.journal)) {
+          tier3.push('The journal title is incorrect.');
+        }
+
+        if (normalizeForCompare(values.volumeIssue) === normalizeForCompare('14(2)') || normalizeForCompare(values.volumeIssue) === normalizeForCompare('14, 2')) {
+          tier1.push('You identified the correct volume and issue.');
+          if (normalizeForCompare(values.volumeIssue) !== normalizeForCompare('14(2)')) {
+            tier2.push('Format the volume and issue as 14(2).');
+          }
+        } else if (sanitize(values.volumeIssue)) {
+          tier3.push('The volume and issue do not match the source.');
+        }
+
+        if (normalizePages(values.pages) === normalizePages(source.correctData.pagesRaw) || normalizePages(values.pages) === normalizePages(source.correctData.pagesAPA)) {
+          tier1.push('You identified the correct page range.');
+          if (values.pages && values.pages.includes('-') && !values.pages.includes('–')) {
+            tier2.push('Use an en dash rather than a hyphen in the page range.');
+          }
+        } else if (sanitize(values.pages)) {
+          tier3.push('The page range is incorrect.');
+        }
+      }
+
+      if (sourceId === 'webpage_author') {
+        if (normalizeForCompare(values.author).includes('maya') && normalizeForCompare(values.author).includes('patel')) {
+          tier1.push('You identified the correct webpage author.');
+          if (!hasInitialsPattern(values.author)) {
+            tier2.push('Convert the author name to initials for APA style.');
+          }
+        } else if (sanitize(values.author)) {
+          tier3.push('The webpage author is incorrect.');
+        }
+
+        if (normalizeForCompare(values.date) === normalizeForCompare(source.correctData.dateRaw)) {
+          tier1.push('You identified the correct webpage date.');
+          if (normalizeForCompare(values.date) !== normalizeForCompare('2023 July 18')) {
+            tier2.push('Format the date in APA order: year, month day, inside parentheses.');
+          }
+        } else if (sanitize(values.date)) {
+          tier3.push('The date is incorrect for this webpage.');
+        }
+
+        if (normalizeForCompare(values.title) === normalizeForCompare(source.correctData.titleRaw)) {
+          tier1.push('You identified the correct webpage title.');
+          if (!titleLooksSentenceCase(values.title)) {
+            tier2.push('Convert the webpage title to sentence case.');
+          }
+        } else if (sanitize(values.title)) {
+          tier3.push('The webpage title is incorrect.');
+        }
+
+        if (normalizeForCompare(values.siteName) === normalizeForCompare(source.correctData.siteNameRaw)) {
+          tier1.push('You identified the correct website name.');
+        } else if (sanitize(values.siteName)) {
+          tier3.push('The website name is incorrect.');
+        }
+
+        if (sanitize(values.url) === source.correctData.urlRaw) {
+          tier1.push('You identified the correct URL.');
+        } else if (sanitize(values.url)) {
+          tier3.push('The URL is incorrect.');
+        }
+      }
+
+      if (sourceId === 'book') {
+        if (normalizeForCompare(values.author).includes('elena') && normalizeForCompare(values.author).includes('martinez')) {
+          tier1.push('You identified the correct book author.');
+          if (!hasInitialsPattern(values.author)) {
+            tier2.push('Convert the author name to initials for APA style.');
+          }
+        } else if (sanitize(values.author)) {
+          tier3.push('The book author is incorrect.');
+        }
+
+        if (normalizeForCompare(values.year) === normalizeForCompare(source.correctData.yearRaw)) {
+          tier1.push('You identified the correct year.');
+        } else if (sanitize(values.year)) {
+          tier3.push('The year is incorrect for this book.');
+        }
+
+        if (normalizeForCompare(values.title) === normalizeForCompare(source.correctData.titleRaw)) {
+          tier1.push('You identified the correct book title.');
+          if (!titleLooksSentenceCase(values.title)) {
+            tier2.push('Convert the book title to sentence case.');
+          }
+        } else if (sanitize(values.title)) {
+          tier3.push('The book title is incorrect.');
+        }
+
+        if (normalizeForCompare(values.publisher) === normalizeForCompare(source.correctData.publisherRaw)) {
+          tier1.push('You identified the correct publisher.');
+        } else if (sanitize(values.publisher)) {
+          tier3.push('The publisher is incorrect.');
+        }
+      }
+
+      if (sourceId === 'webpage_no_author') {
+        if (normalizeForCompare(values.title) === normalizeForCompare(source.correctData.titleRaw)) {
+          tier1.push('You identified the correct title for the author position.');
+          if (!titleLooksSentenceCase(values.title)) {
+            tier2.push('Convert the title to sentence case for APA style.');
+          }
+        } else if (sanitize(values.title)) {
+          tier3.push('The title is incorrect for this no-author webpage reference.');
+        }
+
+        if (normalizeForCompare(values.date) === normalizeForCompare(source.correctData.dateRaw)) {
+          tier1.push('You identified the correct webpage date.');
+          tier2.push('Check APA date order and punctuation when formatting the final reference.');
+        } else if (sanitize(values.date)) {
+          tier3.push('The date is incorrect for this webpage.');
+        }
+
+        if (normalizeForCompare(values.siteName) === normalizeForCompare(source.correctData.siteNameRaw)) {
+          tier1.push('You identified the correct website name.');
+        } else if (sanitize(values.siteName)) {
+          tier3.push('The website name is incorrect.');
+        }
+
+        if (sanitize(values.url) === source.correctData.urlRaw) {
+          tier1.push('You identified the correct URL.');
+        } else if (sanitize(values.url)) {
+          tier3.push('The URL is incorrect.');
+        }
+      }
+
+      if (sourceId === 'chapter_edited_book') {
+        if (normalizeForCompare(values.chapterAuthor).includes('janelle') && normalizeForCompare(values.chapterAuthor).includes('brooks')) {
+          tier1.push('You identified the correct chapter author.');
+          if (!hasInitialsPattern(values.chapterAuthor)) {
+            tier2.push('Convert the chapter author name to initials for APA style.');
+          }
+        } else if (sanitize(values.chapterAuthor)) {
+          tier3.push('The chapter author is incorrect.');
+        }
+
+        if (normalizeForCompare(values.year) === normalizeForCompare(source.correctData.yearRaw)) {
+          tier1.push('You identified the correct year.');
+        } else if (sanitize(values.year)) {
+          tier3.push('The year is incorrect.');
+        }
+
+        if (normalizeForCompare(values.chapterTitle) === normalizeForCompare(source.correctData.chapterTitleRaw)) {
+          tier1.push('You identified the correct chapter title.');
+          if (!titleLooksSentenceCase(values.chapterTitle)) {
+            tier2.push('Convert the chapter title to sentence case.');
+          }
+        } else if (sanitize(values.chapterTitle)) {
+          tier3.push('The chapter title is incorrect.');
+        }
+
+        const editorsNorm = normalizeForCompare(values.editors);
+        if (editorsNorm.includes('morgan') && editorsNorm.includes('chen') && editorsNorm.includes('felicia') && editorsNorm.includes('gomez')) {
+          tier1.push('You identified the correct editors.');
+          if (!hasInitialsPattern(values.editors)) {
+            tier2.push('Format the editors with initials in APA style.');
+          }
+        } else if (sanitize(values.editors)) {
+          tier3.push('The editors are incorrect.');
+        }
+
+        if (normalizeForCompare(values.bookTitle) === normalizeForCompare(source.correctData.bookTitleRaw)) {
+          tier1.push('You identified the correct book title.');
+          if (!titleLooksSentenceCase(values.bookTitle)) {
+            tier2.push('Convert the book title to sentence case.');
+          }
+        } else if (sanitize(values.bookTitle)) {
+          tier3.push('The book title is incorrect.');
+        }
+
+        if (normalizePages(values.pages) === normalizePages(source.correctData.pagesRaw) || normalizePages(values.pages) === normalizePages(source.correctData.pagesAPA)) {
+          tier1.push('You identified the correct page range.');
+          if (values.pages && values.pages.includes('-') && !values.pages.includes('–')) {
+            tier2.push('Use an en dash rather than a hyphen in the page range.');
+          }
+        } else if (sanitize(values.pages)) {
+          tier3.push('The page range is incorrect.');
+        }
+
+        if (normalizeForCompare(values.publisher) === normalizeForCompare(source.correctData.publisherRaw)) {
+          tier1.push('You identified the correct publisher.');
+        } else if (sanitize(values.publisher)) {
+          tier3.push('The publisher is incorrect.');
+        }
+      }
+
+      return {
+        tier1: [...new Set(tier1)],
+        tier2: [...new Set(tier2)],
+        tier3: [...new Set(tier3)],
+        canComplete: tier3.length === 0
+      };
+    }
+
+    function checkBuilder() {
+      const sourceId = currentSourceId();
+      const feedback = buildFeedback(sourceId);
+      appState.feedbackBySource[sourceId] = feedback;
+      if (feedback.canComplete) {
+        appState.builderProgress[sourceId] = true;
+        appState.completionReady = sourceOrder.every(id => !!appState.builderProgress[id]);
+      }
+      render();
+    }
+
+    function moveToNextSource() {
+      if (appState.currentSourceIndex < sourceOrder.length - 1) {
+        appState.currentSourceIndex += 1;
+        render();
+      } else if (appState.completionReady) {
+        navigateTo('completion');
       }
     }
 
-    function resetGuideSelections() {
-      guideState.category = null;
-      guideState.example = null;
-      guideState.pattern = null;
+    function toggleVerify(sourceId) {
+      appState.verifyOpen[sourceId] = !appState.verifyOpen[sourceId];
+      render();
     }
 
-    function resetFormForCurrentSource() {
-      const source = getCurrentSource();
-      formValues = { ...source.blankValues };
-      feedbackBox.classList.add("hidden");
-      apaPreviewBox.classList.add("hidden");
-      sourceCompleteBox.classList.toggle("hidden", !completedSources.includes(currentSourceId));
-      renderForm();
-      renderPreview();
+    function downloadBadge() {
+      const canvas = document.getElementById('badgeCanvas');
+      const link = document.createElement('a');
+      link.download = 'apa-reference-builder-badge.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
     }
 
-    function isGuidePassedForCurrentSource() {
-      return !!guideState.passedBySource[currentSourceId];
-    }
-
-    function renderSourceSelect() {
-      sourceSelect.innerHTML = "";
-      sources.forEach(source => {
-        const option = document.createElement("option");
-        option.value = source.id;
-        option.textContent = source.label;
-        sourceSelect.appendChild(option);
-      });
-      sourceSelect.value = currentSourceId;
-    }
-
-    function renderProgress() {
-      studentNameDisplay.textContent = studentName.trim() || "Name not entered yet";
-      progressText.textContent = completedSources.length + " of " + sources.length + " source types completed";
-      const percent = Math.round((completedSources.length / sources.length) * 100);
-      progressBar.style.width = percent + "%";
-      progressPercentText.textContent = percent + "%";
-      unlockBadgeBtn.disabled = !(studentName.trim() && completedSources.length === sources.length);
-    }
-
-    function renderInspectPanel() {
-      const source = getCurrentSource();
-      sourceTypePill.textContent = source.instructionalType;
-      snapshotHeading.textContent = source.snapshotHeading;
-      snapshotList.innerHTML = "";
-      source.snapshotLines.forEach(line => {
-        const li = document.createElement("li");
-        li.textContent = line;
-        snapshotList.appendChild(li);
-      });
-
-      guideStatusText.textContent = isGuidePassedForCurrentSource()
-        ? "Guide completed for this source. You can verify against APA Style."
-        : "Guide not completed yet for this source. Practice using APA Style before verifying.";
-    }
-
-    function renderForm() {
-      const source = getCurrentSource();
-      formFields.innerHTML = "";
-
-      source.fields.forEach(fieldDef => {
-        const wrapper = document.createElement("label");
-        wrapper.textContent = fieldDef.label;
-
-        let input;
-        if (fieldDef.type === "textarea") {
-          input = document.createElement("textarea");
-          input.rows = 3;
-        } else {
-          input = document.createElement("input");
-          input.type = "text";
-        }
-
-        input.className = "field";
-        input.value = formValues[fieldDef.key] || "";
-        input.addEventListener("input", event => {
-          formValues[fieldDef.key] = event.target.value;
-          renderPreview();
-        });
-
-        wrapper.appendChild(input);
-        formFields.appendChild(wrapper);
-      });
-    }
-
-    function renderPreview() {
-      const source = getCurrentSource();
-      const plain = source.plainReference(formValues).trim();
-      referencePreview.textContent = plain || "Your APA reference will appear here.";
-    }
-
-    function renderFeedback() {
-      const source = getCurrentSource();
-      const checks = source.validate(formValues);
-      feedbackItems.innerHTML = "";
-
-      checks.forEach(check => {
-        const div = document.createElement("div");
-        div.className = "feedback-item feedback-" + check.type;
-        div.innerHTML = "<strong>" + check.type + ":</strong> " + check.message;
-        feedbackItems.appendChild(div);
-      });
-
-      feedbackBox.classList.remove("hidden");
-    }
-
-    function renderAPAPreview() {
-      const source = getCurrentSource();
-      apaExampleTitle.textContent = source.apaExampleTitle;
-      apaLinkBtn.href = source.apaLink;
-      apaModelPreview.innerHTML = source.buildReference(source.answers);
-      apaExampleNote.textContent = source.apaExampleNote;
-    }
-
-    function renderLab() {
-      renderSourceSelect();
-      renderProgress();
-      renderInspectPanel();
-      renderForm();
-      renderPreview();
-      renderAPAPreview();
-      sourceCompleteBox.classList.toggle("hidden", !completedSources.includes(currentSourceId));
-    }
-
-    function renderGuideSidebar(showAnswerKey = false) {
-      const source = getCurrentSource();
-      guideCurrentSource.textContent = source.label;
-      guideTaskText.textContent = source.guideTask;
-      guideCategoryList.innerHTML = "";
-
-      source.guideChoices.categoryOptions.forEach(option => {
-        const li = document.createElement("li");
-        li.textContent = option;
-        if (showAnswerKey && option === source.guideChoices.correctCategory) {
-          li.style.fontWeight = "bold";
-          li.style.color = "#166534";
-        }
-        guideCategoryList.appendChild(li);
-      });
-
-      guideExampleLabel.textContent = showAnswerKey ? source.guideChoices.correctExample : "Not revealed yet";
-      guideModelReference.innerHTML = showAnswerKey
-        ? source.buildReference(source.answers)
-        : "<span class='muted'>The formatted example appears after you finish the guide.</span>";
-    }
-
-    function renderGuideStep1() {
-      const source = getCurrentSource();
-      guideStepHeading.textContent = "Step 1 of 4";
-      guideStepBody.innerHTML = "";
-      guideFeedback.classList.add("hidden");
-      guideFeedback.innerHTML = "";
-      renderGuideSidebar(false);
-
-      const prompt = document.createElement("p");
-      prompt.textContent = "Where would you click first on the APA Style examples page?";
-      guideStepBody.appendChild(prompt);
-
-      source.guideChoices.categoryOptions.forEach(option => {
-        const btn = document.createElement("button");
-        btn.className = "option-btn" + (guideState.category === option ? " selected" : "");
-        btn.textContent = option;
-        btn.addEventListener("click", () => {
-          guideState.category = option;
-          renderGuideStep2();
-        });
-        guideStepBody.appendChild(btn);
-      });
-    }
-
-    function renderGuideStep2() {
-      const source = getCurrentSource();
-      guideStepHeading.textContent = "Step 2 of 4";
-      guideStepBody.innerHTML = "";
-      guideFeedback.classList.add("hidden");
-      guideFeedback.innerHTML = "";
-      renderGuideSidebar(false);
-
-      const prompt = document.createElement("p");
-      prompt.textContent = "Which example best matches your source?";
-      guideStepBody.appendChild(prompt);
-
-      source.guideChoices.exampleOptions.forEach(option => {
-        const btn = document.createElement("button");
-        btn.className = "option-btn" + (guideState.example === option ? " selected" : "");
-        btn.textContent = option;
-        btn.addEventListener("click", () => {
-          guideState.example = option;
-          renderGuideStep3();
-        });
-        guideStepBody.appendChild(btn);
-      });
-    }
-
-    function renderGuideStep3() {
-      const source = getCurrentSource();
-      guideStepHeading.textContent = "Step 3 of 4";
-      guideStepBody.innerHTML = "";
-      guideFeedback.classList.add("hidden");
-      guideFeedback.innerHTML = "";
-      renderGuideSidebar(false);
-
-      const prompt = document.createElement("p");
-      prompt.textContent = source.guideChoices.patternPrompt;
-      guideStepBody.appendChild(prompt);
-
-      source.guideChoices.patternOptions.forEach(option => {
-        const btn = document.createElement("button");
-        btn.className = "option-btn" + (guideState.pattern === option ? " selected" : "");
-        btn.textContent = option;
-        btn.addEventListener("click", () => {
-          guideState.pattern = option;
-          renderGuideStep3();
-        });
-        guideStepBody.appendChild(btn);
-      });
-
-      const checkBtn = document.createElement("button");
-      checkBtn.className = "primary";
-      checkBtn.style.marginTop = "8px";
-      checkBtn.textContent = "Check guide answers";
-      checkBtn.addEventListener("click", evaluateGuide);
-      guideStepBody.appendChild(checkBtn);
-    }
-
-    function evaluateGuide() {
-      const source = getCurrentSource();
-      const categoryCorrect = guideState.category === source.guideChoices.correctCategory;
-      const exampleCorrect = guideState.example === source.guideChoices.correctExample;
-      const patternCorrect = guideState.pattern === source.guideChoices.correctPattern;
-      const allCorrect = categoryCorrect && exampleCorrect && patternCorrect;
-
-      guideFeedback.classList.remove("hidden");
-      guideFeedback.innerHTML = "";
-      renderGuideSidebar(true);
-
-      const items = [
-        {
-          ok: categoryCorrect,
-          good: "Section choice: Correct.",
-          bad: "Section choice: Try " + source.guideChoices.correctCategory + "."
-        },
-        {
-          ok: exampleCorrect,
-          good: "Example choice: Correct.",
-          bad: "Example choice: Look for " + source.guideChoices.correctExample + "."
-        },
-        {
-          ok: patternCorrect,
-          good: "Pattern choice: Correct.",
-          bad: "Pattern choice: The best answer is " + source.guideChoices.correctPattern + "."
-        }
-      ];
-
-      items.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "feedback-item " + (item.ok ? "feedback-success" : "feedback-structural");
-        div.textContent = item.ok ? item.good : item.bad;
-        guideFeedback.appendChild(div);
-      });
-
-      if (allCorrect) {
-        guideState.passedBySource[currentSourceId] = true;
-        renderGuideStep4();
+    async function copyBadge() {
+      const canvas = document.getElementById('badgeCanvas');
+      if (!navigator.clipboard || !window.ClipboardItem) {
+        alert('Copy to clipboard is not supported in this browser. Use Download PNG instead.');
+        return;
       }
-    }
-
-    function renderGuideStep4() {
-      const source = getCurrentSource();
-      guideStepHeading.textContent = "Step 4 of 4";
-      guideStepBody.innerHTML = "";
-      guideFeedback.classList.add("hidden");
-      guideFeedback.innerHTML = "";
-      renderGuideSidebar(true);
-
-      const box = document.createElement("div");
-      box.className = "green-box";
-      box.innerHTML = "<p><strong>Guide complete</strong></p><p style='margin-bottom:0;'>" + source.guideChoices.successMessage + "</p>";
-      guideStepBody.appendChild(box);
-
-      const returnBtn = document.createElement("button");
-      returnBtn.className = "indigo";
-      returnBtn.style.marginTop = "14px";
-      returnBtn.textContent = "Return to the builder";
-      returnBtn.addEventListener("click", () => {
-        renderLab();
-        navigateTo("lab");
+      canvas.toBlob(async (blob) => {
+        try {
+          await navigator.clipboard.write([
+            new ClipboardItem({ 'image/png': blob })
+          ]);
+          alert('Badge copied to your clipboard.');
+        } catch (err) {
+          alert('Copy failed in this browser. Use Download PNG instead.');
+        }
       });
-      guideStepBody.appendChild(returnBtn);
-    }
-
-    function renderGuide() {
-      const passed = isGuidePassedForCurrentSource();
-      if (passed) {
-        renderGuideStep4();
-      } else if (!guideState.category) {
-        renderGuideStep1();
-      } else if (!guideState.example) {
-        renderGuideStep2();
-      } else {
-        renderGuideStep3();
-      }
-    }
-
-    function createCompletionPrompt() {
-      const seed = completedSources.length + (studentName.trim().length || 0);
-      return completionPrompts[seed % completionPrompts.length];
     }
 
     function drawBadge() {
-      const canvas = badgeCanvas;
-      const ctx = canvas.getContext("2d");
-      const w = canvas.width;
-      const h = canvas.height;
+      const canvas = document.getElementById('badgeCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const name = sanitize(appState.userName) || 'Student';
+      canvas.width = 900;
+      canvas.height = 900;
 
-      ctx.clearRect(0, 0, w, h);
+      const gradient = ctx.createLinearGradient(0, 0, 900, 900);
+      gradient.addColorStop(0, '#18347c');
+      gradient.addColorStop(1, '#4d86ff');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 900, 900);
 
-      const grad = ctx.createLinearGradient(0, 0, w, h);
-      grad.addColorStop(0, "#eef2ff");
-      grad.addColorStop(1, "#ffffff");
-      ctx.fillStyle = grad;
-      roundRect(ctx, 0, 0, w, h, 34, true, false);
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      ctx.beginPath();
+      ctx.arc(720, 180, 120, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(220, 760, 170, 0, Math.PI * 2);
+      ctx.fill();
 
-      ctx.lineWidth = 8;
-      ctx.strokeStyle = "#c7d2fe";
-      roundRect(ctx, 12, 12, w - 24, h - 24, 30, false, true);
+      ctx.fillStyle = '#ffffff';
+      roundRect(ctx, 90, 90, 720, 720, 40, true, false);
 
-      ctx.fillStyle = "#4338ca";
-      ctx.font = "700 24px Arial";
-      ctx.fillText("APA REFERENCE BUILDER LAB", 70, 90);
+      ctx.strokeStyle = '#d5e1ff';
+      ctx.lineWidth = 10;
+      roundRect(ctx, 120, 120, 660, 660, 34, false, true);
 
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "700 56px Arial";
-      ctx.fillText(studentName || "Student", 70, 170);
+      ctx.fillStyle = '#23408e';
+      ctx.beginPath();
+      ctx.arc(450, 290, 92, 0, Math.PI * 2);
+      ctx.fill();
 
-      ctx.fillStyle = "#475569";
-      ctx.font = "30px Arial";
-      ctx.fillText("completed the full APA reference practice sequence", 70, 225);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 16;
+      ctx.beginPath();
+      ctx.moveTo(408, 288);
+      ctx.lineTo(440, 322);
+      ctx.lineTo(496, 252);
+      ctx.stroke();
 
-      drawStatBox(ctx, 70, 290, 470, 120, "COMPLETED SOURCE TYPES", `${completedSources.length} / ${sources.length}`);
-      drawStatBox(ctx, 580, 290, 550, 120, "COMPLETION DATE", completionDate);
+      ctx.fillStyle = '#183153';
+      ctx.font = 'bold 44px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('APA Reference Builder Lab', 450, 440);
 
-      ctx.fillStyle = "#ffffff";
-      ctx.strokeStyle = "#cbd5e1";
-      ctx.lineWidth = 2;
-      roundRect(ctx, 70, 450, 1060, 130, 26, true, true);
+      ctx.fillStyle = '#456086';
+      ctx.font = '28px Arial';
+      ctx.fillText('Completion Badge', 450, 488);
 
-      ctx.fillStyle = "#64748b";
-      ctx.font = "700 22px Arial";
-      ctx.fillText("COMPLETION STATUS", 100, 500);
+      ctx.fillStyle = '#23408e';
+      ctx.font = 'bold 38px Arial';
+      ctx.fillText(name, 450, 585);
 
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "700 34px Arial";
-      ctx.fillText("Verified all required APA practice sources", 100, 555);
-
-      ctx.fillStyle = "#64748b";
-      ctx.font = "22px Arial";
-      ctx.fillText("Submit this badge image to document completion.", 100, 610);
-
-      lastBadgeDataUrl = canvas.toDataURL("image/png");
-    }
-
-    function drawStatBox(ctx, x, y, width, height, label, value) {
-      ctx.fillStyle = "#ffffff";
-      ctx.strokeStyle = "#c7d2fe";
-      ctx.lineWidth = 2;
-      roundRect(ctx, x, y, width, height, 22, true, true);
-
-      ctx.fillStyle = "#64748b";
-      ctx.font = "700 20px Arial";
-      ctx.fillText(label, x + 28, y + 42);
-
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "700 38px Arial";
-      ctx.fillText(value, x + 28, y + 92);
+      ctx.fillStyle = '#60708f';
+      ctx.font = '24px Arial';
+      ctx.fillText('Identified, classified, and formatted core APA references', 450, 640);
+      ctx.fillText(new Date().toLocaleDateString(), 450, 680);
     }
 
     function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
@@ -1711,154 +1423,292 @@
       if (stroke) ctx.stroke();
     }
 
+    function renderTopBar() {
+      return `
+        <div class="topbar">
+          <div class="title-block">
+            <h1>APA Reference Builder Lab</h1>
+            <p>Practice identifying source information and converting it into APA references.</p>
+          </div>
+          <div class="controls">
+            <button class="btn btn-ghost" ${appState.historyStack.length ? '' : 'disabled'} onclick="goBack()">Back</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function overallProgress() {
+      const total = preparedExamples.length + sourceOrder.length;
+      const examplesDone = preparedExamples.filter(ex => ex.result === true).length;
+      const builderDone = sourceOrder.filter(id => appState.builderProgress[id]).length;
+      return Math.round(((examplesDone + builderDone) / total) * 100);
+    }
+
+    function renderProgress() {
+      const pct = overallProgress();
+      return `
+        <div class="progress-shell">
+          <div class="progress-top">
+            <div><strong>Overall Progress:</strong> ${pct}%</div>
+            <div class="small">Example practice first. Builder lab next. Badge at the end.</div>
+          </div>
+          <div class="progress-track"><div class="progress-bar" style="width:${pct}%"></div></div>
+          <div class="chips">
+            <div class="chip ${appState.currentView === 'orientation' ? 'active' : ''}">Orientation</div>
+            <div class="chip ${appState.examplePhaseComplete ? 'done' : appState.currentView === 'examples' ? 'active' : ''}">Find the Right APA Example</div>
+            <div class="chip ${sourceOrder.every(id => appState.builderProgress[id]) ? 'done' : appState.currentView === 'builder' ? 'active' : ''}">Builder Lab</div>
+            <div class="chip ${appState.currentView === 'completion' ? 'active' : appState.completionReady ? 'done' : ''}">Badge</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderOrientation() {
+      return `
+        <div class="panel hero">
+          <div class="hero-card">
+            <h2>Practice Using APA Style</h2>
+            <p>This lab is designed to help you do two things: identify the right source information in realistic contexts and format that information into APA references.</p>
+            <div class="callout">
+              You will move through three kinds of thinking in order: <strong>interpret</strong>, <strong>classify</strong>, and <strong>format</strong>.
+            </div>
+            <ul>
+              <li><strong>First:</strong> complete all of the “Find the Right APA Example” practice items.</li>
+              <li><strong>Next:</strong> work through the Builder Lab source by source.</li>
+              <li><strong>Finally:</strong> generate a completion badge image you can copy or download.</li>
+            </ul>
+          </div>
+          <div class="hero-card">
+            <h3>How feedback works</h3>
+            <ul>
+              <li><strong>Correct identification:</strong> you found the right source information.</li>
+              <li><strong>APA conversion needed:</strong> your information is right, but formatting still needs adjustment.</li>
+              <li><strong>Incorrect understanding:</strong> you chose the wrong author, date, title role, editor, or source element.</li>
+            </ul>
+            <p><strong>Important:</strong> only incorrect understanding blocks completion.</p>
+            <div class="field" style="margin-top:14px;">
+              <label for="studentName">Your name for the completion badge</label>
+              <input id="studentName" type="text" value="${escapeHtml(appState.userName)}" oninput="appState.userName=this.value" placeholder="Enter your name" />
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Source types in this lab</h3>
+          <div class="chips">
+            ${sourceOrder.map(id => `<div class="chip">${sourceLibrary[id].label}</div>`).join('')}
+          </div>
+          <div class="footer-actions">
+            <div class="small">You will see source information in realistic artifact views rather than clean labeled metadata. That means you need to interpret what belongs in the reference.</div>
+            <button class="btn btn-primary" onclick="navigateTo('examples')">Start Example Practice</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderExamples() {
+      const example = preparedExamples[appState.currentExampleIndex];
+      const selected = appState.exampleResponses[example.id];
+      const result = example.result;
+      return `
+        <div class="panel">
+          <h2>Find the Right APA Example</h2>
+          <p>Work through all source types here first. This is a one-time practice phase before the Builder Lab. The correct answer is randomized each time the page loads.</p>
+          <div class="chips">
+            ${preparedExamples.map((ex, index) => {
+              const cls = ex.result === true ? 'done' : index === appState.currentExampleIndex ? 'active' : '';
+              return `<div class="chip ${cls}">${index + 1}. ${sourceLibrary[ex.sourceId].shortLabel}</div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="example-card">
+          <div class="prompt">${appState.currentExampleIndex + 1}. ${example.prompt}</div>
+          <p class="helper"><strong>Source cue:</strong> ${example.artifactSnippet}</p>
+          <div class="example-options">
+            ${example.options.map((opt, index) => `
+              <label class="example-option">
+                <input type="radio" name="exampleOption" ${selected === index ? 'checked' : ''} onclick="selectExampleOption('${example.id}', ${index})" />
+                ${escapeHtml(opt.text)}
+              </label>
+            `).join('')}
+          </div>
+          ${result === true ? `<div class="status-line" style="color: var(--success);">Correct. Move on to the next source type.</div>` : result === false ? `<div class="status-line" style="color: var(--danger);">Not quite. Review source type patterns and try again.</div>` : ''}
+          <div class="footer-actions">
+            <div class="small">Focus on source type logic: which elements appear, what order they take, and when a container is needed.</div>
+            <button class="btn btn-primary" onclick="submitExample()">Check Answer</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderBuilder() {
+      const source = currentSource();
+      const sourceId = source.id;
+      const values = getBuilderFormValues(sourceId);
+      const feedback = appState.feedbackBySource[sourceId];
+      const decisions = appState.decisionResponses[sourceId] || {};
+
+      return `
+        <div class="panel">
+          <h2>Builder Lab</h2>
+          <p>For each source, inspect the artifact, make a few key decisions, and then build the reference. You can move on once your source understanding is correct, even if some APA formatting still needs refinement.</p>
+          <div class="chips">
+            ${sourceOrder.map((id, index) => {
+              const cls = appState.builderProgress[id] ? 'done' : index === appState.currentSourceIndex ? 'active' : '';
+              return `<div class="chip ${cls}">${index + 1}. ${sourceLibrary[id].shortLabel}</div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>1. Inspect the Source</h3>
+            <div class="artifact-wrap">
+              <div class="artifact-label">${source.artifactLabel}</div>
+              ${source.artifactHtml}
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>2. Make Key Decisions</h3>
+            ${source.decisions.map(decision => `
+              <div class="task-box">
+                <h4>${decision.prompt}</h4>
+                <div class="option-list">
+                  ${decision.options.map(opt => `
+                    <label class="option">
+                      <input type="radio" name="${decision.id}" ${decisions[decision.id] === opt.value ? 'checked' : ''} onclick="updateDecision('${sourceId}', '${decision.id}', '${opt.value}'); render();" />
+                      ${escapeHtml(opt.label)}
+                    </label>
+                  `).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>3. Build the Reference</h3>
+          <div class="builder-form">
+            <div class="field-grid">
+              ${source.fields.map(field => `
+                <div class="field">
+                  <label for="${sourceId}_${field.key}">${field.label}</label>
+                  <input
+                    id="${sourceId}_${field.key}"
+                    type="text"
+                    value="${escapeHtml(values[field.key] || '')}"
+                    placeholder="${escapeHtml(field.placeholder || '')}"
+                    oninput="updateBuilderField('${sourceId}', '${field.key}', this.value)"
+                  />
+                </div>
+              `).join('')}
+            </div>
+            <div class="footer-actions">
+              <div class="small">Use what you can infer from the artifact. Do not worry if your APA formatting is not perfect on the first try.</div>
+              <div>
+                <button class="btn btn-secondary" onclick="checkBuilder()">Check My Work</button>
+                <button class="btn" onclick="toggleVerify('${sourceId}')">${appState.verifyOpen[sourceId] ? 'Hide' : 'Verify'} with APA Style</button>
+              </div>
+            </div>
+          </div>
+
+          ${feedback ? `
+            <div class="feedback-columns">
+              <div class="feedback-card success">
+                <h4>Tier 1: Correct Identification</h4>
+                ${feedback.tier1.length ? `<ul>${feedback.tier1.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : '<p>No correct identifications recorded yet.</p>'}
+              </div>
+              <div class="feedback-card warn">
+                <h4>Tier 2: APA Conversion Needed</h4>
+                ${feedback.tier2.length ? `<ul>${feedback.tier2.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : '<p>No conversion issues detected right now.</p>'}
+              </div>
+              <div class="feedback-card danger">
+                <h4>Tier 3: Incorrect Understanding</h4>
+                ${feedback.tier3.length ? `<ul>${feedback.tier3.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : '<p>No blocking misunderstandings detected.</p>'}
+              </div>
+            </div>
+            <div class="footer-actions">
+              <div class="small">${feedback.canComplete ? 'This source is complete. You can move on, even if some APA conversion reminders remain.' : 'You need to correct Tier 3 issues before this source is marked complete.'}</div>
+              <button class="btn btn-primary" ${feedback.canComplete ? '' : 'disabled'} onclick="moveToNextSource()">${appState.currentSourceIndex === sourceOrder.length - 1 ? 'Finish Lab' : 'Next Source'}</button>
+            </div>
+          ` : ''}
+
+          ${appState.verifyOpen[sourceId] ? `
+            <div class="verify-panel">
+              <strong>4. Verify with APA Style</strong>
+              <p class="small">Use this support panel to compare your work against a correct APA model. This is optional support, not a required redirect.</p>
+              <div class="reference-preview">${source.buildReference()}</div>
+              <p class="small">Compare with official examples at <a href="${APA_LINK}" target="_blank" rel="noopener noreferrer">APA Style reference examples</a>.</p>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
     function renderCompletion() {
-      completionDate = new Date().toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      });
-      reflectionPromptText.textContent = createCompletionPrompt();
-      copyMessage.classList.add("hidden");
-      drawBadge();
+      return `
+        <div class="panel">
+          <h2>Completion Badge</h2>
+          <p>You finished the lab. Generate a badge image with your name and either copy it to your clipboard or download it as a PNG.</p>
+        </div>
+
+        <div class="panel badge-stage">
+          <div>
+            <div class="field">
+              <label for="completionName">Name on badge</label>
+              <input id="completionName" type="text" value="${escapeHtml(appState.userName)}" oninput="appState.userName=this.value; setTimeout(drawBadge, 0);" placeholder="Enter your name" />
+            </div>
+            <div class="callout" style="margin-top:16px;">
+              Your badge is based on successful completion of the example phase and all builder source types.
+            </div>
+            <ul class="mini-list">
+              <li>Copy image for quick pasting into a document or LMS submission space.</li>
+              <li>Download PNG to save the badge as a file.</li>
+              <li>The lab does not require a completion code.</li>
+            </ul>
+            <div class="footer-actions" style="margin-top:22px;">
+              <button class="btn btn-secondary" onclick="copyBadge()">Copy Badge Image</button>
+              <button class="btn btn-primary" onclick="downloadBadge()">Download PNG</button>
+            </div>
+          </div>
+          <div class="badge-box">
+            <canvas id="badgeCanvas" width="900" height="900"></canvas>
+          </div>
+        </div>
+      `;
     }
 
-    studentNameInput.addEventListener("input", event => {
-      studentName = event.target.value;
-      renderProgress();
-    });
-
-    goGuideBtn.addEventListener("click", () => {
-      studentName = studentNameInput.value;
-      resetGuideSelections();
-      renderGuide();
-      navigateTo("guide");
-    });
-
-    skipToLabBtn.addEventListener("click", () => {
-      studentName = studentNameInput.value;
-      renderLab();
-      navigateTo("lab");
-    });
-
-    guideBackBtn.addEventListener("click", () => goBack());
-
-    guideToBuilderBtn.addEventListener("click", () => {
-      renderLab();
-      navigateTo("lab");
-    });
-
-    labBackBtn.addEventListener("click", () => goBack());
-
-    completeBackBtn.addEventListener("click", () => goBack());
-
-    openGuideBtn.addEventListener("click", () => {
-      resetGuideSelections();
-      renderGuide();
-      navigateTo("guide");
-    });
-
-    sourceSelect.addEventListener("change", event => {
-      currentSourceId = event.target.value;
-      resetGuideSelections();
-      resetFormForCurrentSource();
-      renderLab();
-    });
-
-    resetBtn.addEventListener("click", () => {
-      resetFormForCurrentSource();
-    });
-
-    checkBtn.addEventListener("click", () => {
-      renderFeedback();
-    });
-
-    verifyBtn.addEventListener("click", () => {
-      renderFeedback();
-      if (!isGuidePassedForCurrentSource()) {
-        resetGuideSelections();
-        renderGuide();
-        navigateTo("guide");
-        return;
-      }
-      renderAPAPreview();
-      apaPreviewBox.classList.remove("hidden");
-    });
-
-    markCompleteBtn.addEventListener("click", () => {
-      const source = getCurrentSource();
-      const checks = source.validate(formValues);
-      const successfulCheck = checks.some(check =>
-        check.type === "success" &&
-        check.message.includes("structurally correct")
-      );
-
-      renderFeedback();
-
-      if (!isGuidePassedForCurrentSource()) return;
-      if (!successfulCheck) return;
-
-      if (!completedSources.includes(currentSourceId)) {
-        completedSources.push(currentSourceId);
-      }
-
-      sourceCompleteBox.classList.remove("hidden");
-      renderProgress();
-    });
-
-    unlockBadgeBtn.addEventListener("click", () => {
-      if (!studentName.trim()) return;
-      if (completedSources.length !== sources.length) return;
-      renderCompletion();
-      navigateTo("complete");
-    });
-
-    copyBadgeBtn.addEventListener("click", async () => {
-      try {
-        const blob = await new Promise(resolve => badgeCanvas.toBlob(resolve, "image/png"));
-        if (navigator.clipboard && window.ClipboardItem && blob) {
-          await navigator.clipboard.write([
-            new ClipboardItem({ "image/png": blob })
-          ]);
-          copyMessage.textContent = "Badge image copied.";
-          copyMessage.classList.remove("hidden");
-        } else {
-          copyMessage.textContent = "Image copy is not supported in this browser. Use Download badge PNG instead.";
-          copyMessage.classList.remove("hidden");
-        }
-      } catch (err) {
-        copyMessage.textContent = "Image copy failed in this browser. Use Download badge PNG instead.";
-        copyMessage.classList.remove("hidden");
-      }
-    });
-
-    downloadBadgeBtn.addEventListener("click", () => {
-      if (!lastBadgeDataUrl) drawBadge();
-      const a = document.createElement("a");
-      a.href = lastBadgeDataUrl;
-      a.download = "apa-reference-builder-badge.png";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    });
-
-    function initialize() {
-      studentNameInput.value = "";
-      studentName = "";
-      sourceSelect.innerHTML = "";
-      sources.forEach(source => {
-        const option = document.createElement("option");
-        option.value = source.id;
-        option.textContent = source.label;
-        sourceSelect.appendChild(option);
-      });
-      sourceSelect.value = currentSourceId;
-      resetFormForCurrentSource();
-      renderLab();
-      navigateTo("intro", false);
-      navHistory = ["intro"];
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
-    initialize();
+    function render() {
+      const app = document.getElementById('app');
+      let body = '';
+      if (appState.currentView === 'orientation') body = renderOrientation();
+      if (appState.currentView === 'examples') body = renderExamples();
+      if (appState.currentView === 'builder') body = renderBuilder();
+      if (appState.currentView === 'completion') body = renderCompletion();
+
+      app.innerHTML = `
+        ${renderTopBar()}
+        ${renderProgress()}
+        ${body}
+      `;
+
+      if (appState.currentView === 'completion') {
+        drawBadge();
+      }
+    }
+
+    render();
   </script>
 </body>
 </html>
