@@ -1,1067 +1,736 @@
-import React, { useEffect, useMemo, useState } from "react";
-
-const SAMPLE_SOURCES = [
-  {
-    id: "journal",
-    label: "Journal Article",
-    instructionalType: "journal article",
-    category: "Journal Articles",
-    exampleType: "Standard journal article",
-    guideTask:
-      "You have a journal article with one author, a year, a journal title, volume and issue information, a page range, and a DOI.",
-    sourceCard: {
-      heading: "Source Snapshot",
-      lines: [
-        "Author: Jordan Smith",
-        "Year: 2023",
-        "Article title: Social media habits among first-year students",
-        "Journal: Journal of College Learning",
-        "Volume(issue): 12(3)",
-        "Pages: 45–67",
-        "DOI: https://doi.org/10.1234/jcl.2023.5678",
-      ],
-    },
-    fields: {
-      author: "Smith, J.",
-      year: "2023",
-      title: "Social media habits among first-year students",
-      source: "Journal of College Learning",
-      locator: "12(3), 45–67",
-      url: "https://doi.org/10.1234/jcl.2023.5678",
-    },
-    modelReference:
-      "Smith, J. (2023). Social media habits among first-year students. Journal of College Learning, 12(3), 45–67. https://doi.org/10.1234/jcl.2023.5678",
-    apaLink:
-      "https://apastyle.apa.org/style-grammar-guidelines/references/examples/journal-article-references",
-    apaExampleTitle: "APA Style example: journal article reference",
-    apaExampleNote:
-      "Use this model to check author order, date placement, article title capitalization, journal title formatting, and DOI placement.",
-    guideChoices: {
-      categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
-      correctCategory: "Journal Articles",
-      exampleOptions: ["Standard journal article", "Journal article with no DOI", "Magazine article"],
-      correctExample: "Standard journal article",
-      patternPrompt: "Which source element appears after the article title in this reference?",
-      patternOptions: ["Journal title and volume", "Publisher only", "Website name"],
-      correctPattern: "Journal title and volume",
-      successMessage:
-        "Correct. For a standard journal article, the article title is followed by the journal title, volume(issue), page range, and DOI when available.",
-    },
-  },
-  {
-    id: "webpage",
-    label: "Webpage",
-    instructionalType: "webpage",
-    category: "Webpages",
-    exampleType: "Webpage with author",
-    guideTask:
-      "You have a webpage with an author, a full date, a page title, a website name, and a URL.",
-    sourceCard: {
-      heading: "Source Snapshot",
-      lines: [
-        "Author: Maria Chen",
-        "Date: 2024, March 12",
-        "Page title: Why sleep matters in college",
-        "Website: Student Health Hub",
-        "URL: https://www.studenthealthhub.org/sleep-college",
-      ],
-    },
-    fields: {
-      author: "Chen, M.",
-      year: "2024, March 12",
-      title: "Why sleep matters in college",
-      source: "Student Health Hub",
-      locator: "",
-      url: "https://www.studenthealthhub.org/sleep-college",
-    },
-    modelReference:
-      "Chen, M. (2024, March 12). Why sleep matters in college. Student Health Hub. https://www.studenthealthhub.org/sleep-college",
-    apaLink:
-      "https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references",
-    apaExampleTitle: "APA Style example: webpage reference",
-    apaExampleNote:
-      "Use this model to check date formatting, webpage title capitalization, website name placement, and URL formatting.",
-    guideChoices: {
-      categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
-      correctCategory: "Webpages",
-      exampleOptions: ["Webpage with author", "Webpage with no author", "Social media post"],
-      correctExample: "Webpage with author",
-      patternPrompt: "Which element comes after the webpage title?",
-      patternOptions: ["Website name", "Journal title", "Volume(issue)"],
-      correctPattern: "Website name",
-      successMessage:
-        "Correct. In this webpage model, the website name follows the title before the URL.",
-    },
-  },
-  {
-    id: "book",
-    label: "Book",
-    instructionalType: "book",
-    category: "Books",
-    exampleType: "Book",
-    guideTask: "You have a book with one author, a year, a title, and a publisher.",
-    sourceCard: {
-      heading: "Source Snapshot",
-      lines: [
-        "Author: Alicia Rivera",
-        "Year: 2021",
-        "Title: Writing in college contexts",
-        "Publisher: Northeastern Academic Press",
-      ],
-    },
-    fields: {
-      author: "Rivera, A.",
-      year: "2021",
-      title: "Writing in college contexts",
-      source: "Northeastern Academic Press",
-      locator: "",
-      url: "",
-    },
-    modelReference: "Rivera, A. (2021). Writing in college contexts. Northeastern Academic Press.",
-    apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/book-references",
-    apaExampleTitle: "APA Style example: book reference",
-    apaExampleNote:
-      "Use this model to check book title capitalization, author formatting, year placement, and publisher formatting.",
-    guideChoices: {
-      categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
-      correctCategory: "Books",
-      exampleOptions: ["Book", "Edited book chapter", "Reference work entry"],
-      correctExample: "Book",
-      patternPrompt: "Which element usually closes this reference?",
-      patternOptions: ["Publisher", "Website name", "Page range"],
-      correctPattern: "Publisher",
-      successMessage: "Correct. A standard book reference typically ends with the publisher.",
-    },
-  },
-  {
-    id: "webpage-no-author",
-    label: "Webpage (No Author)",
-    instructionalType: "webpage without an author",
-    category: "Webpages",
-    exampleType: "Webpage with no author",
-    guideTask:
-      "You have a webpage with no listed author but a date, page title, website name, and URL.",
-    sourceCard: {
-      heading: "Source Snapshot",
-      lines: [
-        "Author: not listed",
-        "Date: 2025, January 8",
-        "Page title: Campus tutoring resources",
-        "Website: Elmwood College Success Center",
-        "URL: https://www.elmwood.edu/tutoring-resources",
-      ],
-    },
-    fields: {
-      author: "",
-      year: "2025, January 8",
-      title: "Campus tutoring resources",
-      source: "Elmwood College Success Center",
-      locator: "",
-      url: "https://www.elmwood.edu/tutoring-resources",
-    },
-    modelReference:
-      "Campus tutoring resources. (2025, January 8). Elmwood College Success Center. https://www.elmwood.edu/tutoring-resources",
-    apaLink:
-      "https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references",
-    apaExampleTitle: "APA Style example: webpage reference with no author",
-    apaExampleNote:
-      "Use this model to notice that when no author is available, the title moves into the author position.",
-    guideChoices: {
-      categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
-      correctCategory: "Webpages",
-      exampleOptions: ["Webpage with author", "Webpage with no author", "Webpage with group author"],
-      correctExample: "Webpage with no author",
-      patternPrompt: "When no author is listed, what moves into the author position?",
-      patternOptions: ["Title", "Website name", "URL"],
-      correctPattern: "Title",
-      successMessage: "Correct. When there is no author, the title shifts into the author position.",
-    },
-  },
-  {
-    id: "chapter",
-    label: "Chapter in Edited Book",
-    instructionalType: "book chapter",
-    category: "Chapters / Anthologies",
-    exampleType: "Edited book chapter",
-    guideTask:
-      "You have a chapter author, a chapter title, the editor, the book title, the page range, and a publisher.",
-    sourceCard: {
-      heading: "Source Snapshot",
-      lines: [
-        "Chapter author: Priya Nair",
-        "Year: 2022",
-        "Chapter title: Revising with digital tools",
-        "Editor: L. Gomez",
-        "Book title: Teaching writing today",
-        "Pages: 88–106",
-        "Publisher: North Bridge Press",
-      ],
-    },
-    fields: {
-      author: "Nair, P.",
-      year: "2022",
-      title: "Revising with digital tools",
-      source: "In L. Gomez (Ed.), Teaching writing today",
-      locator: "pp. 88–106",
-      url: "North Bridge Press",
-    },
-    modelReference:
-      "Nair, P. (2022). Revising with digital tools. In L. Gomez (Ed.), Teaching writing today (pp. 88–106). North Bridge Press.",
-    apaLink:
-      "https://apastyle.apa.org/style-grammar-guidelines/references/examples/edited-book-chapter-references",
-    apaExampleTitle: "APA Style example: chapter in an edited book",
-    apaExampleNote:
-      "Use this model to notice the In phrase, the editor, the book title, the page range, and the publisher.",
-    guideChoices: {
-      categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
-      correctCategory: "Chapters / Anthologies",
-      exampleOptions: ["Book", "Edited book chapter", "Webpage with author"],
-      correctExample: "Edited book chapter",
-      patternPrompt: "What phrase signals the larger source for the chapter?",
-      patternOptions: ["In + editor information", "Retrieved from", "Website name"],
-      correctPattern: "In + editor information",
-      successMessage:
-        "Correct. Edited-book chapter references use an In phrase followed by editor and book information.",
-    },
-  },
-];
-
-const COMPLETION_PROMPTS = [
-  "What source element was hardest for you to identify, and why?",
-  "What did the APA Style example help you notice?",
-  "What rule or pattern will you pay closer attention to next time?",
-  "What was the most useful part of the verification process?",
-];
-
-function addSentencePeriod(text) {
-  if (!text.trim()) return "";
-  return /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`;
-}
-
-function buildReferencePreview(sourceId, values) {
-  if (sourceId === "chapter") {
-    const parts = [];
-    if (values.author.trim()) parts.push(`${values.author.trim()} `);
-    if (values.year.trim()) parts.push(`(${values.year.trim()}). `);
-    if (values.title.trim()) parts.push(`${addSentencePeriod(values.title)} `);
-    if (values.source.trim()) parts.push(values.source.trim());
-    if (values.locator.trim()) parts.push(` (${values.locator.trim()})`);
-    if (values.source.trim() || values.locator.trim()) parts.push(".");
-    if (values.url.trim()) parts.push(` ${values.url.trim()}.`);
-    return parts.join("").replace(/\s+\./g, ".").trim();
-  }
-
-  if (sourceId === "webpage-no-author") {
-    const parts = [];
-    if (values.title.trim()) parts.push(`${addSentencePeriod(values.title)} `);
-    if (values.year.trim()) parts.push(`(${values.year.trim()}). `);
-    if (values.source.trim()) parts.push(`${values.source.trim()}.`);
-    if (values.url.trim()) parts.push(` ${values.url.trim()}`);
-    return parts.join("").replace(/\s+\./g, ".").trim();
-  }
-
-  const parts = [];
-  if (values.author.trim()) parts.push(`${values.author.trim()} `);
-  if (values.year.trim()) parts.push(`(${values.year.trim()}). `);
-  if (values.title.trim()) parts.push(`${addSentencePeriod(values.title)} `);
-  if (values.source.trim()) parts.push(values.source.trim());
-  if (values.locator.trim()) parts.push(`, ${values.locator.trim()}`);
-  if (values.source.trim()) parts.push(".");
-  if (values.url.trim()) parts.push(` ${values.url.trim()}`);
-  return parts.join("").replace(/\s+\./g, ".").trim();
-}
-
-function createCompletionCode(studentName, completedCount, totalCount) {
-  const cleanName = studentName.trim() ? studentName.trim().replace(/\s+/g, "").toUpperCase() : "STUDENT";
-  const shortName = cleanName.slice(0, 4).padEnd(4, "X");
-  const dateSegment = new Date().toISOString().slice(2, 10).replace(/-/g, "");
-  const randomSegment = Math.floor(1000 + Math.random() * 9000);
-  const progressSegment = `${completedCount}${totalCount}`.padStart(2, "0");
-  return `APA-${shortName}-${progressSegment}-${dateSegment}-${randomSegment}`;
-}
-
-export default function APAReferenceBuilderOriginalIteration() {
-  const [mode, setMode] = useState("intro");
-  const [studentName, setStudentName] = useState("");
-  const [selectedSourceId, setSelectedSourceId] = useState(SAMPLE_SOURCES[0].id);
-  const [completedSources, setCompletedSources] = useState([]);
-  const [feedbackVisible, setFeedbackVisible] = useState(false);
-  const [apaPreviewVisible, setApaPreviewVisible] = useState(false);
-  const [guideStep, setGuideStep] = useState(1);
-  const [guideSelections, setGuideSelections] = useState({ category: null, example: null, pattern: null });
-  const [guideFeedbackVisible, setGuideFeedbackVisible] = useState(false);
-  const [completionCode, setCompletionCode] = useState("");
-  const [completionDate, setCompletionDate] = useState("");
-  const [copiedCode, setCopiedCode] = useState(false);
-  const [reflection, setReflection] = useState("");
-
-  const selectedSource = useMemo(
-    () => SAMPLE_SOURCES.find((source) => source.id === selectedSourceId) || SAMPLE_SOURCES[0],
-    [selectedSourceId]
-  );
-
-  const [form, setForm] = useState(selectedSource.fields);
-
-  useEffect(() => {
-    setForm(selectedSource.fields);
-    setFeedbackVisible(false);
-    setApaPreviewVisible(false);
-    setGuideStep(1);
-    setGuideSelections({ category: null, example: null, pattern: null });
-    setGuideFeedbackVisible(false);
-  }, [selectedSource]);
-
-  useEffect(() => {
-    if (!copiedCode) return undefined;
-    const timer = window.setTimeout(() => setCopiedCode(false), 1800);
-    return () => window.clearTimeout(timer);
-  }, [copiedCode]);
-
-  const builtReference = useMemo(() => buildReferencePreview(selectedSource.id, form), [selectedSource.id, form]);
-
-  const checks = useMemo(() => {
-    const results = [];
-    const needsAuthor = selectedSource.id !== "webpage-no-author";
-
-    if (needsAuthor && !form.author.trim()) {
-      results.push({ type: "structural", message: "Missing author element." });
-    }
-    if (!form.year.trim()) {
-      results.push({ type: "structural", message: "Missing date element." });
-    }
-    if (!form.title.trim()) {
-      results.push({ type: "structural", message: "Missing title element." });
-    }
-    if (!form.source.trim()) {
-      results.push({ type: "structural", message: "Missing source or publisher element." });
-    }
-    if (form.year.trim() && !/^\d{4}([, ].*)?$/.test(form.year.trim())) {
-      results.push({ type: "formatting", message: "Date does not look APA-ready." });
-    }
-    if (needsAuthor && form.author.trim() && !form.author.includes(",")) {
-      results.push({ type: "formatting", message: "Author should usually appear inverted, like Last, F." });
-    }
-    if (selectedSource.id !== "chapter" && form.url.trim() && !/^https?:\/\//.test(form.url.trim())) {
-      results.push({ type: "formatting", message: "URL or DOI should begin with http:// or https://" });
-    }
-    if (selectedSource.id === "webpage-no-author" && form.author.trim()) {
-      results.push({
-        type: "formatting",
-        message: "For this practice source, the author field should remain blank because no author is listed.",
-      });
-    }
-    if (selectedSource.id === "chapter" && form.source.trim() && !form.source.includes("In ")) {
-      results.push({
-        type: "formatting",
-        message: "Chapter references usually include an In phrase with editor and book information.",
-      });
-    }
-    if (
-      results.length === 0 &&
-      form.year.trim() &&
-      form.title.trim() &&
-      form.source.trim() &&
-      (needsAuthor ? form.author.trim() : true)
-    ) {
-      results.push({ type: "success", message: "Core elements are present and look structurally sound." });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APA Reference Builder Lab</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --soft: #f8fafc;
+      --blue-soft: #e0f2fe;
+      --blue-border: #7dd3fc;
+      --amber-soft: #fef3c7;
+      --amber-border: #fbbf24;
+      --green-soft: #dcfce7;
+      --green-border: #86efac;
+      --red-soft: #fee2e2;
+      --red-border: #fca5a5;
+      --shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+      --radius: 20px;
     }
 
-    return results;
-  }, [form, selectedSource]);
+    * { box-sizing: border-box; }
 
-  const guideResults = useMemo(() => {
-    const { correctCategory, correctExample, correctPattern } = selectedSource.guideChoices;
-    return {
-      categoryCorrect: guideSelections.category === correctCategory,
-      exampleCorrect: guideSelections.example === correctExample,
-      patternCorrect: guideSelections.pattern === correctPattern,
-      allCorrect:
-        guideSelections.category === correctCategory &&
-        guideSelections.example === correctExample &&
-        guideSelections.pattern === correctPattern,
-    };
-  }, [guideSelections, selectedSource]);
-
-  const successfulCheck = checks.some((check) => check.type === "success");
-  const currentSourceComplete = completedSources.includes(selectedSource.id);
-  const progressPercent = Math.round((completedSources.length / SAMPLE_SOURCES.length) * 100);
-
-  const currentReflectionPrompt = useMemo(() => {
-    if (!completionCode) return COMPLETION_PROMPTS[0];
-    const numeric = completionCode
-      .replace(/\D/g, "")
-      .split("")
-      .reduce((sum, digit) => sum + Number(digit), 0);
-    return COMPLETION_PROMPTS[numeric % COMPLETION_PROMPTS.length];
-  }, [completionCode]);
-
-  const fieldLabels = {
-    author: selectedSource.id === "webpage-no-author" ? "Author (leave blank for this source)" : "Author",
-    year: "Date",
-    title: "Title",
-    source: selectedSource.id === "chapter" ? "Container / Book information" : "Source / Publisher",
-    locator:
-      selectedSource.id === "chapter"
-        ? "Page range or extra locator"
-        : "Volume(Issue), pages or extra locator",
-    url: selectedSource.id === "chapter" ? "Publisher" : "DOI / URL",
-  };
-
-  const styleMap = {
-    structural: "border-red-200 bg-red-50 text-red-900",
-    formatting: "border-amber-200 bg-amber-50 text-amber-900",
-    success: "border-emerald-200 bg-emerald-50 text-emerald-900",
-  };
-
-  function updateField(field, value) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  }
-
-  function openGuide() {
-    setMode("guide");
-  }
-
-  function handleGuideCategory(option) {
-    setGuideSelections((prev) => ({ ...prev, category: option }));
-    setGuideStep(2);
-  }
-
-  function handleGuideExample(option) {
-    setGuideSelections((prev) => ({ ...prev, example: option }));
-    setGuideStep(3);
-  }
-
-  function handleGuidePattern(option) {
-    setGuideSelections((prev) => ({ ...prev, pattern: option }));
-  }
-
-  function submitGuideAnswers() {
-    setGuideFeedbackVisible(true);
-    if (guideResults.allCorrect) {
-      setGuideStep(4);
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
     }
-  }
 
-  function handleVerify() {
-    setFeedbackVisible(true);
-    if (!guideResults.allCorrect) {
-      setMode("guide");
-      return;
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
     }
-    setApaPreviewVisible(true);
-  }
 
-  function markSourceComplete() {
-    setFeedbackVisible(true);
-    if (!successfulCheck || !guideResults.allCorrect) return;
-    setCompletedSources((prev) => (prev.includes(selectedSource.id) ? prev : [...prev, selectedSource.id]));
-  }
-
-  function unlockCompletion() {
-    if (!studentName.trim()) return;
-    if (completedSources.length !== SAMPLE_SOURCES.length) return;
-    setCompletionCode(createCompletionCode(studentName, completedSources.length, SAMPLE_SOURCES.length));
-    setCompletionDate(
-      new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })
-    );
-    setMode("complete");
-  }
-
-  async function copyCodeToClipboard() {
-    try {
-      await navigator.clipboard.writeText(completionCode);
-      setCopiedCode(true);
-    } catch (error) {
-      console.error("Clipboard copy failed", error);
+    .card {
+      background: var(--card);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 24px;
     }
-  }
 
-  return (
-    <div className="min-h-screen bg-slate-100 p-6 text-slate-900">
-      <div className="mx-auto max-w-7xl">
-        {mode === "intro" && (
-          <div className="rounded-3xl bg-white p-8 shadow-sm">
-            <div className="mx-auto max-w-5xl">
-              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Before You Begin</p>
-              <h1 className="text-4xl font-bold tracking-tight">Welcome to the APA Reference Builder Lab</h1>
-              <p className="mt-4 max-w-4xl text-lg leading-8 text-slate-600">
-                This activity helps students learn how APA reference entries are built and how to use APA Style as a problem-solving resource. Instead of memorizing rules in the abstract, students identify source details, build references, verify decisions, and document completion.
-              </p>
+    .section-card {
+      background: var(--card);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
 
-              <div className="mt-8 grid gap-6 lg:grid-cols-2">
-                <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
-                  <h2 className="text-xl font-semibold">What students are learning</h2>
-                  <ul className="mt-4 space-y-3 text-sm leading-7 text-slate-700">
-                    <li><span className="font-semibold text-slate-900">Identify source information:</span> author, date, title, source, DOI, or URL.</li>
-                    <li><span className="font-semibold text-slate-900">Build an APA reference:</span> place those elements in the correct sequence.</li>
-                    <li><span className="font-semibold text-slate-900">Use APA Style strategically:</span> find the correct category and example when a source is unfamiliar.</li>
-                    <li><span className="font-semibold text-slate-900">Track completion:</span> finish all practice sources and unlock a named badge and completion code.</li>
-                  </ul>
-                </div>
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
 
-                <div className="rounded-3xl border border-sky-200 bg-sky-50 p-6">
-                  <h2 className="text-xl font-semibold text-sky-950">Why this matters</h2>
-                  <div className="mt-4 space-y-3 text-sm leading-7 text-sky-900">
-                    <p>Reference pages make research traceable and show readers where evidence comes from.</p>
-                    <p>This lab teaches students how to use an authoritative resource when they are unsure, which is more durable than memorizing isolated examples.</p>
-                    <p>The goal is a repeatable process for recognizing source types, checking conventions, and revising with confidence.</p>
-                  </div>
-                </div>
-              </div>
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1.05fr 1.2fr 1.1fr;
+      gap: 24px;
+    }
 
-              <div className="mt-6 grid gap-6 lg:grid-cols-[1.25fr_0.95fr]">
-                <div className="rounded-3xl border border-amber-200 bg-amber-50 p-6">
-                  <h2 className="text-xl font-semibold text-amber-950">How the lab works</h2>
-                  <ol className="mt-4 list-decimal space-y-3 pl-5 text-sm leading-7 text-amber-900">
-                    <li>Enter your name so the completion badge can be personalized.</li>
-                    <li>Choose a source type and inspect the source snapshot.</li>
-                    <li>Build the reference and check the diagnostic feedback.</li>
-                    <li>Use the APA Navigation Lab before verifying the source against an APA Style example.</li>
-                    <li>Mark each source complete after successful checking and guide completion.</li>
-                    <li>Unlock the final badge after all source types are complete.</li>
-                  </ol>
-                </div>
+    .muted {
+      color: var(--muted);
+    }
 
-                <div className="rounded-3xl border border-indigo-200 bg-indigo-50 p-6">
-                  <h2 className="text-xl font-semibold text-indigo-950">Student badge setup</h2>
-                  <label className="mt-4 block text-sm font-semibold text-indigo-900">Student name</label>
-                  <input
-                    value={studentName}
-                    onChange={(event) => setStudentName(event.target.value)}
-                    placeholder="Enter your name"
-                    className="mt-2 w-full rounded-2xl border border-indigo-300 bg-white px-4 py-3 outline-none focus:border-indigo-500"
-                  />
-                  <p className="mt-3 text-sm leading-6 text-indigo-900">
-                    Students can explore the lab without entering a name, but a name is required before the completion badge can be unlocked.
-                  </p>
-                </div>
-              </div>
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: bold;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
 
-              <div className="mt-8 flex flex-wrap gap-4">
-                <button
-                  type="button"
-                  onClick={() => setMode("lab")}
-                  className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:opacity-90"
-                >
-                  Start the lab
-                </button>
-                <button
-                  type="button"
-                  onClick={openGuide}
-                  className="rounded-2xl border border-indigo-300 bg-indigo-50 px-5 py-3 text-sm font-semibold text-indigo-900 hover:bg-indigo-100"
-                >
-                  Preview the APA Navigation Lab
-                </button>
-                <a
-                  href="https://apastyle.apa.org/style-grammar-guidelines/references/examples"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
-                >
-                  Visit APA Style examples
-                </a>
-              </div>
-            </div>
+    h1, h2, h3, p {
+      margin-top: 0;
+    }
+
+    .soft-box {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .blue-box {
+      background: var(--blue-soft);
+      border: 1px solid var(--blue-border);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .amber-box {
+      background: var(--amber-soft);
+      border: 1px solid var(--amber-border);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .green-box {
+      background: var(--green-soft);
+      border: 1px solid var(--green-border);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .red-box {
+      background: var(--red-soft);
+      border: 1px solid var(--red-border);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .pill {
+      display: inline-block;
+      background: var(--soft);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #475569;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    button, select, input, textarea, a.button-link {
+      font: inherit;
+    }
+
+    button, .button-link {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 16px;
+      background: white;
+      color: var(--text);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    button.primary {
+      background: #0f172a;
+      color: white;
+      border-color: #0f172a;
+    }
+
+    button.sky {
+      background: #e0f2fe;
+      color: #0c4a6e;
+      border-color: #7dd3fc;
+    }
+
+    button:hover, .button-link:hover {
+      opacity: 0.95;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 14px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .field {
+      width: 100%;
+      margin-top: 6px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: white;
+      color: var(--text);
+    }
+
+    textarea.field {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .snapshot-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .snapshot-list li {
+      background: white;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 4px rgba(15,23,42,0.05);
+    }
+
+    .preview-box {
+      min-height: 120px;
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.8;
+      box-shadow: 0 1px 4px rgba(15,23,42,0.05);
+    }
+
+    .feedback-item {
+      border-radius: 18px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .feedback-structural {
+      background: var(--red-soft);
+      border-color: var(--red-border);
+      color: #7f1d1d;
+    }
+
+    .feedback-formatting {
+      background: #fef3c7;
+      border-color: #fcd34d;
+      color: #78350f;
+    }
+
+    .feedback-success {
+      background: var(--green-soft);
+      border-color: var(--green-border);
+      color: #166534;
+    }
+
+    .preview-window {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: white;
+      box-shadow: 0 1px 4px rgba(15,23,42,0.05);
+    }
+
+    .preview-window-top {
+      background: #e2e8f0;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #94a3b8;
+      margin-right: 6px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 1000px) {
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div id="introScreen" class="card">
+      <div style="max-width: 980px; margin: 0 auto;">
+        <div class="eyebrow">Before You Begin</div>
+        <h1>Welcome to the APA Reference Builder Lab</h1>
+        <p class="muted" style="font-size: 18px; line-height: 1.8;">
+          This activity is designed to help you learn how APA reference entries are built. Instead of memorizing rules in the abstract, you will practice identifying the parts of a source, placing them in the correct order, and checking your work against an authoritative resource.
+        </p>
+
+        <div class="grid-2" style="margin-top: 30px;">
+          <div class="soft-box">
+            <h2>What you are learning</h2>
+            <ul>
+              <li><strong>Identify source information:</strong> locate the author, date, title, source, and DOI or URL.</li>
+              <li><strong>Build an APA reference:</strong> assemble those elements into the correct APA sequence.</li>
+              <li><strong>Notice formatting conventions:</strong> recognize punctuation, capitalization, and source formatting patterns.</li>
+              <li><strong>Verify your decisions:</strong> compare your work to APA Style so you can confirm correctness independently.</li>
+            </ul>
           </div>
-        )}
 
-        {mode === "guide" && (
-          <div className="rounded-3xl bg-white p-8 shadow-sm">
-            <div className="mx-auto max-w-6xl">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                <div>
-                  <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">APA Navigation Lab</p>
-                  <h1 className="text-3xl font-bold tracking-tight">How to Use APA Style to Solve a Citation</h1>
-                  <p className="mt-2 max-w-3xl text-base leading-7 text-slate-600">
-                    This guided screen simulates the decision-making process students should use on the APA Style examples page before returning to the builder.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                  Current source: <span className="font-semibold text-slate-900">{selectedSource.label}</span>
-                </div>
-              </div>
-
-              <div className="mt-6 grid gap-6 lg:grid-cols-[0.95fr_1.15fr_1fr]">
-                <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
-                  <h2 className="text-lg font-semibold">Your task</h2>
-                  <p className="mt-3 text-sm leading-7 text-slate-700">{selectedSource.guideTask}</p>
-                  <div className="mt-5 rounded-2xl border border-indigo-200 bg-indigo-50 p-4 text-sm leading-6 text-indigo-900">
-                    <p className="font-semibold">Goal</p>
-                    <p>Pick the right section, choose the closest example, and identify the pattern you need.</p>
-                  </div>
-                </div>
-
-                <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <h2 className="text-lg font-semibold">Step {guideStep} of 4</h2>
-
-                  {guideStep === 1 && (
-                    <div className="mt-4 space-y-3">
-                      <p className="text-sm leading-6 text-slate-700">Where would you click first on the APA Style examples page?</p>
-                      {selectedSource.guideChoices.categoryOptions.map((option) => (
-                        <button
-                          key={option}
-                          type="button"
-                          onClick={() => handleGuideCategory(option)}
-                          className={`block w-full rounded-2xl border px-4 py-3 text-left text-sm font-medium hover:bg-slate-50 ${guideSelections.category === option ? "border-slate-900 bg-slate-100" : "border-slate-300"}`}
-                        >
-                          {option}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {guideStep === 2 && (
-                    <div className="mt-4 space-y-3">
-                      <p className="text-sm leading-6 text-slate-700">Which example best matches your source?</p>
-                      {selectedSource.guideChoices.exampleOptions.map((option) => (
-                        <button
-                          key={option}
-                          type="button"
-                          onClick={() => handleGuideExample(option)}
-                          className={`block w-full rounded-2xl border px-4 py-3 text-left text-sm font-medium hover:bg-slate-50 ${guideSelections.example === option ? "border-slate-900 bg-slate-100" : "border-slate-300"}`}
-                        >
-                          {option}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {guideStep === 3 && (
-                    <div className="mt-4 space-y-3">
-                      <p className="text-sm leading-6 text-slate-700">{selectedSource.guideChoices.patternPrompt}</p>
-                      {selectedSource.guideChoices.patternOptions.map((option) => (
-                        <button
-                          key={option}
-                          type="button"
-                          onClick={() => handleGuidePattern(option)}
-                          className={`block w-full rounded-2xl border px-4 py-3 text-left text-sm font-medium hover:bg-slate-50 ${guideSelections.pattern === option ? "border-slate-900 bg-slate-100" : "border-slate-300"}`}
-                        >
-                          {option}
-                        </button>
-                      ))}
-                      <button
-                        type="button"
-                        onClick={submitGuideAnswers}
-                        className="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:opacity-90"
-                      >
-                        Check guide answers
-                      </button>
-                    </div>
-                  )}
-
-                  {guideStep === 4 && (
-                    <div className="mt-4 space-y-4">
-                      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-900">
-                        <p className="font-semibold">Guide complete</p>
-                        <p>{selectedSource.guideChoices.successMessage}</p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setMode("lab")}
-                        className="rounded-2xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white hover:opacity-90"
-                      >
-                        Return to the builder
-                      </button>
-                    </div>
-                  )}
-
-                  {guideFeedbackVisible && guideStep !== 4 && (
-                    <div className="mt-4 space-y-3">
-                      <div className={`rounded-2xl border px-4 py-3 text-sm ${guideResults.categoryCorrect ? styleMap.success : styleMap.structural}`}>
-                        <span className="font-semibold">Section choice: </span>
-                        {guideResults.categoryCorrect ? "Correct." : `Try ${selectedSource.guideChoices.correctCategory}.`}
-                      </div>
-                      <div className={`rounded-2xl border px-4 py-3 text-sm ${guideResults.exampleCorrect ? styleMap.success : styleMap.structural}`}>
-                        <span className="font-semibold">Example choice: </span>
-                        {guideResults.exampleCorrect ? "Correct." : `Look for ${selectedSource.guideChoices.correctExample}.`}
-                      </div>
-                      <div className={`rounded-2xl border px-4 py-3 text-sm ${guideResults.patternCorrect ? styleMap.success : styleMap.structural}`}>
-                        <span className="font-semibold">Pattern choice: </span>
-                        {guideResults.patternCorrect ? "Correct." : `The best answer is ${selectedSource.guideChoices.correctPattern}.`}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <h2 className="text-lg font-semibold">Simulated APA Style</h2>
-                    <a
-                      href="https://apastyle.apa.org/style-grammar-guidelines/references/examples"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50"
-                    >
-                      Open the real page
-                    </a>
-                  </div>
-                  <div className="mt-4 overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-sm">
-                    <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-100 px-4 py-2">
-                      <span className="h-3 w-3 rounded-full bg-slate-300" />
-                      <span className="h-3 w-3 rounded-full bg-slate-300" />
-                      <span className="h-3 w-3 rounded-full bg-slate-300" />
-                      <p className="ml-2 text-xs font-medium text-slate-500">APA Style examples page (simulated)</p>
-                    </div>
-                    <div className="p-4 text-sm leading-6 text-slate-700">
-                      <p className="font-semibold uppercase tracking-wide text-slate-500">Reference categories</p>
-                      <ul className="mt-2 space-y-1">
-                        {selectedSource.guideChoices.categoryOptions.map((option) => (
-                          <li key={option} className={option === selectedSource.guideChoices.correctCategory ? "font-semibold text-indigo-700" : ""}>
-                            {option}
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Closest matching example</p>
-                        <p className="mt-2 font-medium text-slate-900">{selectedSource.guideChoices.correctExample}</p>
-                        <div className="mt-3 rounded-xl bg-white p-4 font-serif text-[1rem] leading-8 text-slate-900 shadow-sm">
-                          {selectedSource.modelReference}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => setMode("lab")}
-                  className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
-                >
-                  Back to the builder
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode("intro")}
-                  className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
-                >
-                  Back to overview
-                </button>
-              </div>
-            </div>
+          <div class="blue-box">
+            <h2>Why this matters</h2>
+            <p>Reference pages are not just about following rules. They show readers where your information came from and make your research traceable.</p>
+            <p>Learning to build references also helps you read sources more carefully because you begin to notice the parts that make a source credible and usable in academic writing.</p>
+            <p>In this lab, the goal is not perfection on the first try. The goal is to develop a repeatable process you can use when working with new sources.</p>
           </div>
-        )}
+        </div>
 
-        {mode === "lab" && (
-          <>
-            <header className="mb-6 rounded-3xl bg-white p-6 shadow-sm">
-              <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-                <div>
-                  <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">GitHub-ready version</p>
-                  <h1 className="text-3xl font-bold tracking-tight">APA Reference Builder Lab</h1>
-                  <p className="mt-2 max-w-3xl text-base leading-7 text-slate-600">
-                    Students inspect the source, build a reference, use the APA Navigation Lab, verify against an APA Style example, and then mark the source complete.
-                  </p>
-                </div>
+        <div class="amber-box" style="margin-top: 24px;">
+          <h2>How the lab works</h2>
+          <ol>
+            <li>Read the source snapshot and identify the relevant publication details.</li>
+            <li>Enter those details into the reference builder.</li>
+            <li>Review the live preview of your reference entry.</li>
+            <li>Use the feedback panel to catch missing or questionable elements.</li>
+            <li>Compare your entry with the APA Style example.</li>
+          </ol>
+        </div>
 
-                <div className="grid gap-3 md:grid-cols-3">
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
-                    <p className="font-semibold text-slate-900">Student</p>
-                    <p className="mt-1 text-slate-700">{studentName.trim() || "Name not entered yet"}</p>
-                  </div>
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
-                    <p className="font-semibold text-slate-900">Progress</p>
-                    <p className="mt-1 text-slate-700">{completedSources.length} of {SAMPLE_SOURCES.length} source types completed</p>
-                  </div>
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
-                    <p className="font-semibold text-slate-900">Completion meter</p>
-                    <div className="mt-2 h-3 overflow-hidden rounded-full bg-slate-200">
-                      <div className="h-full rounded-full bg-slate-900" style={{ width: `${progressPercent}%` }} />
-                    </div>
-                    <p className="mt-2 text-slate-700">{progressPercent}%</p>
-                  </div>
-                </div>
-              </div>
-            </header>
-
-            <div className="mb-6 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="rounded-3xl bg-white p-5 shadow-sm">
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                  <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Source selection</p>
-                    <label className="mt-2 block text-sm font-semibold text-slate-700">Choose a source type</label>
-                    <select
-                      className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:border-slate-500 lg:min-w-[300px]"
-                      value={selectedSourceId}
-                      onChange={(event) => setSelectedSourceId(event.target.value)}
-                    >
-                      {SAMPLE_SOURCES.map((source) => (
-                        <option key={source.id} value={source.id}>{source.label}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="flex flex-wrap gap-3">
-                    <button
-                      type="button"
-                      onClick={openGuide}
-                      className="rounded-2xl border border-indigo-300 bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-900 hover:bg-indigo-100"
-                    >
-                      Open APA Navigation Lab
-                    </button>
-                    <button
-                      type="button"
-                      onClick={unlockCompletion}
-                      disabled={!studentName.trim() || completedSources.length !== SAMPLE_SOURCES.length}
-                      className={`rounded-2xl px-4 py-3 text-sm font-semibold text-white ${!studentName.trim() || completedSources.length !== SAMPLE_SOURCES.length ? "cursor-not-allowed bg-slate-300" : "bg-emerald-600 hover:opacity-90"}`}
-                    >
-                      Unlock final badge
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-5 text-sm leading-6 text-emerald-900 shadow-sm">
-                <p className="font-semibold">Completion rule</p>
-                <p className="mt-2">
-                  Students need to complete the guide for the current source, run the diagnostic check successfully, and then mark that source complete. After all sources are complete, the final badge becomes available.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid gap-6 xl:grid-cols-[1.05fr_1.2fr_1.1fr]">
-              <section className="rounded-3xl bg-white p-6 shadow-sm">
-                <div className="mb-4 flex items-center justify-between gap-4">
-                  <h2 className="text-xl font-semibold">1. Inspect the source</h2>
-                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
-                    {selectedSource.instructionalType}
-                  </span>
-                </div>
-
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">{selectedSource.sourceCard.heading}</h3>
-                  <ul className="space-y-3 text-sm leading-6 text-slate-700">
-                    {selectedSource.sourceCard.lines.map((line, index) => (
-                      <li key={index} className="rounded-xl bg-white px-3 py-2 shadow-sm">{line}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-5 rounded-2xl border border-sky-200 bg-sky-50 p-4 text-sm leading-6 text-sky-900">
-                  <p className="font-semibold">Task</p>
-                  <p>Extract the metadata you need, build the reference, complete the APA Navigation Lab for this source, and then verify your result against the APA model.</p>
-                </div>
-
-                <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
-                  <p className="font-semibold text-slate-900">Guide status for this source</p>
-                  <p className="mt-2">
-                    {guideResults.allCorrect ? "Guide completed for this source. You can verify against APA Style." : "Guide not completed yet for this source. Use the APA Navigation Lab before verifying."}
-                  </p>
-                </div>
-              </section>
-
-              <section className="rounded-3xl bg-white p-6 shadow-sm">
-                <div className="mb-4 flex items-center justify-between gap-4">
-                  <h2 className="text-xl font-semibold">2. Build the reference</h2>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setForm(selectedSource.fields);
-                      setFeedbackVisible(false);
-                      setApaPreviewVisible(false);
-                    }}
-                    className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-medium hover:bg-slate-50"
-                  >
-                    Reset fields
-                  </button>
-                </div>
-
-                <div className="grid gap-4">
-                  {Object.entries(fieldLabels).map(([field, label]) => (
-                    <label key={field} className="grid gap-2">
-                      <span className="text-sm font-semibold text-slate-700">{label}</span>
-                      {field === "title" ? (
-                        <textarea
-                          value={form[field]}
-                          onChange={(event) => updateField(field, event.target.value)}
-                          rows={3}
-                          className="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:border-slate-500"
-                        />
-                      ) : (
-                        <input
-                          value={form[field]}
-                          onChange={(event) => updateField(field, event.target.value)}
-                          className="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:border-slate-500"
-                        />
-                      )}
-                    </label>
-                  ))}
-                </div>
-
-                <div className="mt-5 flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setFeedbackVisible(true)}
-                    className="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:opacity-90"
-                  >
-                    Check my reference
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleVerify}
-                    className="rounded-2xl border border-sky-300 bg-sky-50 px-4 py-3 text-sm font-semibold text-sky-900 hover:bg-sky-100"
-                  >
-                    Verify with APA Style
-                  </button>
-                  <button
-                    type="button"
-                    onClick={markSourceComplete}
-                    className={`rounded-2xl px-4 py-3 text-sm font-semibold text-white ${successfulCheck && guideResults.allCorrect ? "bg-emerald-600 hover:opacity-90" : "bg-slate-300"}`}
-                  >
-                    Mark source complete
-                  </button>
-                </div>
-              </section>
-
-              <section className="rounded-3xl bg-white p-6 shadow-sm">
-                <h2 className="mb-4 text-xl font-semibold">3. Review the output</h2>
-
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">Live Preview</p>
-                  <div className="min-h-[112px] rounded-2xl bg-white p-4 font-serif text-[1.02rem] leading-8 shadow-sm">
-                    {builtReference || <span className="text-slate-400">Your APA reference will appear here.</span>}
-                  </div>
-                </div>
-
-                {feedbackVisible && (
-                  <div className="mt-4 rounded-2xl border border-slate-200 p-4">
-                    <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Diagnostic Feedback</p>
-                    <div className="space-y-3">
-                      {checks.map((check, index) => (
-                        <div key={index} className={`rounded-2xl border px-4 py-3 text-sm ${styleMap[check.type]}`}>
-                          <span className="font-semibold capitalize">{check.type}: </span>
-                          {check.message}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {currentSourceComplete && (
-                  <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-900">
-                    <p className="font-semibold">Source complete</p>
-                    <p>This source has been marked complete and counted toward the final badge.</p>
-                  </div>
-                )}
-
-                <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
-                  <p className="mb-2 font-semibold text-slate-900">Instructor Model</p>
-                  <p>{selectedSource.modelReference}</p>
-                </div>
-
-                {apaPreviewVisible && (
-                  <div className="mt-4 rounded-2xl border border-sky-200 bg-sky-50 p-4 text-sm leading-6 text-slate-700">
-                    <div className="mb-3 flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-semibold uppercase tracking-wide text-sky-700">APA Style Verification</p>
-                        <h3 className="text-base font-semibold text-slate-900">{selectedSource.apaExampleTitle}</h3>
-                      </div>
-                      <a
-                        href={selectedSource.apaLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded-xl border border-sky-300 bg-white px-3 py-2 text-xs font-semibold text-sky-900 hover:bg-sky-100"
-                      >
-                        Open APA Style
-                      </a>
-                    </div>
-
-                    <div className="overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-sm">
-                      <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-100 px-4 py-2">
-                        <span className="h-3 w-3 rounded-full bg-slate-300" />
-                        <span className="h-3 w-3 rounded-full bg-slate-300" />
-                        <span className="h-3 w-3 rounded-full bg-slate-300" />
-                        <p className="ml-2 text-xs font-medium text-slate-500">APA Style example preview</p>
-                      </div>
-                      <div className="p-4">
-                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Reference Example</p>
-                          <div className="mt-3 rounded-xl bg-white p-4 font-serif text-[1rem] leading-8 text-slate-900 shadow-sm">
-                            {selectedSource.modelReference}
-                          </div>
-                          <p className="mt-3 text-sm leading-6 text-slate-600">{selectedSource.apaExampleNote}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs leading-5 text-slate-500">
-                      This in-app panel mirrors the formatting students should verify. Use the button above to compare it against the full APA Style example page.
-                    </p>
-                  </div>
-                )}
-              </section>
-            </div>
-          </>
-        )}
-
-        {mode === "complete" && (
-          <div className="rounded-3xl bg-white p-8 shadow-sm">
-            <div className="mx-auto max-w-4xl">
-              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Completion unlocked</p>
-              <h1 className="text-4xl font-bold tracking-tight">Named completion badge</h1>
-              <p className="mt-3 text-lg leading-8 text-slate-600">
-                The student has completed all source types. The badge below can be shown, screenshot, or paired with the completion code in Brightspace or email submission.
-              </p>
-
-              <div className="mt-8 rounded-[2rem] border-4 border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-8 shadow-sm">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-indigo-700">APA Reference Builder Lab</p>
-                <h2 className="mt-3 text-3xl font-bold text-slate-900">{studentName || "Student"}</h2>
-                <p className="mt-2 text-lg text-slate-700">completed the full APA reference practice sequence</p>
-                <div className="mt-6 grid gap-4 md:grid-cols-2">
-                  <div className="rounded-2xl border border-indigo-200 bg-white p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Completed source types</p>
-                    <p className="mt-2 text-lg font-semibold text-slate-900">{completedSources.length} / {SAMPLE_SOURCES.length}</p>
-                  </div>
-                  <div className="rounded-2xl border border-indigo-200 bg-white p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Completion date</p>
-                    <p className="mt-2 text-lg font-semibold text-slate-900">{completionDate}</p>
-                  </div>
-                </div>
-                <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Completion code</p>
-                  <p className="mt-2 break-all font-mono text-lg font-semibold text-slate-900">{completionCode}</p>
-                </div>
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={copyCodeToClipboard}
-                  className="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:opacity-90"
-                >
-                  Copy completion code
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode("lab")}
-                  className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
-                >
-                  Back to the lab
-                </button>
-              </div>
-
-              {copiedCode && (
-                <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-                  Completion code copied.
-                </div>
-              )}
-
-              <div className="mt-8 rounded-3xl border border-slate-200 bg-slate-50 p-6">
-                <h3 className="text-xl font-semibold">Submission reflection</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-700">{currentReflectionPrompt}</p>
-                <textarea
-                  value={reflection}
-                  onChange={(event) => setReflection(event.target.value)}
-                  rows={5}
-                  placeholder="Students can type a short reflection here before copying it into Brightspace or email."
-                  className="mt-4 w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:border-slate-500"
-                />
-              </div>
-            </div>
-          </div>
-        )}
+        <div class="controls">
+          <button id="startLabBtn" class="primary">Start the lab</button>
+          <a class="button-link" href="https://apastyle.apa.org/" target="_blank" rel="noreferrer">Visit APA Style</a>
+        </div>
       </div>
     </div>
-  );
-}
+
+    <div id="labScreen" class="hidden">
+      <div class="card" style="margin-bottom: 24px;">
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:20px; align-items:end;">
+          <div>
+            <div class="eyebrow">Original Iteration</div>
+            <h1 style="font-size: 32px;">APA Reference Builder Lab</h1>
+            <p class="muted" style="max-width: 760px;">
+              A first-pass interface for non-nursing students to practice identifying source metadata, assembling an APA reference, and verifying conventions against APA Style.
+            </p>
+          </div>
+
+          <div class="soft-box" style="min-width: 260px;">
+            <label for="sourceSelect" style="margin-bottom:8px;">Choose a source type</label>
+            <select id="sourceSelect" class="field" style="margin-top:0;">
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <section class="section-card">
+          <div style="display:flex; justify-content:space-between; gap:16px; align-items:center; margin-bottom:16px;">
+            <h2>1. Inspect the source</h2>
+            <span id="sourceTypePill" class="pill"></span>
+          </div>
+
+          <div class="soft-box">
+            <h3 id="snapshotHeading" class="eyebrow" style="margin-bottom:14px;">Source Snapshot</h3>
+            <ul id="snapshotList" class="snapshot-list"></ul>
+          </div>
+
+          <div class="blue-box" style="margin-top:20px;">
+            <p><strong>Task</strong></p>
+            <p>
+              Extract the metadata you need, then build the reference. Afterward, compare your result to the linked APA Style example.
+            </p>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div style="display:flex; justify-content:space-between; gap:16px; align-items:center; margin-bottom:16px;">
+            <h2>2. Build the reference</h2>
+            <button id="resetBtn">Reset fields</button>
+          </div>
+
+          <div id="formFields"></div>
+
+          <div class="controls">
+            <button id="checkBtn" class="primary">Check my reference</button>
+            <button id="verifyBtn" class="sky">Verify with APA Style</button>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <h2 style="margin-bottom:16px;">3. Review the output</h2>
+
+          <div class="soft-box">
+            <div class="eyebrow" style="margin-bottom:10px;">Live Preview</div>
+            <div id="referencePreview" class="preview-box">Your APA reference will appear here.</div>
+          </div>
+
+          <div id="feedbackBox" class="hidden" style="margin-top:16px;">
+            <div class="soft-box">
+              <div class="eyebrow" style="margin-bottom:10px;">Diagnostic Feedback</div>
+              <div id="feedbackItems"></div>
+            </div>
+          </div>
+
+          <div class="soft-box" style="margin-top:16px;">
+            <p><strong>Instructor Model</strong></p>
+            <p id="instructorModel"></p>
+          </div>
+
+          <div id="apaPreviewBox" class="hidden" style="margin-top:16px;">
+            <div class="blue-box">
+              <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px;">
+                <div>
+                  <div class="eyebrow" style="color:#0369a1;">APA Style Verification</div>
+                  <h3 id="apaExampleTitle" style="margin-bottom:0;"></h3>
+                </div>
+                <a id="apaLinkBtn" class="button-link" target="_blank" rel="noreferrer">Open APA Style</a>
+              </div>
+
+              <div class="preview-window">
+                <div class="preview-window-top">
+                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                  APA Style example preview
+                </div>
+                <div style="padding:16px;">
+                  <div class="soft-box">
+                    <div class="eyebrow" style="margin-bottom:10px;">Reference Example</div>
+                    <div id="apaModelPreview" class="preview-box" style="min-height:auto;"></div>
+                    <p id="apaExampleNote" class="muted" style="margin-top:12px;"></p>
+                  </div>
+                </div>
+              </div>
+
+              <p class="muted" style="font-size:12px; margin-top:12px;">
+                This in-app panel mirrors the formatting students should verify. Use the button above to compare it against the full APA Style example page.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sampleSources = [
+      {
+        id: "journal",
+        label: "Journal Article",
+        instructionalType: "journal article",
+        sourceCard: {
+          heading: "Source Snapshot",
+          lines: [
+            "Author: Jordan Smith",
+            "Year: 2023",
+            "Article title: Social media habits among first-year students",
+            "Journal: Journal of College Learning",
+            "Volume(issue): 12(3)",
+            "Pages: 45–67",
+            "DOI: https://doi.org/10.1234/jcl.2023.5678"
+          ]
+        },
+        fields: {
+          author: "Smith, J.",
+          year: "2023",
+          title: "Social media habits among first-year students",
+          source: "Journal of College Learning",
+          locator: "12(3), 45–67",
+          url: "https://doi.org/10.1234/jcl.2023.5678"
+        },
+        modelReference:
+          "Smith, J. (2023). Social media habits among first-year students. Journal of College Learning, 12(3), 45–67. https://doi.org/10.1234/jcl.2023.5678",
+        apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/journal-article-references",
+        apaExampleTitle: "APA Style example: journal article reference",
+        apaExampleNote:
+          "Use this model to check author order, date placement, article title capitalization, journal title formatting, and DOI placement."
+      },
+      {
+        id: "webpage",
+        label: "Webpage",
+        instructionalType: "webpage",
+        sourceCard: {
+          heading: "Source Snapshot",
+          lines: [
+            "Author: Maria Chen",
+            "Date: 2024, March 12",
+            "Page title: Why sleep matters in college",
+            "Website: Student Health Hub",
+            "URL: https://www.studenthealthhub.org/sleep-college"
+          ]
+        },
+        fields: {
+          author: "Chen, M.",
+          year: "2024, March 12",
+          title: "Why sleep matters in college",
+          source: "Student Health Hub",
+          locator: "",
+          url: "https://www.studenthealthhub.org/sleep-college"
+        },
+        modelReference:
+          "Chen, M. (2024, March 12). Why sleep matters in college. Student Health Hub. https://www.studenthealthhub.org/sleep-college",
+        apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references",
+        apaExampleTitle: "APA Style example: webpage reference",
+        apaExampleNote:
+          "Use this model to check date formatting, webpage title capitalization, website name placement, and URL formatting."
+      },
+      {
+        id: "book",
+        label: "Book",
+        instructionalType: "book",
+        sourceCard: {
+          heading: "Source Snapshot",
+          lines: [
+            "Author: Alicia Rivera",
+            "Year: 2021",
+            "Title: Writing in college contexts",
+            "Publisher: Northeastern Academic Press"
+          ]
+        },
+        fields: {
+          author: "Rivera, A.",
+          year: "2021",
+          title: "Writing in college contexts",
+          source: "Northeastern Academic Press",
+          locator: "",
+          url: ""
+        },
+        modelReference:
+          "Rivera, A. (2021). Writing in college contexts. Northeastern Academic Press.",
+        apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/book-references",
+        apaExampleTitle: "APA Style example: book reference",
+        apaExampleNote:
+          "Use this model to check book title capitalization, author formatting, year placement, and publisher formatting."
+      }
+    ];
+
+    const fieldLabels = {
+      author: "Author",
+      year: "Date",
+      title: "Title",
+      source: "Source / Publisher",
+      locator: "Volume(Issue), pages or extra locator",
+      url: "DOI / URL"
+    };
+
+    let currentSourceId = sampleSources[0].id;
+    let form = { ...sampleSources[0].fields };
+
+    const introScreen = document.getElementById("introScreen");
+    const labScreen = document.getElementById("labScreen");
+    const startLabBtn = document.getElementById("startLabBtn");
+    const sourceSelect = document.getElementById("sourceSelect");
+    const sourceTypePill = document.getElementById("sourceTypePill");
+    const snapshotHeading = document.getElementById("snapshotHeading");
+    const snapshotList = document.getElementById("snapshotList");
+    const formFields = document.getElementById("formFields");
+    const referencePreview = document.getElementById("referencePreview");
+    const feedbackBox = document.getElementById("feedbackBox");
+    const feedbackItems = document.getElementById("feedbackItems");
+    const instructorModel = document.getElementById("instructorModel");
+    const apaPreviewBox = document.getElementById("apaPreviewBox");
+    const apaExampleTitle = document.getElementById("apaExampleTitle");
+    const apaLinkBtn = document.getElementById("apaLinkBtn");
+    const apaModelPreview = document.getElementById("apaModelPreview");
+    const apaExampleNote = document.getElementById("apaExampleNote");
+    const resetBtn = document.getElementById("resetBtn");
+    const checkBtn = document.getElementById("checkBtn");
+    const verifyBtn = document.getElementById("verifyBtn");
+
+    function getSelectedSource() {
+      return sampleSources.find(source => source.id === currentSourceId) || sampleSources[0];
+    }
+
+    function addSentencePeriod(text) {
+      const trimmed = text.trim();
+      if (!trimmed) return "";
+      return /[.!?]$/.test(trimmed) ? trimmed : trimmed + ".";
+    }
+
+    function buildReference(values) {
+      const parts = [];
+      if (values.author.trim()) parts.push(values.author.trim() + " ");
+      if (values.year.trim()) parts.push("(" + values.year.trim() + "). ");
+      if (values.title.trim()) parts.push(addSentencePeriod(values.title) + " ");
+      if (values.source.trim()) parts.push(values.source.trim());
+      if (values.locator.trim()) parts.push(", " + values.locator.trim());
+      if (values.source.trim()) parts.push(".");
+      if (values.url.trim()) parts.push(" " + values.url.trim());
+      return parts.join("").replace(/\s+\./g, ".").trim();
+    }
+
+    function getChecks(values) {
+      const results = [];
+
+      if (!values.author.trim()) {
+        results.push({ type: "structural", message: "Missing author element." });
+      }
+      if (!values.year.trim()) {
+        results.push({ type: "structural", message: "Missing date element." });
+      }
+      if (!values.title.trim()) {
+        results.push({ type: "structural", message: "Missing title element." });
+      }
+      if (!values.source.trim()) {
+        results.push({ type: "structural", message: "Missing source or publisher element." });
+      }
+      if (values.year.trim() && !/^\d{4}([, ].*)?$/.test(values.year.trim())) {
+        results.push({ type: "formatting", message: "Date does not look APA-ready." });
+      }
+      if (values.author.trim() && !values.author.includes(",")) {
+        results.push({ type: "formatting", message: "Author should usually appear inverted, like Last, F." });
+      }
+      if (values.url.trim() && !/^https?:\/\//.test(values.url.trim())) {
+        results.push({ type: "formatting", message: "URL or DOI should begin with http:// or https://" });
+      }
+
+      if (
+        values.author.trim() &&
+        values.year.trim() &&
+        values.title.trim() &&
+        values.source.trim() &&
+        results.length === 0
+      ) {
+        results.push({ type: "success", message: "Core elements are present and look structurally sound." });
+      }
+
+      return results;
+    }
+
+    function renderSourceOptions() {
+      sourceSelect.innerHTML = "";
+      sampleSources.forEach(source => {
+        const option = document.createElement("option");
+        option.value = source.id;
+        option.textContent = source.label;
+        sourceSelect.appendChild(option);
+      });
+      sourceSelect.value = currentSourceId;
+    }
+
+    function renderSnapshot(source) {
+      sourceTypePill.textContent = source.instructionalType;
+      snapshotHeading.textContent = source.sourceCard.heading;
+      snapshotList.innerHTML = "";
+      source.sourceCard.lines.forEach(line => {
+        const li = document.createElement("li");
+        li.textContent = line;
+        snapshotList.appendChild(li);
+      });
+    }
+
+    function renderForm() {
+      formFields.innerHTML = "";
+      Object.keys(fieldLabels).forEach(field => {
+        const wrapper = document.createElement("label");
+        wrapper.textContent = fieldLabels[field];
+
+        let input;
+        if (field === "title") {
+          input = document.createElement("textarea");
+          input.rows = 3;
+        } else {
+          input = document.createElement("input");
+          input.type = "text";
+        }
+
+        input.className = "field";
+        input.value = form[field] || "";
+        input.addEventListener("input", (e) => {
+          form[field] = e.target.value;
+          renderPreview();
+        });
+
+        wrapper.appendChild(input);
+        formFields.appendChild(wrapper);
+      });
+    }
+
+    function renderPreview() {
+      const text = buildReference(form);
+      referencePreview.textContent = text || "Your APA reference will appear here.";
+    }
+
+    function renderFeedback() {
+      const checks = getChecks(form);
+      feedbackItems.innerHTML = "";
+
+      checks.forEach(check => {
+        const div = document.createElement("div");
+        div.className = "feedback-item feedback-" + check.type;
+        div.innerHTML = "<strong>" + check.type + ":</strong> " + check.message;
+        feedbackItems.appendChild(div);
+      });
+
+      feedbackBox.classList.remove("hidden");
+    }
+
+    function renderAPABox(source) {
+      instructorModel.textContent = source.modelReference;
+      apaExampleTitle.textContent = source.apaExampleTitle;
+      apaLinkBtn.href = source.apaLink;
+      apaModelPreview.textContent = source.modelReference;
+      apaExampleNote.textContent = source.apaExampleNote;
+    }
+
+    function renderAll() {
+      const source = getSelectedSource();
+      renderSnapshot(source);
+      renderForm();
+      renderPreview();
+      renderAPABox(source);
+      instructorModel.textContent = source.modelReference;
+      feedbackBox.classList.add("hidden");
+      apaPreviewBox.classList.add("hidden");
+    }
+
+    startLabBtn.addEventListener("click", () => {
+      introScreen.classList.add("hidden");
+      labScreen.classList.remove("hidden");
+      renderAll();
+    });
+
+    sourceSelect.addEventListener("change", (e) => {
+      currentSourceId = e.target.value;
+      form = { ...getSelectedSource().fields };
+      renderAll();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      form = { ...getSelectedSource().fields };
+      renderAll();
+    });
+
+    checkBtn.addEventListener("click", () => {
+      renderFeedback();
+    });
+
+    verifyBtn.addEventListener("click", () => {
+      renderFeedback();
+      apaPreviewBox.classList.remove("hidden");
+    });
+
+    renderSourceOptions();
+  </script>
+</body>
+</html>
