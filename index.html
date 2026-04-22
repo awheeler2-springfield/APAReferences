@@ -720,7 +720,37 @@
           compareExact(results, values.journal, this.answers.journal, "Journal title");
           compareExact(results, values.volume, this.answers.volume, "Volume");
           compareExact(results, values.issue, this.answers.issue, "Issue");
-          compareExact(results, values.pages, this.answers.pages, "Page range");
+          if (String(values.pages || "").trim()) {
+  const actualPages = String(values.pages || "").trim();
+  const expectedPages = String(this.answers.pages || "").trim();
+
+  const normalizedActualPages = normalizeString(actualPages).replace(/-/g, "–");
+  const normalizedExpectedPages = normalizeString(expectedPages).replace(/-/g, "–");
+
+  if (normalizedActualPages === normalizedExpectedPages) {
+    if (actualPages.includes("-") && !actualPages.includes("–")) {
+      results.push({
+        type: "formatting",
+        message: "You identified the correct page range, but APA uses an en dash (–) instead of a hyphen (-)."
+      });
+    } else {
+      results.push({
+        type: "success",
+        message: "Page range looks correct."
+      });
+    }
+  } else {
+    results.push({
+      type: "formatting",
+      message: "Page range does not look correct for this source."
+    });
+  }
+} else {
+  results.push({
+    type: "structural",
+    message: "Page range is missing."
+  });
+}
           compareUrlLike(results, values.doi, this.answers.doi, "DOI / URL");
           finalizeResults(results, values, ["author", "year", "title", "journal", "volume", "issue", "pages", "doi"]);
           return dedupeResults(results);
