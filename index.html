@@ -6,12 +6,13 @@
   <title>APA Reference Builder Lab</title>
   <style>
     :root {
-      --bg: #f1f5f9;
+      --bg: #e8edf3;
       --card: #ffffff;
       --text: #0f172a;
       --muted: #475569;
       --border: #cbd5e1;
       --soft: #f8fafc;
+      --soft-2: #f1f5f9;
       --blue-soft: #e0f2fe;
       --blue-border: #7dd3fc;
       --amber-soft: #fef3c7;
@@ -20,11 +21,17 @@
       --green-border: #86efac;
       --red-soft: #fee2e2;
       --red-border: #fca5a5;
-      --shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
-      --radius: 20px;
+      --indigo-soft: #e0e7ff;
+      --indigo-border: #a5b4fc;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -37,19 +44,21 @@
     .page {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 24px;
+      padding: 22px;
     }
 
-    .card {
-      background: var(--card);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      padding: 24px;
+    .screen {
+      display: none;
     }
 
+    .screen.active {
+      display: block;
+    }
+
+    .card,
     .section-card {
       background: var(--card);
-      border-radius: 24px;
+      border-radius: var(--radius-lg);
       box-shadow: var(--shadow);
       padding: 24px;
     }
@@ -62,69 +71,81 @@
 
     .grid-3 {
       display: grid;
-      grid-template-columns: 1.05fr 1.2fr 1.1fr;
+      grid-template-columns: 1.02fr 1.18fr 1.06fr;
       gap: 24px;
     }
 
-    .muted {
-      color: var(--muted);
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.15fr 1fr;
+      gap: 24px;
     }
 
     .eyebrow {
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.18em;
-      font-weight: bold;
+      font-weight: 700;
       color: #64748b;
       margin-bottom: 8px;
     }
 
-    h1, h2, h3, p {
+    .muted {
+      color: var(--muted);
+    }
+
+    h1, h2, h3, h4, p {
       margin-top: 0;
+    }
+
+    .soft-box,
+    .blue-box,
+    .amber-box,
+    .green-box,
+    .red-box,
+    .indigo-box {
+      border-radius: var(--radius-md);
+      padding: 16px;
+      border: 1px solid var(--border);
     }
 
     .soft-box {
       background: var(--soft);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 16px;
+      border-color: var(--border);
     }
 
     .blue-box {
       background: var(--blue-soft);
-      border: 1px solid var(--blue-border);
-      border-radius: 20px;
-      padding: 16px;
+      border-color: var(--blue-border);
     }
 
     .amber-box {
       background: var(--amber-soft);
-      border: 1px solid var(--amber-border);
-      border-radius: 20px;
-      padding: 16px;
+      border-color: var(--amber-border);
     }
 
     .green-box {
       background: var(--green-soft);
-      border: 1px solid var(--green-border);
-      border-radius: 20px;
-      padding: 16px;
+      border-color: var(--green-border);
     }
 
     .red-box {
       background: var(--red-soft);
-      border: 1px solid var(--red-border);
-      border-radius: 20px;
-      padding: 16px;
+      border-color: var(--red-border);
+    }
+
+    .indigo-box {
+      background: var(--indigo-soft);
+      border-color: var(--indigo-border);
     }
 
     .pill {
       display: inline-block;
-      background: var(--soft);
+      background: var(--soft-2);
       border-radius: 999px;
       padding: 6px 12px;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: 700;
       text-transform: uppercase;
       color: #475569;
     }
@@ -136,11 +157,16 @@
       margin-top: 20px;
     }
 
-    button, select, input, textarea, a.button-link {
+    button,
+    select,
+    input,
+    textarea,
+    a.button-link {
       font: inherit;
     }
 
-    button, .button-link {
+    button,
+    .button-link {
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 12px 16px;
@@ -158,19 +184,37 @@
     }
 
     button.sky {
-      background: #e0f2fe;
+      background: var(--blue-soft);
       color: #0c4a6e;
-      border-color: #7dd3fc;
+      border-color: var(--blue-border);
     }
 
-    button:hover, .button-link:hover {
-      opacity: 0.95;
+    button.indigo {
+      background: var(--indigo-soft);
+      color: #312e81;
+      border-color: var(--indigo-border);
+    }
+
+    button.green {
+      background: #059669;
+      color: white;
+      border-color: #059669;
+    }
+
+    button:hover:not(:disabled),
+    .button-link:hover {
+      opacity: 0.96;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
     }
 
     label {
       display: block;
       margin-bottom: 14px;
-      font-weight: bold;
+      font-weight: 700;
       font-size: 14px;
     }
 
@@ -200,7 +244,7 @@
       border-radius: 14px;
       padding: 10px 12px;
       margin-bottom: 10px;
-      box-shadow: 0 1px 4px rgba(15,23,42,0.05);
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
     }
 
     .preview-box {
@@ -210,7 +254,7 @@
       padding: 16px;
       font-family: Georgia, "Times New Roman", serif;
       line-height: 1.8;
-      box-shadow: 0 1px 4px rgba(15,23,42,0.05);
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
     }
 
     .feedback-item {
@@ -244,7 +288,7 @@
       border: 1px solid var(--border);
       border-radius: 18px;
       background: white;
-      box-shadow: 0 1px 4px rgba(15,23,42,0.05);
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
     }
 
     .preview-window-top {
@@ -264,15 +308,63 @@
       margin-right: 6px;
     }
 
+    .option-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: white;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .option-btn.selected {
+      border-color: #0f172a;
+      background: var(--soft-2);
+    }
+
+    .progress-wrap {
+      height: 12px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #0f172a;
+      width: 0%;
+    }
+
+    .badge-card {
+      border-radius: 34px;
+      border: 4px solid #c7d2fe;
+      background: linear-gradient(135deg, #eef2ff, #ffffff);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .mono {
+      font-family: "Courier New", Courier, monospace;
+      word-break: break-word;
+    }
+
     .hidden {
       display: none;
     }
 
-    @media (max-width: 1000px) {
-      .grid-3 {
-        grid-template-columns: 1fr;
-      }
-      .grid-2 {
+    ul.compact,
+    ol.compact {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 1020px) {
+      .grid-2,
+      .grid-3,
+      .guide-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -280,66 +372,174 @@
 </head>
 <body>
   <div class="page">
-    <div id="introScreen" class="card">
-      <div style="max-width: 980px; margin: 0 auto;">
-        <div class="eyebrow">Before You Begin</div>
-        <h1>Welcome to the APA Reference Builder Lab</h1>
-        <p class="muted" style="font-size: 18px; line-height: 1.8;">
-          This activity is designed to help you learn how APA reference entries are built. Instead of memorizing rules in the abstract, you will practice identifying the parts of a source, placing them in the correct order, and checking your work against an authoritative resource.
-        </p>
 
-        <div class="grid-2" style="margin-top: 30px;">
-          <div class="soft-box">
-            <h2>What you are learning</h2>
-            <ul>
-              <li><strong>Identify source information:</strong> locate the author, date, title, source, and DOI or URL.</li>
-              <li><strong>Build an APA reference:</strong> assemble those elements into the correct APA sequence.</li>
-              <li><strong>Notice formatting conventions:</strong> recognize punctuation, capitalization, and source formatting patterns.</li>
-              <li><strong>Verify your decisions:</strong> compare your work to APA Style so you can confirm correctness independently.</li>
-            </ul>
+    <!-- INTRO -->
+    <div id="introScreen" class="screen active">
+      <div class="card">
+        <div style="max-width: 1020px; margin: 0 auto;">
+          <div class="eyebrow">Before You Begin</div>
+          <h1>Welcome to the APA Reference Builder Lab</h1>
+          <p class="muted" style="font-size: 18px; line-height: 1.8;">
+            This activity is designed to help you learn how APA reference entries are built and how to use APA Style as a problem-solving resource. Instead of memorizing rules in the abstract, you will identify source details, build references, verify your decisions, and document completion.
+          </p>
+
+          <div class="grid-2" style="margin-top: 28px;">
+            <div class="soft-box">
+              <h2>What you are learning</h2>
+              <ul class="compact">
+                <li><strong>Identify source information:</strong> locate the author, date, title, source, and DOI or URL.</li>
+                <li><strong>Build an APA reference:</strong> assemble those elements into the correct APA sequence.</li>
+                <li><strong>Use APA Style strategically:</strong> choose the right category and example when a source is unfamiliar.</li>
+                <li><strong>Track completion:</strong> finish all source types and unlock a named badge and completion code.</li>
+              </ul>
+            </div>
+
+            <div class="blue-box">
+              <h2>Why this matters</h2>
+              <p>Reference pages are not just about following rules. They make research traceable and show readers where evidence comes from.</p>
+              <p>This lab also teaches you how to use an authoritative resource when you are unsure, which is a more durable skill than memorizing isolated examples.</p>
+              <p>The goal is not perfection on the first try. The goal is to build a repeatable process for recognizing source types, checking conventions, and revising with confidence.</p>
+            </div>
           </div>
 
-          <div class="blue-box">
-            <h2>Why this matters</h2>
-            <p>Reference pages are not just about following rules. They show readers where your information came from and make your research traceable.</p>
-            <p>Learning to build references also helps you read sources more carefully because you begin to notice the parts that make a source credible and usable in academic writing.</p>
-            <p>In this lab, the goal is not perfection on the first try. The goal is to develop a repeatable process you can use when working with new sources.</p>
+          <div class="grid-2" style="margin-top: 24px;">
+            <div class="amber-box">
+              <h2>How the lab works</h2>
+              <ol class="compact">
+                <li>Enter your name so the completion badge can be personalized.</li>
+                <li>Use the APA Navigation Lab to practice finding the right example.</li>
+                <li>Choose a source type and inspect the source snapshot.</li>
+                <li>Build the reference and check the diagnostic feedback.</li>
+                <li>Verify your work against the APA model.</li>
+                <li>Mark each source complete and unlock the final badge.</li>
+              </ol>
+            </div>
+
+            <div class="indigo-box">
+              <h2>Student badge setup</h2>
+              <label for="studentNameInput">Student name</label>
+              <input id="studentNameInput" class="field" type="text" placeholder="Enter your name" />
+              <p style="margin-top: 12px;">
+                You can explore the lab without entering a name, but a name is required before the completion badge can be unlocked.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="amber-box" style="margin-top: 24px;">
-          <h2>How the lab works</h2>
-          <ol>
-            <li>Read the source snapshot and identify the relevant publication details.</li>
-            <li>Enter those details into the reference builder.</li>
-            <li>Review the live preview of your reference entry.</li>
-            <li>Use the feedback panel to catch missing or questionable elements.</li>
-            <li>Compare your entry with the APA Style example.</li>
-          </ol>
-        </div>
-
-        <div class="controls">
-          <button id="startLabBtn" class="primary">Start the lab</button>
-          <a class="button-link" href="https://apastyle.apa.org/" target="_blank" rel="noreferrer">Visit APA Style</a>
+          <div class="controls" style="margin-top: 28px;">
+            <button id="goGuideBtn" class="primary">Start with the APA Navigation Lab</button>
+            <button id="skipToLabBtn" class="indigo">Go directly to the builder</button>
+            <a class="button-link" href="https://apastyle.apa.org/style-grammar-guidelines/references/examples" target="_blank" rel="noreferrer">Visit APA Style examples</a>
+          </div>
         </div>
       </div>
     </div>
 
-    <div id="labScreen" class="hidden">
+    <!-- GUIDE -->
+    <div id="guideScreen" class="screen">
+      <div class="card">
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:18px; align-items:end;">
+          <div>
+            <div class="eyebrow">APA Navigation Lab</div>
+            <h1>How to Use APA Style to Solve a Citation</h1>
+            <p class="muted" style="max-width: 760px;">
+              This guided screen simulates the decision-making process students should use on the APA Style examples page before returning to the builder.
+            </p>
+          </div>
+          <div class="soft-box" style="min-width: 260px;">
+            Current source:
+            <div id="guideCurrentSource" style="font-weight: bold; margin-top: 4px;"></div>
+          </div>
+        </div>
+
+        <div class="guide-grid" style="margin-top: 24px;">
+          <section class="section-card" style="padding: 20px;">
+            <h2>Your task</h2>
+            <p id="guideTaskText"></p>
+            <div class="indigo-box" style="margin-top: 18px;">
+              <p><strong>Goal</strong></p>
+              <p>Pick the right section, choose the closest example, and identify the pattern you need.</p>
+            </div>
+          </section>
+
+          <section class="section-card" style="padding: 20px;">
+            <h2 id="guideStepHeading">Step 1 of 4</h2>
+            <div id="guideStepBody" style="margin-top: 16px;"></div>
+            <div id="guideFeedback" class="hidden" style="margin-top: 16px;"></div>
+          </section>
+
+          <section class="section-card" style="padding: 20px;">
+            <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
+              <h2>Simulated APA Style</h2>
+              <a class="button-link" href="https://apastyle.apa.org/style-grammar-guidelines/references/examples" target="_blank" rel="noreferrer">Open the real page</a>
+            </div>
+
+            <div class="preview-window" style="margin-top: 16px;">
+              <div class="preview-window-top">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                APA Style examples page (simulated)
+              </div>
+              <div style="padding: 16px;">
+                <div class="eyebrow">Reference categories</div>
+                <ul id="guideCategoryList"></ul>
+
+                <div class="soft-box" style="margin-top: 14px;">
+                  <div class="eyebrow">Closest matching example</div>
+                  <p id="guideExampleLabel" style="font-weight: bold; margin-bottom: 10px;"></p>
+                  <div id="guideModelReference" class="preview-box" style="min-height: auto;"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="controls">
+          <button id="guideBackIntroBtn">Back to overview</button>
+          <button id="guideBackLabBtn">Back to builder</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAB -->
+    <div id="labScreen" class="screen">
       <div class="card" style="margin-bottom: 24px;">
         <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:20px; align-items:end;">
           <div>
-            <div class="eyebrow">Original Iteration</div>
-            <h1 style="font-size: 32px;">APA Reference Builder Lab</h1>
+            <div class="eyebrow">Builder Lab</div>
+            <h1>APA Reference Builder Lab</h1>
             <p class="muted" style="max-width: 760px;">
-              A first-pass interface for non-nursing students to practice identifying source metadata, assembling an APA reference, and verifying conventions against APA Style.
+              Students inspect the source, build a reference, use the APA Navigation Lab, verify against an APA Style example, and then mark the source complete.
             </p>
           </div>
 
-          <div class="soft-box" style="min-width: 260px;">
-            <label for="sourceSelect" style="margin-bottom:8px;">Choose a source type</label>
-            <select id="sourceSelect" class="field" style="margin-top:0;">
-            </select>
+          <div style="display:grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap:12px; width:100%; max-width: 700px;">
+            <div class="soft-box">
+              <div style="font-weight:bold;">Student</div>
+              <div id="studentNameDisplay" class="muted" style="margin-top: 6px;">Name not entered yet</div>
+            </div>
+            <div class="soft-box">
+              <div style="font-weight:bold;">Progress</div>
+              <div id="progressText" class="muted" style="margin-top: 6px;"></div>
+            </div>
+            <div class="soft-box">
+              <div style="font-weight:bold;">Completion meter</div>
+              <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+              <div id="progressPercentText" class="muted" style="margin-top: 6px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 24px;">
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; align-items:end;">
+          <div>
+            <div class="eyebrow">Source selection</div>
+            <label for="sourceSelect" style="margin-bottom: 8px;">Choose a source type</label>
+            <select id="sourceSelect" class="field" style="margin-top: 0; min-width: 300px;"></select>
+          </div>
+
+          <div class="controls" style="margin-top: 0;">
+            <button id="openGuideBtn" class="indigo">Open APA Navigation Lab</button>
+            <button id="unlockBadgeBtn" class="green" disabled>Unlock final badge</button>
           </div>
         </div>
       </div>
@@ -352,15 +552,20 @@
           </div>
 
           <div class="soft-box">
-            <h3 id="snapshotHeading" class="eyebrow" style="margin-bottom:14px;">Source Snapshot</h3>
+            <h3 id="snapshotHeading" class="eyebrow" style="margin-bottom: 14px;">Source Snapshot</h3>
             <ul id="snapshotList" class="snapshot-list"></ul>
           </div>
 
-          <div class="blue-box" style="margin-top:20px;">
+          <div class="blue-box" style="margin-top: 20px;">
             <p><strong>Task</strong></p>
             <p>
-              Extract the metadata you need, then build the reference. Afterward, compare your result to the linked APA Style example.
+              Extract the metadata you need, build the reference, complete the APA Navigation Lab for this source, and then verify your result against the APA model.
             </p>
+          </div>
+
+          <div class="soft-box" style="margin-top: 16px;">
+            <p><strong>Guide status for this source</strong></p>
+            <p id="guideStatusText" style="margin-bottom: 0;"></p>
           </div>
         </section>
 
@@ -375,35 +580,38 @@
           <div class="controls">
             <button id="checkBtn" class="primary">Check my reference</button>
             <button id="verifyBtn" class="sky">Verify with APA Style</button>
+            <button id="markCompleteBtn" class="green">Mark source complete</button>
           </div>
         </section>
 
         <section class="section-card">
-          <h2 style="margin-bottom:16px;">3. Review the output</h2>
+          <h2 style="margin-bottom: 16px;">3. Review the output</h2>
 
           <div class="soft-box">
-            <div class="eyebrow" style="margin-bottom:10px;">Live Preview</div>
+            <div class="eyebrow" style="margin-bottom: 10px;">Live Preview</div>
             <div id="referencePreview" class="preview-box">Your APA reference will appear here.</div>
           </div>
 
-          <div id="feedbackBox" class="hidden" style="margin-top:16px;">
+          <div id="feedbackBox" class="hidden" style="margin-top: 16px;">
             <div class="soft-box">
-              <div class="eyebrow" style="margin-bottom:10px;">Diagnostic Feedback</div>
+              <div class="eyebrow" style="margin-bottom: 10px;">Diagnostic Feedback</div>
               <div id="feedbackItems"></div>
             </div>
           </div>
 
-          <div class="soft-box" style="margin-top:16px;">
-            <p><strong>Instructor Model</strong></p>
-            <p id="instructorModel"></p>
+          <div id="sourceCompleteBox" class="hidden" style="margin-top: 16px;">
+            <div class="green-box">
+              <p><strong>Source complete</strong></p>
+              <p style="margin-bottom: 0;">This source has been marked complete and counted toward the final badge.</p>
+            </div>
           </div>
 
-          <div id="apaPreviewBox" class="hidden" style="margin-top:16px;">
+          <div id="apaPreviewBox" class="hidden" style="margin-top: 16px;">
             <div class="blue-box">
-              <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom: 12px;">
                 <div>
                   <div class="eyebrow" style="color:#0369a1;">APA Style Verification</div>
-                  <h3 id="apaExampleTitle" style="margin-bottom:0;"></h3>
+                  <h3 id="apaExampleTitle" style="margin-bottom: 0;"></h3>
                 </div>
                 <a id="apaLinkBtn" class="button-link" target="_blank" rel="noreferrer">Open APA Style</a>
               </div>
@@ -413,16 +621,16 @@
                   <span class="dot"></span><span class="dot"></span><span class="dot"></span>
                   APA Style example preview
                 </div>
-                <div style="padding:16px;">
+                <div style="padding: 16px;">
                   <div class="soft-box">
-                    <div class="eyebrow" style="margin-bottom:10px;">Reference Example</div>
-                    <div id="apaModelPreview" class="preview-box" style="min-height:auto;"></div>
-                    <p id="apaExampleNote" class="muted" style="margin-top:12px;"></p>
+                    <div class="eyebrow" style="margin-bottom: 10px;">Reference Example</div>
+                    <div id="apaModelPreview" class="preview-box" style="min-height: auto;"></div>
+                    <p id="apaExampleNote" class="muted" style="margin-top: 12px;"></p>
                   </div>
                 </div>
               </div>
 
-              <p class="muted" style="font-size:12px; margin-top:12px;">
+              <p class="muted" style="font-size: 12px; margin-top: 12px;">
                 This in-app panel mirrors the formatting students should verify. Use the button above to compare it against the full APA Style example page.
               </p>
             </div>
@@ -430,10 +638,61 @@
         </section>
       </div>
     </div>
+
+    <!-- COMPLETE -->
+    <div id="completeScreen" class="screen">
+      <div class="card">
+        <div style="max-width: 920px; margin: 0 auto;">
+          <div class="eyebrow">Completion unlocked</div>
+          <h1>Named completion badge</h1>
+          <p class="muted" style="font-size: 18px; line-height: 1.8;">
+            You completed all source types. The badge below can be shown, screenshotted, or paired with the completion code in Brightspace or email submission.
+          </p>
+
+          <div class="badge-card" style="margin-top: 28px;">
+            <div class="eyebrow" style="color:#4338ca;">APA Reference Builder Lab</div>
+            <h2 id="badgeName" style="font-size: 34px; margin-bottom: 6px;"></h2>
+            <p style="font-size: 20px; color: var(--muted);">completed the full APA reference practice sequence</p>
+
+            <div class="grid-2" style="margin-top: 22px;">
+              <div class="soft-box">
+                <div class="eyebrow">Completed source types</div>
+                <div id="badgeCount" style="font-size: 24px; font-weight: bold;"></div>
+              </div>
+              <div class="soft-box">
+                <div class="eyebrow">Completion date</div>
+                <div id="badgeDate" style="font-size: 24px; font-weight: bold;"></div>
+              </div>
+            </div>
+
+            <div class="soft-box" style="margin-top: 22px;">
+              <div class="eyebrow">Completion code</div>
+              <div id="badgeCode" class="mono" style="font-size: 22px; font-weight: bold;"></div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button id="copyCodeBtn" class="primary">Copy completion code</button>
+            <button id="backToLabBtn">Back to the lab</button>
+          </div>
+
+          <div id="copyMessage" class="green-box hidden" style="margin-top: 16px;">
+            Completion code copied.
+          </div>
+
+          <div class="soft-box" style="margin-top: 28px;">
+            <h2>Submission reflection</h2>
+            <p id="reflectionPromptText"></p>
+            <textarea id="reflectionBox" class="field" rows="5" placeholder="Type a short reflection here before copying it into Brightspace or email."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    const sampleSources = [
+    const sources = [
       {
         id: "journal",
         label: "Journal Article",
@@ -450,7 +709,15 @@
             "DOI: https://doi.org/10.1234/jcl.2023.5678"
           ]
         },
-        fields: {
+        blankFields: {
+          author: "",
+          year: "",
+          title: "",
+          source: "",
+          locator: "",
+          url: ""
+        },
+        answerFields: {
           author: "Smith, J.",
           year: "2023",
           title: "Social media habits among first-year students",
@@ -458,12 +725,21 @@
           locator: "12(3), 45–67",
           url: "https://doi.org/10.1234/jcl.2023.5678"
         },
-        modelReference:
-          "Smith, J. (2023). Social media habits among first-year students. Journal of College Learning, 12(3), 45–67. https://doi.org/10.1234/jcl.2023.5678",
         apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/journal-article-references",
         apaExampleTitle: "APA Style example: journal article reference",
-        apaExampleNote:
-          "Use this model to check author order, date placement, article title capitalization, journal title formatting, and DOI placement."
+        apaExampleNote: "Use this model to check author order, date placement, article title capitalization, journal title formatting, and DOI placement.",
+        apaFormattedReference: 'Smith, J. (2023). Social media habits among first-year students. <em>Journal of College Learning</em>, <em>12</em>(3), 45–67. https://doi.org/10.1234/jcl.2023.5678',
+        guideTask: "You have a journal article with one author, a year, a journal title, volume and issue information, a page range, and a DOI.",
+        guideChoices: {
+          categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
+          correctCategory: "Journal Articles",
+          exampleOptions: ["Standard journal article", "Journal article with no DOI", "Magazine article"],
+          correctExample: "Standard journal article",
+          patternPrompt: "Which source element appears after the article title in this reference?",
+          patternOptions: ["Journal title and volume", "Publisher only", "Website name"],
+          correctPattern: "Journal title and volume",
+          successMessage: "Correct. For a standard journal article, the article title is followed by the journal title, volume(issue), page range, and DOI when available."
+        }
       },
       {
         id: "webpage",
@@ -479,7 +755,15 @@
             "URL: https://www.studenthealthhub.org/sleep-college"
           ]
         },
-        fields: {
+        blankFields: {
+          author: "",
+          year: "",
+          title: "",
+          source: "",
+          locator: "",
+          url: ""
+        },
+        answerFields: {
           author: "Chen, M.",
           year: "2024, March 12",
           title: "Why sleep matters in college",
@@ -487,12 +771,21 @@
           locator: "",
           url: "https://www.studenthealthhub.org/sleep-college"
         },
-        modelReference:
-          "Chen, M. (2024, March 12). Why sleep matters in college. Student Health Hub. https://www.studenthealthhub.org/sleep-college",
         apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references",
         apaExampleTitle: "APA Style example: webpage reference",
-        apaExampleNote:
-          "Use this model to check date formatting, webpage title capitalization, website name placement, and URL formatting."
+        apaExampleNote: "Use this model to check date formatting, webpage title capitalization, website name placement, and URL formatting.",
+        apaFormattedReference: 'Chen, M. (2024, March 12). Why sleep matters in college. <em>Student Health Hub</em>. https://www.studenthealthhub.org/sleep-college',
+        guideTask: "You have a webpage with an author, a full date, a page title, a website name, and a URL.",
+        guideChoices: {
+          categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
+          correctCategory: "Webpages",
+          exampleOptions: ["Webpage with author", "Webpage with no author", "Social media post"],
+          correctExample: "Webpage with author",
+          patternPrompt: "Which element comes after the webpage title?",
+          patternOptions: ["Website name", "Journal title", "Volume(issue)"],
+          correctPattern: "Website name",
+          successMessage: "Correct. In this webpage model, the website name follows the title before the URL."
+        }
       },
       {
         id: "book",
@@ -507,7 +800,15 @@
             "Publisher: Northeastern Academic Press"
           ]
         },
-        fields: {
+        blankFields: {
+          author: "",
+          year: "",
+          title: "",
+          source: "",
+          locator: "",
+          url: ""
+        },
+        answerFields: {
           author: "Rivera, A.",
           year: "2021",
           title: "Writing in college contexts",
@@ -515,16 +816,126 @@
           locator: "",
           url: ""
         },
-        modelReference:
-          "Rivera, A. (2021). Writing in college contexts. Northeastern Academic Press.",
         apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/book-references",
         apaExampleTitle: "APA Style example: book reference",
-        apaExampleNote:
-          "Use this model to check book title capitalization, author formatting, year placement, and publisher formatting."
+        apaExampleNote: "Use this model to check book title capitalization, author formatting, year placement, and publisher formatting.",
+        apaFormattedReference: 'Rivera, A. (2021). <em>Writing in college contexts</em>. Northeastern Academic Press.',
+        guideTask: "You have a book with one author, a year, a title, and a publisher.",
+        guideChoices: {
+          categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
+          correctCategory: "Books",
+          exampleOptions: ["Book", "Edited book chapter", "Reference work entry"],
+          correctExample: "Book",
+          patternPrompt: "Which element usually closes this reference?",
+          patternOptions: ["Publisher", "Website name", "Page range"],
+          correctPattern: "Publisher",
+          successMessage: "Correct. A standard book reference typically ends with the publisher."
+        }
+      },
+      {
+        id: "webpage-no-author",
+        label: "Webpage (No Author)",
+        instructionalType: "webpage without an author",
+        sourceCard: {
+          heading: "Source Snapshot",
+          lines: [
+            "Author: not listed",
+            "Date: 2025, January 8",
+            "Page title: Campus tutoring resources",
+            "Website: Elmwood College Success Center",
+            "URL: https://www.elmwood.edu/tutoring-resources"
+          ]
+        },
+        blankFields: {
+          author: "",
+          year: "",
+          title: "",
+          source: "",
+          locator: "",
+          url: ""
+        },
+        answerFields: {
+          author: "",
+          year: "2025, January 8",
+          title: "Campus tutoring resources",
+          source: "Elmwood College Success Center",
+          locator: "",
+          url: "https://www.elmwood.edu/tutoring-resources"
+        },
+        apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references",
+        apaExampleTitle: "APA Style example: webpage reference with no author",
+        apaExampleNote: "Use this model to notice that when no author is available, the title moves into the author position.",
+        apaFormattedReference: 'Campus tutoring resources. (2025, January 8). <em>Elmwood College Success Center</em>. https://www.elmwood.edu/tutoring-resources',
+        guideTask: "You have a webpage with no listed author but a date, page title, website name, and URL.",
+        guideChoices: {
+          categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
+          correctCategory: "Webpages",
+          exampleOptions: ["Webpage with author", "Webpage with no author", "Webpage with group author"],
+          correctExample: "Webpage with no author",
+          patternPrompt: "When no author is listed, what moves into the author position?",
+          patternOptions: ["Title", "Website name", "URL"],
+          correctPattern: "Title",
+          successMessage: "Correct. When there is no author, the title shifts into the author position."
+        }
+      },
+      {
+        id: "chapter",
+        label: "Chapter in Edited Book",
+        instructionalType: "book chapter",
+        sourceCard: {
+          heading: "Source Snapshot",
+          lines: [
+            "Chapter author: Priya Nair",
+            "Year: 2022",
+            "Chapter title: Revising with digital tools",
+            "Editor: L. Gomez",
+            "Book title: Teaching writing today",
+            "Pages: 88–106",
+            "Publisher: North Bridge Press"
+          ]
+        },
+        blankFields: {
+          author: "",
+          year: "",
+          title: "",
+          source: "",
+          locator: "",
+          url: ""
+        },
+        answerFields: {
+          author: "Nair, P.",
+          year: "2022",
+          title: "Revising with digital tools",
+          source: "In L. Gomez (Ed.), Teaching writing today",
+          locator: "pp. 88–106",
+          url: "North Bridge Press"
+        },
+        apaLink: "https://apastyle.apa.org/style-grammar-guidelines/references/examples/edited-book-chapter-references",
+        apaExampleTitle: "APA Style example: chapter in an edited book",
+        apaExampleNote: "Use this model to notice the In phrase, the editor, the book title, the page range, and the publisher.",
+        apaFormattedReference: 'Nair, P. (2022). Revising with digital tools. In L. Gomez (Ed.), <em>Teaching writing today</em> (pp. 88–106). North Bridge Press.',
+        guideTask: "You have a chapter author, a chapter title, the editor, the book title, the page range, and a publisher.",
+        guideChoices: {
+          categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
+          correctCategory: "Chapters / Anthologies",
+          exampleOptions: ["Book", "Edited book chapter", "Webpage with author"],
+          correctExample: "Edited book chapter",
+          patternPrompt: "What phrase signals the larger source for the chapter?",
+          patternOptions: ["In + editor information", "Retrieved from", "Website name"],
+          correctPattern: "In + editor information",
+          successMessage: "Correct. Edited-book chapter references use an In phrase followed by editor and book information."
+        }
       }
     ];
 
-    const fieldLabels = {
+    const completionPrompts = [
+      "What source element was hardest for you to identify, and why?",
+      "What did the APA Style example help you notice?",
+      "What rule or pattern will you pay closer attention to next time?",
+      "What was the most useful part of the verification process?"
+    ];
+
+    const fieldLabelsBase = {
       author: "Author",
       year: "Date",
       title: "Title",
@@ -533,32 +944,94 @@
       url: "DOI / URL"
     };
 
-    let currentSourceId = sampleSources[0].id;
-    let form = { ...sampleSources[0].fields };
+    let currentScreen = "intro";
+    let currentSourceId = sources[0].id;
+    let studentName = "";
+    let completedSources = [];
+    let form = {};
+    let guideState = {
+      category: null,
+      example: null,
+      pattern: null,
+      passedBySource: {}
+    };
+    let completionCode = "";
+    let completionDate = "";
 
     const introScreen = document.getElementById("introScreen");
+    const guideScreen = document.getElementById("guideScreen");
     const labScreen = document.getElementById("labScreen");
-    const startLabBtn = document.getElementById("startLabBtn");
+    const completeScreen = document.getElementById("completeScreen");
+
+    const studentNameInput = document.getElementById("studentNameInput");
+    const goGuideBtn = document.getElementById("goGuideBtn");
+    const skipToLabBtn = document.getElementById("skipToLabBtn");
+
+    const guideCurrentSource = document.getElementById("guideCurrentSource");
+    const guideTaskText = document.getElementById("guideTaskText");
+    const guideStepHeading = document.getElementById("guideStepHeading");
+    const guideStepBody = document.getElementById("guideStepBody");
+    const guideFeedback = document.getElementById("guideFeedback");
+    const guideCategoryList = document.getElementById("guideCategoryList");
+    const guideExampleLabel = document.getElementById("guideExampleLabel");
+    const guideModelReference = document.getElementById("guideModelReference");
+    const guideBackIntroBtn = document.getElementById("guideBackIntroBtn");
+    const guideBackLabBtn = document.getElementById("guideBackLabBtn");
+
+    const studentNameDisplay = document.getElementById("studentNameDisplay");
+    const progressText = document.getElementById("progressText");
+    const progressBar = document.getElementById("progressBar");
+    const progressPercentText = document.getElementById("progressPercentText");
     const sourceSelect = document.getElementById("sourceSelect");
+    const openGuideBtn = document.getElementById("openGuideBtn");
+    const unlockBadgeBtn = document.getElementById("unlockBadgeBtn");
+
     const sourceTypePill = document.getElementById("sourceTypePill");
     const snapshotHeading = document.getElementById("snapshotHeading");
     const snapshotList = document.getElementById("snapshotList");
+    const guideStatusText = document.getElementById("guideStatusText");
+
     const formFields = document.getElementById("formFields");
+    const resetBtn = document.getElementById("resetBtn");
+    const checkBtn = document.getElementById("checkBtn");
+    const verifyBtn = document.getElementById("verifyBtn");
+    const markCompleteBtn = document.getElementById("markCompleteBtn");
+
     const referencePreview = document.getElementById("referencePreview");
     const feedbackBox = document.getElementById("feedbackBox");
     const feedbackItems = document.getElementById("feedbackItems");
-    const instructorModel = document.getElementById("instructorModel");
+    const sourceCompleteBox = document.getElementById("sourceCompleteBox");
     const apaPreviewBox = document.getElementById("apaPreviewBox");
     const apaExampleTitle = document.getElementById("apaExampleTitle");
     const apaLinkBtn = document.getElementById("apaLinkBtn");
     const apaModelPreview = document.getElementById("apaModelPreview");
     const apaExampleNote = document.getElementById("apaExampleNote");
-    const resetBtn = document.getElementById("resetBtn");
-    const checkBtn = document.getElementById("checkBtn");
-    const verifyBtn = document.getElementById("verifyBtn");
 
-    function getSelectedSource() {
-      return sampleSources.find(source => source.id === currentSourceId) || sampleSources[0];
+    const badgeName = document.getElementById("badgeName");
+    const badgeCount = document.getElementById("badgeCount");
+    const badgeDate = document.getElementById("badgeDate");
+    const badgeCode = document.getElementById("badgeCode");
+    const copyCodeBtn = document.getElementById("copyCodeBtn");
+    const backToLabBtn = document.getElementById("backToLabBtn");
+    const copyMessage = document.getElementById("copyMessage");
+    const reflectionPromptText = document.getElementById("reflectionPromptText");
+    const reflectionBox = document.getElementById("reflectionBox");
+
+    function getCurrentSource() {
+      return sources.find(source => source.id === currentSourceId) || sources[0];
+    }
+
+    function showScreen(screenName) {
+      currentScreen = screenName;
+      introScreen.classList.remove("active");
+      guideScreen.classList.remove("active");
+      labScreen.classList.remove("active");
+      completeScreen.classList.remove("active");
+
+      if (screenName === "intro") introScreen.classList.add("active");
+      if (screenName === "guide") guideScreen.classList.add("active");
+      if (screenName === "lab") labScreen.classList.add("active");
+      if (screenName === "complete") completeScreen.classList.add("active");
     }
 
     function addSentencePeriod(text) {
@@ -567,7 +1040,28 @@
       return /[.!?]$/.test(trimmed) ? trimmed : trimmed + ".";
     }
 
-    function buildReference(values) {
+    function buildReference(source, values) {
+      if (source.id === "chapter") {
+        const parts = [];
+        if (values.author.trim()) parts.push(values.author.trim() + " ");
+        if (values.year.trim()) parts.push("(" + values.year.trim() + "). ");
+        if (values.title.trim()) parts.push(addSentencePeriod(values.title) + " ");
+        if (values.source.trim()) parts.push(values.source.trim());
+        if (values.locator.trim()) parts.push(" (" + values.locator.trim() + ")");
+        if (values.source.trim() || values.locator.trim()) parts.push(".");
+        if (values.url.trim()) parts.push(" " + values.url.trim() + ".");
+        return parts.join("").replace(/\s+\./g, ".").trim();
+      }
+
+      if (source.id === "webpage-no-author") {
+        const parts = [];
+        if (values.title.trim()) parts.push(addSentencePeriod(values.title) + " ");
+        if (values.year.trim()) parts.push("(" + values.year.trim() + "). ");
+        if (values.source.trim()) parts.push(values.source.trim() + ".");
+        if (values.url.trim()) parts.push(" " + values.url.trim());
+        return parts.join("").replace(/\s+\./g, ".").trim();
+      }
+
       const parts = [];
       if (values.author.trim()) parts.push(values.author.trim() + " ");
       if (values.year.trim()) parts.push("(" + values.year.trim() + "). ");
@@ -579,37 +1073,65 @@
       return parts.join("").replace(/\s+\./g, ".").trim();
     }
 
-    function getChecks(values) {
-      const results = [];
+    function getFieldLabels(source) {
+      const labels = { ...fieldLabelsBase };
+      if (source.id === "webpage-no-author") {
+        labels.author = "Author (leave blank for this source)";
+      }
+      if (source.id === "chapter") {
+        labels.source = "Container / Book information";
+        labels.locator = "Page range or extra locator";
+        labels.url = "Publisher";
+      }
+      return labels;
+    }
 
-      if (!values.author.trim()) {
+    function getChecks(source, values) {
+      const results = [];
+      const needsAuthor = source.id !== "webpage-no-author";
+
+      if (needsAuthor && !values.author.trim()) {
         results.push({ type: "structural", message: "Missing author element." });
       }
+
       if (!values.year.trim()) {
         results.push({ type: "structural", message: "Missing date element." });
       }
+
       if (!values.title.trim()) {
         results.push({ type: "structural", message: "Missing title element." });
       }
+
       if (!values.source.trim()) {
         results.push({ type: "structural", message: "Missing source or publisher element." });
       }
+
       if (values.year.trim() && !/^\d{4}([, ].*)?$/.test(values.year.trim())) {
         results.push({ type: "formatting", message: "Date does not look APA-ready." });
       }
-      if (values.author.trim() && !values.author.includes(",")) {
+
+      if (needsAuthor && values.author.trim() && !values.author.includes(",")) {
         results.push({ type: "formatting", message: "Author should usually appear inverted, like Last, F." });
       }
-      if (values.url.trim() && !/^https?:\/\//.test(values.url.trim())) {
+
+      if (source.id !== "chapter" && values.url.trim() && !/^https?:\/\//.test(values.url.trim())) {
         results.push({ type: "formatting", message: "URL or DOI should begin with http:// or https://" });
       }
 
+      if (source.id === "webpage-no-author" && values.author.trim()) {
+        results.push({ type: "formatting", message: "For this practice source, the author field should remain blank because no author is listed." });
+      }
+
+      if (source.id === "chapter" && values.source.trim() && !values.source.includes("In ")) {
+        results.push({ type: "formatting", message: "Chapter references usually include an In phrase with editor and book information." });
+      }
+
       if (
-        values.author.trim() &&
+        results.length === 0 &&
         values.year.trim() &&
         values.title.trim() &&
         values.source.trim() &&
-        results.length === 0
+        (needsAuthor ? values.author.trim() : true)
       ) {
         results.push({ type: "success", message: "Core elements are present and look structurally sound." });
       }
@@ -617,9 +1139,23 @@
       return results;
     }
 
-    function renderSourceOptions() {
+    function isGuidePassedForCurrentSource() {
+      return !!guideState.passedBySource[currentSourceId];
+    }
+
+    function resetFormForCurrentSource() {
+      const source = getCurrentSource();
+      form = { ...source.blankFields };
+      feedbackBox.classList.add("hidden");
+      apaPreviewBox.classList.add("hidden");
+      sourceCompleteBox.classList.toggle("hidden", !completedSources.includes(currentSourceId));
+      renderForm();
+      renderPreview();
+    }
+
+    function renderSourceSelect() {
       sourceSelect.innerHTML = "";
-      sampleSources.forEach(source => {
+      sources.forEach(source => {
         const option = document.createElement("option");
         option.value = source.id;
         option.textContent = source.label;
@@ -628,7 +1164,17 @@
       sourceSelect.value = currentSourceId;
     }
 
-    function renderSnapshot(source) {
+    function renderProgress() {
+      studentNameDisplay.textContent = studentName.trim() || "Name not entered yet";
+      progressText.textContent = completedSources.length + " of " + sources.length + " source types completed";
+      const percent = Math.round((completedSources.length / sources.length) * 100);
+      progressBar.style.width = percent + "%";
+      progressPercentText.textContent = percent + "%";
+      unlockBadgeBtn.disabled = !(studentName.trim() && completedSources.length === sources.length);
+    }
+
+    function renderInspectPanel() {
+      const source = getCurrentSource();
       sourceTypePill.textContent = source.instructionalType;
       snapshotHeading.textContent = source.sourceCard.heading;
       snapshotList.innerHTML = "";
@@ -637,13 +1183,20 @@
         li.textContent = line;
         snapshotList.appendChild(li);
       });
+
+      guideStatusText.textContent = isGuidePassedForCurrentSource()
+        ? "Guide completed for this source. You can verify against APA Style."
+        : "Guide not completed yet for this source. Use the APA Navigation Lab before verifying.";
     }
 
     function renderForm() {
+      const source = getCurrentSource();
+      const labels = getFieldLabels(source);
       formFields.innerHTML = "";
-      Object.keys(fieldLabels).forEach(field => {
+
+      Object.keys(labels).forEach(field => {
         const wrapper = document.createElement("label");
-        wrapper.textContent = fieldLabels[field];
+        wrapper.textContent = labels[field];
 
         let input;
         if (field === "title") {
@@ -656,8 +1209,8 @@
 
         input.className = "field";
         input.value = form[field] || "";
-        input.addEventListener("input", (e) => {
-          form[field] = e.target.value;
+        input.addEventListener("input", (event) => {
+          form[field] = event.target.value;
           renderPreview();
         });
 
@@ -667,12 +1220,14 @@
     }
 
     function renderPreview() {
-      const text = buildReference(form);
+      const source = getCurrentSource();
+      const text = buildReference(source, form);
       referencePreview.textContent = text || "Your APA reference will appear here.";
     }
 
     function renderFeedback() {
-      const checks = getChecks(form);
+      const source = getCurrentSource();
+      const checks = getChecks(source, form);
       feedbackItems.innerHTML = "";
 
       checks.forEach(check => {
@@ -685,40 +1240,273 @@
       feedbackBox.classList.remove("hidden");
     }
 
-    function renderAPABox(source) {
-      instructorModel.textContent = source.modelReference;
+    function renderAPAPreview() {
+      const source = getCurrentSource();
       apaExampleTitle.textContent = source.apaExampleTitle;
       apaLinkBtn.href = source.apaLink;
-      apaModelPreview.textContent = source.modelReference;
+      apaModelPreview.innerHTML = source.apaFormattedReference;
       apaExampleNote.textContent = source.apaExampleNote;
     }
 
-    function renderAll() {
-      const source = getSelectedSource();
-      renderSnapshot(source);
+    function renderLab() {
+      renderSourceSelect();
+      renderProgress();
+      renderInspectPanel();
       renderForm();
       renderPreview();
-      renderAPABox(source);
-      instructorModel.textContent = source.modelReference;
-      feedbackBox.classList.add("hidden");
-      apaPreviewBox.classList.add("hidden");
+      renderAPAPreview();
+      sourceCompleteBox.classList.toggle("hidden", !completedSources.includes(currentSourceId));
     }
 
-    startLabBtn.addEventListener("click", () => {
-      introScreen.classList.add("hidden");
-      labScreen.classList.remove("hidden");
-      renderAll();
+    function resetGuideSelections() {
+      guideState.category = null;
+      guideState.example = null;
+      guideState.pattern = null;
+    }
+
+    function renderGuideStep1() {
+      const source = getCurrentSource();
+      guideStepHeading.textContent = "Step 1 of 4";
+      guideStepBody.innerHTML = "";
+      guideFeedback.classList.add("hidden");
+      guideFeedback.innerHTML = "";
+
+      const prompt = document.createElement("p");
+      prompt.textContent = "Where would you click first on the APA Style examples page?";
+      guideStepBody.appendChild(prompt);
+
+      source.guideChoices.categoryOptions.forEach(option => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn" + (guideState.category === option ? " selected" : "");
+        btn.textContent = option;
+        btn.addEventListener("click", () => {
+          guideState.category = option;
+          renderGuideStep2();
+        });
+        guideStepBody.appendChild(btn);
+      });
+    }
+
+    function renderGuideStep2() {
+      const source = getCurrentSource();
+      guideStepHeading.textContent = "Step 2 of 4";
+      guideStepBody.innerHTML = "";
+      guideFeedback.classList.add("hidden");
+      guideFeedback.innerHTML = "";
+
+      const prompt = document.createElement("p");
+      prompt.textContent = "Which example best matches your source?";
+      guideStepBody.appendChild(prompt);
+
+      source.guideChoices.exampleOptions.forEach(option => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn" + (guideState.example === option ? " selected" : "");
+        btn.textContent = option;
+        btn.addEventListener("click", () => {
+          guideState.example = option;
+          renderGuideStep3();
+        });
+        guideStepBody.appendChild(btn);
+      });
+    }
+
+    function renderGuideStep3() {
+      const source = getCurrentSource();
+      guideStepHeading.textContent = "Step 3 of 4";
+      guideStepBody.innerHTML = "";
+      guideFeedback.classList.add("hidden");
+      guideFeedback.innerHTML = "";
+
+      const prompt = document.createElement("p");
+      prompt.textContent = source.guideChoices.patternPrompt;
+      guideStepBody.appendChild(prompt);
+
+      source.guideChoices.patternOptions.forEach(option => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn" + (guideState.pattern === option ? " selected" : "");
+        btn.textContent = option;
+        btn.addEventListener("click", () => {
+          guideState.pattern = option;
+          document.querySelectorAll("#guideStepBody .option-btn").forEach(el => el.classList.remove("selected"));
+          btn.classList.add("selected");
+        });
+        guideStepBody.appendChild(btn);
+      });
+
+      const checkBtn = document.createElement("button");
+      checkBtn.className = "primary";
+      checkBtn.style.marginTop = "8px";
+      checkBtn.textContent = "Check guide answers";
+      checkBtn.addEventListener("click", evaluateGuide);
+      guideStepBody.appendChild(checkBtn);
+    }
+
+    function evaluateGuide() {
+      const source = getCurrentSource();
+      const categoryCorrect = guideState.category === source.guideChoices.correctCategory;
+      const exampleCorrect = guideState.example === source.guideChoices.correctExample;
+      const patternCorrect = guideState.pattern === source.guideChoices.correctPattern;
+      const allCorrect = categoryCorrect && exampleCorrect && patternCorrect;
+
+      guideFeedback.classList.remove("hidden");
+      guideFeedback.innerHTML = "";
+
+      const items = [
+        {
+          ok: categoryCorrect,
+          good: "Section choice: Correct.",
+          bad: "Section choice: Try " + source.guideChoices.correctCategory + "."
+        },
+        {
+          ok: exampleCorrect,
+          good: "Example choice: Correct.",
+          bad: "Example choice: Look for " + source.guideChoices.correctExample + "."
+        },
+        {
+          ok: patternCorrect,
+          good: "Pattern choice: Correct.",
+          bad: "Pattern choice: The best answer is " + source.guideChoices.correctPattern + "."
+        }
+      ];
+
+      items.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "feedback-item " + (item.ok ? "feedback-success" : "feedback-structural");
+        div.textContent = item.ok ? item.good : item.bad;
+        guideFeedback.appendChild(div);
+      });
+
+      if (allCorrect) {
+        guideState.passedBySource[currentSourceId] = true;
+        renderGuideStep4();
+      }
+    }
+
+    function renderGuideStep4() {
+      const source = getCurrentSource();
+      guideStepHeading.textContent = "Step 4 of 4";
+      guideStepBody.innerHTML = "";
+      guideFeedback.classList.add("hidden");
+      guideFeedback.innerHTML = "";
+
+      const box = document.createElement("div");
+      box.className = "green-box";
+      box.innerHTML = "<p><strong>Guide complete</strong></p><p style='margin-bottom:0;'>" + source.guideChoices.successMessage + "</p>";
+      guideStepBody.appendChild(box);
+
+      const returnBtn = document.createElement("button");
+      returnBtn.className = "indigo";
+      returnBtn.style.marginTop = "14px";
+      returnBtn.textContent = "Return to the builder";
+      returnBtn.addEventListener("click", () => {
+        renderLab();
+        showScreen("lab");
+      });
+      guideStepBody.appendChild(returnBtn);
+    }
+
+    function renderGuideSidebar() {
+      const source = getCurrentSource();
+      guideCurrentSource.textContent = source.label;
+      guideTaskText.textContent = source.guideTask;
+
+      guideCategoryList.innerHTML = "";
+      source.guideChoices.categoryOptions.forEach(option => {
+        const li = document.createElement("li");
+        li.textContent = option;
+        if (option === source.guideChoices.correctCategory) {
+          li.style.fontWeight = "bold";
+          li.style.color = "#4338ca";
+        }
+        guideCategoryList.appendChild(li);
+      });
+
+      guideExampleLabel.textContent = source.guideChoices.correctExample;
+      guideModelReference.innerHTML = source.apaFormattedReference;
+    }
+
+    function renderGuide() {
+      renderGuideSidebar();
+      if (guideState.passedBySource[currentSourceId]) {
+        renderGuideStep4();
+      } else if (!guideState.category) {
+        renderGuideStep1();
+      } else if (!guideState.example) {
+        renderGuideStep2();
+      } else {
+        renderGuideStep3();
+      }
+    }
+
+    function createCompletionCode(name, completedCount, totalCount) {
+      const cleanName = name.trim() ? name.trim().replace(/\s+/g, "").toUpperCase() : "STUDENT";
+      const shortName = cleanName.slice(0, 4).padEnd(4, "X");
+      const dateSegment = new Date().toISOString().slice(2, 10).replace(/-/g, "");
+      const randomSegment = Math.floor(1000 + Math.random() * 9000);
+      const progressSegment = String(completedCount) + String(totalCount);
+      return "APA-" + shortName + "-" + progressSegment + "-" + dateSegment + "-" + randomSegment;
+    }
+
+    function getCompletionPrompt(code) {
+      if (!code) return completionPrompts[0];
+      const numeric = code
+        .replace(/\D/g, "")
+        .split("")
+        .reduce((sum, digit) => sum + Number(digit), 0);
+      return completionPrompts[numeric % completionPrompts.length];
+    }
+
+    function renderCompletion() {
+      badgeName.textContent = studentName || "Student";
+      badgeCount.textContent = completedSources.length + " / " + sources.length;
+      badgeDate.textContent = completionDate;
+      badgeCode.textContent = completionCode;
+      reflectionPromptText.textContent = getCompletionPrompt(completionCode);
+      copyMessage.classList.add("hidden");
+    }
+
+    studentNameInput.addEventListener("input", (event) => {
+      studentName = event.target.value;
+      renderProgress();
     });
 
-    sourceSelect.addEventListener("change", (e) => {
-      currentSourceId = e.target.value;
-      form = { ...getSelectedSource().fields };
-      renderAll();
+    goGuideBtn.addEventListener("click", () => {
+      studentName = studentNameInput.value;
+      resetGuideSelections();
+      renderGuide();
+      showScreen("guide");
+    });
+
+    skipToLabBtn.addEventListener("click", () => {
+      studentName = studentNameInput.value;
+      renderLab();
+      showScreen("lab");
+    });
+
+    guideBackIntroBtn.addEventListener("click", () => {
+      showScreen("intro");
+    });
+
+    guideBackLabBtn.addEventListener("click", () => {
+      renderLab();
+      showScreen("lab");
+    });
+
+    openGuideBtn.addEventListener("click", () => {
+      resetGuideSelections();
+      renderGuide();
+      showScreen("guide");
+    });
+
+    sourceSelect.addEventListener("change", (event) => {
+      currentSourceId = event.target.value;
+      resetGuideSelections();
+      resetFormForCurrentSource();
+      renderLab();
     });
 
     resetBtn.addEventListener("click", () => {
-      form = { ...getSelectedSource().fields };
-      renderAll();
+      resetFormForCurrentSource();
     });
 
     checkBtn.addEventListener("click", () => {
@@ -727,10 +1515,86 @@
 
     verifyBtn.addEventListener("click", () => {
       renderFeedback();
+      if (!isGuidePassedForCurrentSource()) {
+        resetGuideSelections();
+        renderGuide();
+        showScreen("guide");
+        return;
+      }
+      renderAPAPreview();
       apaPreviewBox.classList.remove("hidden");
     });
 
-    renderSourceOptions();
+    markCompleteBtn.addEventListener("click", () => {
+      const source = getCurrentSource();
+      const checks = getChecks(source, form);
+      const successfulCheck = checks.some(check => check.type === "success");
+
+      renderFeedback();
+
+      if (!isGuidePassedForCurrentSource()) {
+        return;
+      }
+
+      if (!successfulCheck) {
+        return;
+      }
+
+      if (!completedSources.includes(currentSourceId)) {
+        completedSources.push(currentSourceId);
+      }
+
+      sourceCompleteBox.classList.remove("hidden");
+      renderProgress();
+    });
+
+    unlockBadgeBtn.addEventListener("click", () => {
+      if (!studentName.trim()) return;
+      if (completedSources.length !== sources.length) return;
+
+      completionCode = createCompletionCode(studentName, completedSources.length, sources.length);
+      completionDate = new Date().toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+
+      renderCompletion();
+      showScreen("complete");
+    });
+
+    copyCodeBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(completionCode);
+        copyMessage.classList.remove("hidden");
+      } catch (err) {
+        copyMessage.classList.remove("hidden");
+        copyMessage.textContent = "Copy failed. You can still manually copy the code.";
+      }
+    });
+
+    backToLabBtn.addEventListener("click", () => {
+      renderLab();
+      showScreen("lab");
+    });
+
+    function initialize() {
+      studentNameInput.value = "";
+      studentName = "";
+      sourceSelect.innerHTML = "";
+      sources.forEach(source => {
+        const option = document.createElement("option");
+        option.value = source.id;
+        option.textContent = source.label;
+        sourceSelect.appendChild(option);
+      });
+      sourceSelect.value = currentSourceId;
+      resetFormForCurrentSource();
+      renderLab();
+      showScreen("intro");
+    }
+
+    initialize();
   </script>
 </body>
 </html>
