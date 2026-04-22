@@ -1,0 +1,128 @@
+function APANavigationLab({ onExit }) {
+  const [step, setStep] = React.useState(1);
+
+  return (
+    <div className="min-h-screen bg-slate-100 p-6">
+      <div className="max-w-6xl mx-auto bg-white p-8 rounded-3xl shadow">
+        
+        <h1 className="text-3xl font-bold mb-4">
+          APA Navigation Lab
+        </h1>
+
+        <p className="text-slate-600 mb-6">
+          Learn how to use APA Style to solve unfamiliar citation problems.
+        </p>
+
+        <div className="grid grid-cols-3 gap-6">
+          
+          {/* LEFT: TASK */}
+          <div className="bg-slate-50 p-4 rounded-2xl border">
+            <h2 className="font-semibold mb-2">Your Task</h2>
+            <p className="text-sm">
+              You have a webpage with no author. Use APA Style to figure out how to format it.
+            </p>
+          </div>
+
+          {/* CENTER: DECISION STEPS */}
+          <div className="border rounded-2xl p-4">
+            <h2 className="font-semibold mb-3">Step {step}</h2>
+
+            {step === 1 && (
+              <>
+                <p className="text-sm mb-2">Where would you click?</p>
+                {["Journal Articles", "Webpages", "Books"].map(opt => (
+                  <button
+                    key={opt}
+                    onClick={() => setStep(2)}
+                    className="block w-full border rounded-xl px-3 py-2 mb-2 hover:bg-slate-50"
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </>
+            )}
+
+            {step === 2 && (
+              <>
+                <p className="text-sm mb-2">Which example fits?</p>
+                {[
+                  "Webpage with author",
+                  "Webpage with group author",
+                  "Webpage with no author"
+                ].map(opt => (
+                  <button
+                    key={opt}
+                    onClick={() => setStep(3)}
+                    className="block w-full border rounded-xl px-3 py-2 mb-2 hover:bg-slate-50"
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </>
+            )}
+
+            {step === 3 && (
+              <>
+                <p className="text-sm mb-2">What replaces the author?</p>
+                {["Title", "Website name", "URL"].map(opt => (
+                  <button
+                    key={opt}
+                    className="block w-full border rounded-xl px-3 py-2 mb-2 hover:bg-slate-50"
+                  >
+                    {opt}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setStep(4)}
+                  className="mt-2 bg-black text-white px-4 py-2 rounded-xl"
+                >
+                  Check Answer
+                </button>
+              </>
+            )}
+
+            {step === 4 && (
+              <>
+                <p className="text-sm font-semibold mb-2">
+                  Correct: The title moves into the author position.
+                </p>
+                <button
+                  onClick={onExit}
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-xl"
+                >
+                  Apply this in the Builder
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* RIGHT: SIMULATED APA STYLE */}
+          <div className="bg-slate-50 p-4 rounded-2xl border">
+            <h2 className="font-semibold mb-2">APA Style (Simulated)</h2>
+
+            <div className="text-sm">
+              <p className="font-semibold">Reference Examples</p>
+              <ul className="mt-2 space-y-1">
+                <li>Journal Articles</li>
+                <li className="font-bold text-indigo-700">Webpages</li>
+                <li>Books</li>
+              </ul>
+
+              <div className="mt-4 bg-white border rounded-xl p-3 font-serif">
+                Title of page. (Year). Website Name. URL
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <button
+          onClick={onExit}
+          className="mt-6 text-sm underline"
+        >
+          Back
+        </button>
+      </div>
+    </div>
+  );
+}
