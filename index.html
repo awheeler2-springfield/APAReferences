@@ -1,128 +1,232 @@
-function APANavigationLab({ onExit }) {
-  const [step, setStep] = React.useState(1);
+import React, { useEffect, useMemo, useState } from "react";
 
-  return (
-    <div className="min-h-screen bg-slate-100 p-6">
-      <div className="max-w-6xl mx-auto bg-white p-8 rounded-3xl shadow">
-        
-        <h1 className="text-3xl font-bold mb-4">
-          APA Navigation Lab
-        </h1>
-
-        <p className="text-slate-600 mb-6">
-          Learn how to use APA Style to solve unfamiliar citation problems.
-        </p>
-
-        <div className="grid grid-cols-3 gap-6">
-          
-          {/* LEFT: TASK */}
-          <div className="bg-slate-50 p-4 rounded-2xl border">
-            <h2 className="font-semibold mb-2">Your Task</h2>
-            <p className="text-sm">
-              You have a webpage with no author. Use APA Style to figure out how to format it.
-            </p>
-          </div>
-
-          {/* CENTER: DECISION STEPS */}
-          <div className="border rounded-2xl p-4">
-            <h2 className="font-semibold mb-3">Step {step}</h2>
-
-            {step === 1 && (
-              <>
-                <p className="text-sm mb-2">Where would you click?</p>
-                {["Journal Articles", "Webpages", "Books"].map(opt => (
-                  <button
-                    key={opt}
-                    onClick={() => setStep(2)}
-                    className="block w-full border rounded-xl px-3 py-2 mb-2 hover:bg-slate-50"
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </>
-            )}
-
-            {step === 2 && (
-              <>
-                <p className="text-sm mb-2">Which example fits?</p>
-                {[
-                  "Webpage with author",
-                  "Webpage with group author",
-                  "Webpage with no author"
-                ].map(opt => (
-                  <button
-                    key={opt}
-                    onClick={() => setStep(3)}
-                    className="block w-full border rounded-xl px-3 py-2 mb-2 hover:bg-slate-50"
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </>
-            )}
-
-            {step === 3 && (
-              <>
-                <p className="text-sm mb-2">What replaces the author?</p>
-                {["Title", "Website name", "URL"].map(opt => (
-                  <button
-                    key={opt}
-                    className="block w-full border rounded-xl px-3 py-2 mb-2 hover:bg-slate-50"
-                  >
-                    {opt}
-                  </button>
-                ))}
-                <button
-                  onClick={() => setStep(4)}
-                  className="mt-2 bg-black text-white px-4 py-2 rounded-xl"
-                >
-                  Check Answer
-                </button>
-              </>
-            )}
-
-            {step === 4 && (
-              <>
-                <p className="text-sm font-semibold mb-2">
-                  Correct: The title moves into the author position.
-                </p>
-                <button
-                  onClick={onExit}
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-xl"
-                >
-                  Apply this in the Builder
-                </button>
-              </>
-            )}
-          </div>
-
-          {/* RIGHT: SIMULATED APA STYLE */}
-          <div className="bg-slate-50 p-4 rounded-2xl border">
-            <h2 className="font-semibold mb-2">APA Style (Simulated)</h2>
-
-            <div className="text-sm">
-              <p className="font-semibold">Reference Examples</p>
-              <ul className="mt-2 space-y-1">
-                <li>Journal Articles</li>
-                <li className="font-bold text-indigo-700">Webpages</li>
-                <li>Books</li>
-              </ul>
-
-              <div className="mt-4 bg-white border rounded-xl p-3 font-serif">
-                Title of page. (Year). Website Name. URL
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <button
-          onClick={onExit}
-          className="mt-6 text-sm underline"
-        >
-          Back
-        </button>
-      </div>
-    </div>
-  );
-}
+export default function APAReferenceBuilderOriginalIteration() {
+  const sampleSources = [
+    {
+      id: "journal",
+      label: "Journal Article",
+      instructionalType: "journal article",
+      category: "Journal Articles",
+      exampleType: "Standard journal article",
+      guideTask:
+        "You have a journal article with one author, a year, a journal title, volume/issue information, page range, and a DOI.",
+      sourceCard: {
+        heading: "Source Snapshot",
+        lines: [
+          "Author: Jordan Smith",
+          "Year: 2023",
+          "Article title: Social media habits among first-year students",
+          "Journal: Journal of College Learning",
+          "Volume(issue): 12(3)",
+          "Pages: 45–67",
+          "DOI: https://doi.org/10.1234/jcl.2023.5678",
+        ],
+      },
+      fields: {
+        author: "Smith, J.",
+        year: "2023",
+        title: "Social media habits among first-year students",
+        source: "Journal of College Learning",
+        locator: "12(3), 45–67",
+        url: "https://doi.org/10.1234/jcl.2023.5678",
+      },
+      modelReference:
+        "Smith, J. (2023). Social media habits among first-year students. Journal of College Learning, 12(3), 45–67. https://doi.org/10.1234/jcl.2023.5678",
+      apaLink:
+        "https://apastyle.apa.org/style-grammar-guidelines/references/examples/journal-article-references",
+      apaExampleTitle: "APA Style example: journal article reference",
+      apaExampleNote:
+        "Use this model to check author order, date placement, article title capitalization, journal title formatting, and DOI placement.",
+      guideChoices: {
+        categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
+        correctCategory: "Journal Articles",
+        exampleOptions: [
+          "Standard journal article",
+          "Journal article with no DOI",
+          "Magazine article",
+        ],
+        correctExample: "Standard journal article",
+        patternPrompt: "Which source element appears after the article title in this reference?",
+        patternOptions: ["Journal title and volume", "Publisher only", "Website name"],
+        correctPattern: "Journal title and volume",
+        successMessage:
+          "Correct. For a standard journal article, the article title is followed by the journal title, volume(issue), page range, and DOI when available.",
+      },
+    },
+    {
+      id: "webpage",
+      label: "Webpage",
+      instructionalType: "webpage",
+      category: "Webpages",
+      exampleType: "Webpage with author",
+      guideTask:
+        "You have a webpage with an author, a full date, a page title, a website name, and a URL.",
+      sourceCard: {
+        heading: "Source Snapshot",
+        lines: [
+          "Author: Maria Chen",
+          "Date: 2024, March 12",
+          "Page title: Why sleep matters in college",
+          "Website: Student Health Hub",
+          "URL: https://www.studenthealthhub.org/sleep-college",
+        ],
+      },
+      fields: {
+        author: "Chen, M.",
+        year: "2024, March 12",
+        title: "Why sleep matters in college",
+        source: "Student Health Hub",
+        locator: "",
+        url: "https://www.studenthealthhub.org/sleep-college",
+      },
+      modelReference:
+        "Chen, M. (2024, March 12). Why sleep matters in college. Student Health Hub. https://www.studenthealthhub.org/sleep-college",
+      apaLink:
+        "https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references",
+      apaExampleTitle: "APA Style example: webpage reference",
+      apaExampleNote:
+        "Use this model to check date formatting, webpage title capitalization, website name placement, and URL formatting.",
+      guideChoices: {
+        categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
+        correctCategory: "Webpages",
+        exampleOptions: [
+          "Webpage with author",
+          "Webpage with no author",
+          "Social media post",
+        ],
+        correctExample: "Webpage with author",
+        patternPrompt: "Which element comes after the webpage title?",
+        patternOptions: ["Website name", "Journal title", "Volume(issue)"],
+        correctPattern: "Website name",
+        successMessage:
+          "Correct. In this webpage model, the website name follows the title before the URL.",
+      },
+    },
+    {
+      id: "book",
+      label: "Book",
+      instructionalType: "book",
+      category: "Books",
+      exampleType: "Book",
+      guideTask:
+        "You have a book with one author, a year, a title, and a publisher.",
+      sourceCard: {
+        heading: "Source Snapshot",
+        lines: [
+          "Author: Alicia Rivera",
+          "Year: 2021",
+          "Title: Writing in college contexts",
+          "Publisher: Northeastern Academic Press",
+        ],
+      },
+      fields: {
+        author: "Rivera, A.",
+        year: "2021",
+        title: "Writing in college contexts",
+        source: "Northeastern Academic Press",
+        locator: "",
+        url: "",
+      },
+      modelReference:
+        "Rivera, A. (2021). Writing in college contexts. Northeastern Academic Press.",
+      apaLink:
+        "https://apastyle.apa.org/style-grammar-guidelines/references/examples/book-references",
+      apaExampleTitle: "APA Style example: book reference",
+      apaExampleNote:
+        "Use this model to check book title capitalization, author formatting, year placement, and publisher formatting.",
+      guideChoices: {
+        categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
+        correctCategory: "Books",
+        exampleOptions: ["Book", "Edited book chapter", "Reference work entry"],
+        correctExample: "Book",
+        patternPrompt: "Which element usually closes this reference?",
+        patternOptions: ["Publisher", "Website name", "Page range"],
+        correctPattern: "Publisher",
+        successMessage:
+          "Correct. A standard book reference typically ends with the publisher.",
+      },
+    },
+    {
+      id: "webpage-no-author",
+      label: "Webpage (No Author)",
+      instructionalType: "webpage without an author",
+      category: "Webpages",
+      exampleType: "Webpage with no author",
+      guideTask:
+        "You have a webpage with no listed author but a date, page title, website name, and URL.",
+      sourceCard: {
+        heading: "Source Snapshot",
+        lines: [
+          "Author: not listed",
+          "Date: 2025, January 8",
+          "Page title: Campus tutoring resources",
+          "Website: Elmwood College Success Center",
+          "URL: https://www.elmwood.edu/tutoring-resources",
+        ],
+      },
+      fields: {
+        author: "",
+        year: "2025, January 8",
+        title: "Campus tutoring resources",
+        source: "Elmwood College Success Center",
+        locator: "",
+        url: "https://www.elmwood.edu/tutoring-resources",
+      },
+      modelReference:
+        "Campus tutoring resources. (2025, January 8). Elmwood College Success Center. https://www.elmwood.edu/tutoring-resources",
+      apaLink:
+        "https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references",
+      apaExampleTitle: "APA Style example: webpage reference with no author",
+      apaExampleNote:
+        "Use this model to notice that when no author is available, the title moves into the author position.",
+      guideChoices: {
+        categoryOptions: ["Journal Articles", "Webpages", "Books", "Chapters / Anthologies"],
+        correctCategory: "Webpages",
+        exampleOptions: [
+          "Webpage with author",
+          "Webpage with no author",
+          "Webpage with group author",
+        ],
+        correctExample: "Webpage with no author",
+        patternPrompt: "When no author is listed, what moves into the author position?",
+        patternOptions: ["Title", "Website name", "URL"],
+        correctPattern: "Title",
+        successMessage:
+          "Correct. When there is no author, the title shifts into the author position.",
+      },
+    },
+    {
+      id: "chapter",
+      label: "Chapter in Edited Book",
+      instructionalType: "book chapter",
+      category: "Chapters / Anthologies",
+      exampleType: "Edited book chapter",
+      guideTask:
+        "You have a chapter author, a chapter title, the editor, the book title, page range, and a publisher.",
+      sourceCard: {
+        heading: "Source Snapshot",
+        lines: [
+          "Chapter author: Priya Nair",
+          "Year: 2022",
+          "Chapter title: Revising with digital tools",
+          "Editor: L. Gomez",
+          "Book title: Teaching writing today",
+          "Pages: 88–106",
+          "Publisher: North Bridge Press",
+        ],
+      },
+      fields: {
+        author: "Nair, P.",
+        year: "2022",
+        title: "Revising with digital tools",
+        source: "In L. Gomez (Ed.), Teaching writing today",
+        locator: "pp. 88–106",
+        url: "North Bridge Press",
+      },
+      modelReference:
+        "Nair, P. (2022). Revising with digital tools. In L. Gomez (Ed.), Teaching writing today (pp. 88–106). North Bridge Press.",
+      apaLink:
+        "https://apastyle.apa.org/style-grammar-guidelines/references/examples/edited-book-chapter-references",
+      apaExampleTitle: "APA Style example: chapter in an edited book",
+      apaExampleNote:
+        "Use this model to notic
