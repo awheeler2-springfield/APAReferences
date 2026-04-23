@@ -711,50 +711,12 @@
       return { ...item, id: `example_${index + 1}`, options };
     });
 
-    /* ─── localStorage Persistence ──────────────────────────────────── */
-
-    const PERSIST_FIELDS = [
-      'userName', 'currentExampleIndex', 'exampleResults',
-      'examplePhaseComplete', 'currentSourceIndex', 'decisionResponses',
-      'formResponses', 'feedbackBySource', 'builderProgress', 'completionReady'
-    ];
-
-    function saveState() {
-      try {
-        const toSave = {};
-        PERSIST_FIELDS.forEach(f => { toSave[f] = appState[f]; });
-        localStorage.setItem('apaLabState', JSON.stringify(toSave));
-      } catch (e) { /* storage may be unavailable */ }
-    }
-
-    function loadState() {
-      try {
-        const saved = localStorage.getItem('apaLabState');
-        if (!saved) return;
-        const parsed = JSON.parse(saved);
-        PERSIST_FIELDS.forEach(f => {
-          if (parsed[f] !== undefined) appState[f] = parsed[f];
-        });
-      } catch (e) { /* corrupt data — use defaults */ }
-    }
+    /* ─── Session Reset ─────────────────────────────────────────────── */
 
     function resetProgress() {
       if (confirm('Reset all progress? This cannot be undone.')) {
-        try { localStorage.removeItem('apaLabState'); } catch (e) {}
         location.reload();
       }
-    }
-
-    loadState();
-    if (appState.completionReady) {
-      appState.currentView = 'completion';
-      appState.historyStack = ['orientation', 'builder'];
-    } else if (appState.examplePhaseComplete) {
-      appState.currentView = 'builder';
-      appState.historyStack = ['orientation'];
-    } else if (Object.keys(appState.exampleResults).length > 0) {
-      appState.currentView = 'examples';
-      appState.historyStack = ['orientation'];
     }
 
     /* ─── Navigation ────────────────────────────────────────────────── */
@@ -1755,8 +1717,6 @@
     /* ─── Render ────────────────────────────────────────────────────── */
 
     function render() {
-      saveState();
-
       const app = document.getElementById('app');
 
       let body = '';
