@@ -363,7 +363,7 @@
     /* ─── App State ─────────────────────────────────────────────────── */
 
     const appState = {
-      currentView: 'orientation',
+      currentView: 'video',
       historyStack: [],
       userName: '',
       currentExampleIndex: 0,
@@ -757,7 +757,7 @@
     }
 
     function goBack() {
-      appState.currentView = appState.historyStack.pop() || 'orientation';
+      appState.currentView = appState.historyStack.pop() || 'video';
       render();
     }
 
@@ -983,7 +983,7 @@
       if (sourceId === 'webpage_author') {
         const rawAuthor = raw(values.author);
         const authorNorm = norm(rawAuthor);
-        if (authorNorm.includes('maya') && authorNorm.includes('patel')) {
+        if (authorNorm.includes('patel')) {
           tier1.push('You identified the correct webpage author.');
           if (!authorInitialsLikely(rawAuthor))
             tier2.push('Format the author name in APA style: Last, F. (e.g., Patel, M.)');
@@ -1032,7 +1032,7 @@
 
       if (sourceId === 'book') {
         const rawAuthor = raw(values.author);
-        if (norm(rawAuthor).includes('elena') && norm(rawAuthor).includes('martinez')) {
+        if (norm(rawAuthor).includes('martinez')) {
           tier1.push('You identified the correct book author.');
           if (!authorInitialsLikely(rawAuthor))
             tier2.push('Format the author name in APA style: Last, F. (e.g., Martinez, E.)');
@@ -1106,7 +1106,7 @@
 
       if (sourceId === 'chapter') {
         const rawChapterAuthor = raw(values.chapterAuthor);
-        if (norm(rawChapterAuthor).includes('janelle') && norm(rawChapterAuthor).includes('brooks')) {
+        if (norm(rawChapterAuthor).includes('brooks')) {
           tier1.push('You identified the correct chapter author.');
           if (!authorInitialsLikely(rawChapterAuthor))
             tier2.push('Format the chapter author in APA style: Last, F. (e.g., Brooks, J.)');
@@ -1132,8 +1132,7 @@
 
         const rawEditors = raw(values.editors);
         const editorsNorm = norm(rawEditors);
-        if (editorsNorm.includes('morgan') && editorsNorm.includes('chen') &&
-            editorsNorm.includes('felicia') && editorsNorm.includes('gomez')) {
+        if (editorsNorm.includes('chen') && editorsNorm.includes('gomez')) {
           tier1.push('You identified the correct editors.');
           /* FIX 1: use editorInitialsLikely for forward-format editor names */
           if (!editorInitialsLikely(rawEditors))
@@ -1344,7 +1343,10 @@
         <div class="panel">
           <strong>Overall Progress: ${overallProgress()}%</strong>
           <div class="progress">
-            <div class="chip ${appState.currentView === 'orientation' ? 'active' : ''}">Orientation</div>
+            <div class="chip ${appState.currentView === 'video' ? 'active' : (appState.currentView !== 'video') ? 'done' : ''}">
+              <span class="chip-icon">▶</span>Introduction
+            </div>
+            <div class="chip ${appState.currentView === 'orientation' ? 'active' : (appState.currentView !== 'video' && appState.currentView !== 'orientation') ? 'done' : ''}">Orientation</div>
             <div class="chip ${appState.examplePhaseComplete ? 'done' : appState.currentView === 'examples' ? 'active' : ''}">Find the Right APA Example</div>
             <div class="chip ${sourceOrder.every(id => appState.builderProgress[id]) ? 'done' : appState.currentView === 'builder' ? 'active' : ''}">Builder Lab</div>
             <div class="chip ${appState.currentView === 'completion' ? 'active' : appState.completionReady ? 'done' : ''}">Badge</div>
@@ -1355,7 +1357,54 @@
 
     /* ─── Render: Orientation ───────────────────────────────────────── */
 
-    function renderOrientation() {
+    /* ─── Render: Video Introduction ────────────────────────────────── */
+
+    function renderVideo() {
+      return `
+        <div class="panel" style="text-align: center;">
+          <h2>Watch Before You Start</h2>
+          <p style="color: var(--muted); max-width: 640px; margin: 0 auto 18px;">
+            This short video introduces the key ideas behind APA references —
+            <span class="hl">who</span>, <span class="hl">when</span>,
+            <span class="hl">what</span>, and <span class="hl">where</span> —
+            before you practice them in the lab.
+          </p>
+
+          <div style="
+            position: relative;
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto 22px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background: #000;
+            aspect-ratio: 16 / 9;
+          ">
+            <iframe
+              src="https://www.youtube.com/embed/wywvoDidhAI"
+              title="Demystifying APA 7 References"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+            ></iframe>
+          </div>
+
+          <div class="actions" style="justify-content: center;">
+            <button class="btn btn-primary" id="continueToOrientationBtn">
+              Continue to Lab &rarr;
+            </button>
+          </div>
+          <p class="small" style="margin-top: 12px;">
+            Already watched it?
+            <button class="reset-link" id="skipVideoBtn">Skip to orientation</button>
+          </p>
+        </div>
+      `;
+    }
+
+    /* ─── Render: Orientation ───────────────────────────────────────── */
       const sourceIcons = {
         journal: '📄', webpage_author: '🌐', book: '📚',
         webpage_no_author: '🌐', chapter: '🔖'
@@ -1683,6 +1732,12 @@
     /* ─── Event Binding ─────────────────────────────────────────────── */
 
     function bindEvents() {
+      const continueToOrientationBtn = document.getElementById('continueToOrientationBtn');
+      if (continueToOrientationBtn) continueToOrientationBtn.addEventListener('click', () => navigateTo('orientation'));
+
+      const skipVideoBtn = document.getElementById('skipVideoBtn');
+      if (skipVideoBtn) skipVideoBtn.addEventListener('click', () => navigateTo('orientation'));
+
       const backBtn = document.getElementById('backBtn');
       if (backBtn) backBtn.addEventListener('click', goBack);
 
@@ -1759,6 +1814,7 @@
       const app = document.getElementById('app');
 
       let body = '';
+      if (appState.currentView === 'video')       body = renderVideo();
       if (appState.currentView === 'orientation') body = renderOrientation();
       if (appState.currentView === 'examples')    body = renderExamples();
       if (appState.currentView === 'builder')     body = renderBuilder();
