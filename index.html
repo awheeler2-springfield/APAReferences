@@ -33,7 +33,6 @@
     }
 
     a { color: var(--accent); }
-
     button, input { font: inherit; }
 
     .app {
@@ -52,7 +51,7 @@
     }
 
     .topbar h1 { margin: 0; font-size: 1.9rem; }
-    .topbar p { margin: 4px 0 0; color: var(--muted); }
+    .topbar p  { margin: 4px 0 0; color: var(--muted); }
 
     .panel {
       background: var(--panel);
@@ -87,22 +86,10 @@
 
     .btn:hover:not(:disabled) { transform: translateY(-1px); }
 
-    .btn-primary {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white;
-    }
+    .btn-primary  { background: var(--accent); border-color: var(--accent); color: white; }
+    .btn-secondary { background: var(--soft); color: var(--accent); }
 
-    .btn-secondary {
-      background: var(--soft);
-      color: var(--accent);
-    }
-
-    .btn:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
     .actions {
       display: flex;
@@ -130,17 +117,8 @@
       color: var(--muted);
     }
 
-    .chip.active {
-      background: var(--soft);
-      color: var(--accent);
-      font-weight: bold;
-    }
-
-    .chip.done {
-      background: #ebfff3;
-      color: var(--success);
-      font-weight: bold;
-    }
+    .chip.active { background: var(--soft); color: var(--accent); font-weight: bold; }
+    .chip.done   { background: #ebfff3; color: var(--success); font-weight: bold; }
 
     .builder-grid {
       display: grid;
@@ -168,13 +146,7 @@
       letter-spacing: 0.02em;
     }
 
-    .artifact {
-      background: white;
-      border: 1px solid #dfe5f0;
-      border-radius: 12px;
-      padding: 16px;
-    }
-
+    .artifact { background: white; border: 1px solid #dfe5f0; border-radius: 12px; padding: 16px; }
     .artifact .muted { color: #64748b; font-size: 0.95rem; }
     .artifact .title { font-size: 1.4rem; font-weight: bold; margin: 10px 0 6px; }
     .artifact .container { font-size: 1.1rem; font-style: italic; margin: 8px 0; }
@@ -209,13 +181,7 @@
     }
 
     .field { margin-bottom: 12px; }
-
-    .field label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
+    .field label { display: block; font-weight: bold; margin-bottom: 6px; }
     .field input {
       width: 100%;
       padding: 10px 11px;
@@ -240,10 +206,10 @@
     }
 
     .feedback-card.success { background: var(--success-bg); border-color: #bce5cb; }
-    .feedback-card.warn { background: var(--warn-bg); border-color: #ead18d; }
-    .feedback-card.danger { background: var(--danger-bg); border-color: #efc0c2; }
-    .feedback-card h4 { margin-top: 0; }
-    .feedback-card ul { padding-left: 18px; margin-bottom: 0; }
+    .feedback-card.warn    { background: var(--warn-bg);    border-color: #ead18d; }
+    .feedback-card.danger  { background: var(--danger-bg);  border-color: #efc0c2; }
+    .feedback-card h4      { margin-top: 0; }
+    .feedback-card ul      { padding-left: 18px; margin-bottom: 0; }
 
     .verify-box {
       margin-top: 16px;
@@ -324,19 +290,9 @@
       border-bottom: 1px solid var(--line);
     }
 
-    .summary-section:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-
+    .summary-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .summary-section h4 { margin: 0 0 10px; }
-
-    .summary-section ul {
-      margin: 8px 0 0;
-      padding-left: 20px;
-    }
-
+    .summary-section ul { margin: 8px 0 0; padding-left: 20px; }
     .summary-section li { margin-bottom: 6px; }
 
     .reset-link {
@@ -353,11 +309,7 @@
     .reset-link:hover { color: var(--danger); }
 
     @media (max-width: 950px) {
-      .hero,
-      .builder-grid,
-      .feedback-grid,
-      .badge-layout,
-      .field-grid {
+      .hero, .builder-grid, .feedback-grid, .badge-layout, .field-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -370,11 +322,11 @@
     /* ─── Constants ─────────────────────────────────────────────────── */
 
     const APA_LINKS = {
-      journal: 'https://apastyle.apa.org/style-grammar-guidelines/references/examples/journal-article-references',
-      webpage_author: 'https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references',
-      webpage_no_author: 'https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references',
-      book: 'https://apastyle.apa.org/style-grammar-guidelines/references/examples/book-references',
-      chapter: 'https://apastyle.apa.org/style-grammar-guidelines/references/examples/book-chapter-references'
+      journal:          'https://apastyle.apa.org/style-grammar-guidelines/references/examples/journal-article-references',
+      webpage_author:   'https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references',
+      webpage_no_author:'https://apastyle.apa.org/style-grammar-guidelines/references/examples/webpage-website-references',
+      book:             'https://apastyle.apa.org/style-grammar-guidelines/references/examples/book-references',
+      chapter:          'https://apastyle.apa.org/style-grammar-guidelines/references/examples/book-chapter-references'
     };
 
     const sourceOrder = ['journal', 'webpage_author', 'book', 'webpage_no_author', 'chapter'];
@@ -394,12 +346,12 @@
       formResponses: {},
       feedbackBySource: {},
       verifyOpen: {},
-      verifyUnlocked: {},      /* CHANGE 3 */
+      verifyUnlocked: {},
       builderProgress: {},
       completionReady: false
     };
 
-    /* ─── Source Data (CHANGE 2: rule sentences appended) ───────────── */
+    /* ─── Source Data ───────────────────────────────────────────────── */
 
     const sourceData = {
       journal: {
@@ -415,7 +367,7 @@
             <div class="rule"></div>
             <div class="container">Digital Communication Review</div>
             <div>2021, Vol. 14, No. 2, 123-135</div>
-            <div class="muted">Received March 10, 2020 • Accepted January 4, 2021</div>
+            <div class="muted">Received March 10, 2020 &bull; Accepted January 4, 2021</div>
             <div class="rule"></div>
             <p class="muted">Abstract. This study examines interface design and citation learning...</p>
           </div>
@@ -425,12 +377,12 @@
             id: 'author_choice',
             prompt: 'Which names should be treated as the article authors in the reference?',
             options: [
-              { value: 'authors', label: 'John A. Smith and Priya R. Lee' },
-              { value: 'journal', label: 'Digital Communication Review' },
+              { value: 'authors',    label: 'John A. Smith and Priya R. Lee' },
+              { value: 'journal',    label: 'Digital Communication Review' },
               { value: 'department', label: 'Department of Communication, Great Lakes University' }
             ],
             correct: 'authors',
-            success: 'You identified the correct article authors. In APA, use the people who wrote the work, not the journal or department.',
+            success:    'You identified the correct article authors. In APA, use the people who wrote the work, not the journal or department.',
             correction: 'Use the people who wrote the article, not the journal title or department. Always look for individual author names on the article itself.'
           },
           {
@@ -438,21 +390,21 @@
             prompt: 'Which date belongs in the reference?',
             options: [
               { value: 'publication_year', label: '2021' },
-              { value: 'received', label: 'March 10, 2020' },
-              { value: 'accepted', label: 'January 4, 2021' }
+              { value: 'received',         label: 'March 10, 2020' },
+              { value: 'accepted',         label: 'January 4, 2021' }
             ],
             correct: 'publication_year',
-            success: 'You selected the publication date used in the reference. APA uses the year the work was published, not when it was submitted or accepted.',
+            success:    'You selected the publication date used in the reference. APA uses the year the work was published, not when it was submitted or accepted.',
             correction: 'Use the publication year, not received or accepted dates. Received and accepted dates are part of the editorial process, not the publication record.'
           }
         ],
         fields: [
-          ['author', 'Author', 'Enter the author names'],
-          ['year', 'Year', 'Enter the year'],
-          ['title', 'Article title', 'Enter the article title'],
+          ['author',  'Author',        'Enter the author names'],
+          ['year',    'Year',          'Enter the year'],
+          ['title',   'Article title', 'Enter the article title'],
           ['journal', 'Journal title', 'Enter the journal title'],
-          ['volume', 'Volume(issue)', 'Enter the volume and issue'],
-          ['pages', 'Page range', 'Enter the page range']
+          ['volume',  'Volume(issue)', 'Enter the volume and issue'],
+          ['pages',   'Page range',    'Enter the page range']
         ],
         referencePreview: 'Smith, J. A., &amp; Lee, P. R. (2021). How interface friction shapes student citation accuracy. <span class="ital">Digital Communication Review</span>, <span class="ital">14</span>(2), 123–135.'
       },
@@ -480,33 +432,33 @@
             id: 'author_choice',
             prompt: 'Which person should be listed as the author in the reference?',
             options: [
-              { value: 'maya', label: 'Maya Patel' },
-              { value: 'site', label: 'The Learning Lab' },
+              { value: 'maya',    label: 'Maya Patel' },
+              { value: 'site',    label: 'The Learning Lab' },
               { value: 'section', label: 'Teaching Strategies' }
             ],
             correct: 'maya',
-            success: 'You identified the webpage author correctly. When a named author is present, they always take the author position over the site name.',
+            success:    'You identified the webpage author correctly. When a named author is present, they always take the author position over the site name.',
             correction: 'Use the named author, not the site name or section label. The site name goes in the source/website field, not the author position.'
           },
           {
             id: 'date_choice',
             prompt: 'Which date is the best choice for the reference?',
             options: [
-              { value: 'updated', label: 'July 18, 2023' },
+              { value: 'updated',   label: 'July 18, 2023' },
               { value: 'published', label: 'May 9, 2022' },
-              { value: 'none', label: 'No date should be used' }
+              { value: 'none',      label: 'No date should be used' }
             ],
             correct: 'updated',
-            success: 'You selected the most relevant webpage date. Use the most current date shown on the page — this reflects the version of the content you read.',
-            correction: 'Use the current page date shown on the webpage for this exercise. If a date appears on the page, use it; \'n.d.\' is only for pages with no date at all.'
+            success:    'You selected the most relevant webpage date. Use the most current date shown on the page — this reflects the version of the content you read.',
+            correction: "Use the current page date shown on the webpage for this exercise. If a date appears on the page, use it; 'n.d.' is only for pages with no date at all."
           }
         ],
         fields: [
-          ['author', 'Author', 'Enter the author'],
-          ['date', 'Date', 'Enter the date'],
-          ['title', 'Page title', 'Enter the page title'],
-          ['site', 'Website name', 'Enter the website name'],
-          ['url', 'URL', 'Enter the URL']
+          ['author', 'Author',       'Enter the author'],
+          ['date',   'Date',         'Enter the date'],
+          ['title',  'Page title',   'Enter the page title'],
+          ['site',   'Website name', 'Enter the website name'],
+          ['url',    'URL',          'Enter the URL']
         ],
         referencePreview: 'Patel, M. (2023, July 18). Why students misread source details online. <span class="ital">The Learning Lab</span>. https://www.thelearninglab.org/teaching/why-students-misread-source-details'
       },
@@ -523,7 +475,7 @@
             <div class="rule"></div>
             <div>Riverbend Academic Press</div>
             <div class="muted">Boston</div>
-            <div class="muted">Copyright © 2020</div>
+            <div class="muted">Copyright &copy; 2020</div>
             <div class="muted">Library of Congress data available on request</div>
           </div>
         `,
@@ -532,20 +484,20 @@
             id: 'author_choice',
             prompt: 'Who should be treated as the author of this source?',
             options: [
-              { value: 'martinez', label: 'Elena Martinez' },
+              { value: 'martinez',  label: 'Elena Martinez' },
               { value: 'publisher', label: 'Riverbend Academic Press' },
-              { value: 'location', label: 'Boston' }
+              { value: 'location',  label: 'Boston' }
             ],
             correct: 'martinez',
-            success: 'You identified the book author correctly. The publisher and city are never used as the author.',
+            success:    'You identified the book author correctly. The publisher and city are never used as the author.',
             correction: 'Use the person who wrote the book, not the publisher or place. The author is the individual who wrote the book, not the organization that published it.'
           }
         ],
         fields: [
-          ['author', 'Author', 'Enter the author'],
-          ['year', 'Year', 'Enter the year'],
-          ['title', 'Book title', 'Enter the book title'],
-          ['publisher', 'Publisher', 'Enter the publisher']
+          ['author',    'Author',     'Enter the author'],
+          ['year',      'Year',       'Enter the year'],
+          ['title',     'Book title', 'Enter the book title'],
+          ['publisher', 'Publisher',  'Enter the publisher']
         ],
         referencePreview: 'Martinez, E. (2020). <span class="ital">Writing research in everyday contexts</span>. Riverbend Academic Press.'
       },
@@ -572,11 +524,11 @@
             prompt: 'Because no author is listed, what should move into the author position?',
             options: [
               { value: 'page_title', label: 'Reference List Checklist' },
-              { value: 'site_name', label: 'Campus Writing Center' },
-              { value: 'section', label: 'Student Support Resources' }
+              { value: 'site_name',  label: 'Campus Writing Center' },
+              { value: 'section',    label: 'Student Support Resources' }
             ],
             correct: 'page_title',
-            success: 'You identified the correct element to begin the reference. When there is no author, the title of the page shifts into the author position.',
+            success:    'You identified the correct element to begin the reference. When there is no author, the title of the page shifts into the author position.',
             correction: 'With no author, begin with the page title. The site name is a separate element and does not substitute for a missing author.'
           },
           {
@@ -584,19 +536,19 @@
             prompt: 'Which date should you use?',
             options: [
               { value: 'revised', label: 'September 2, 2024' },
-              { value: 'none', label: 'No date' },
-              { value: 'site', label: 'Campus Writing Center' }
+              { value: 'none',    label: 'No date' },
+              { value: 'site',    label: 'Campus Writing Center' }
             ],
             correct: 'revised',
-            success: 'You selected the date shown on the page. Always use a date if one is visible on the page.',
-            correction: 'Use the page date if it appears; do not switch to n.d. when a date is provided. Only use \'n.d.\' if no date appears anywhere on the page.'
+            success:    "You selected the date shown on the page. Always use a date if one is visible on the page.",
+            correction: "Use the page date if it appears; do not switch to n.d. when a date is provided. Only use 'n.d.' if no date appears anywhere on the page."
           }
         ],
         fields: [
-          ['title', 'Page title', 'Enter the page title'],
-          ['date', 'Date', 'Enter the date'],
-          ['site', 'Website name', 'Enter the website name'],
-          ['url', 'URL', 'Enter the URL']
+          ['title', 'Page title',   'Enter the page title'],
+          ['date',  'Date',         'Enter the date'],
+          ['site',  'Website name', 'Enter the website name'],
+          ['url',   'URL',          'Enter the URL']
         ],
         referencePreview: 'Reference list checklist. (2024, September 2). <span class="ital">Campus Writing Center</span>. https://campuswritingcenter.edu/reference-list-checklist'
       },
@@ -610,7 +562,7 @@
             <div class="muted">From the book</div>
             <div class="title">Teaching Writing Across Contexts</div>
             <div>Edited by Morgan Chen and Felicia Gomez</div>
-            <div class="muted">North Street Press • 2022</div>
+            <div class="muted">North Street Press &bull; 2022</div>
             <div class="rule"></div>
             <div class="title" style="font-size:1.15rem;">Chapter 4. Learning Through Worked Examples</div>
             <div>Janelle Brooks</div>
@@ -625,46 +577,46 @@
             prompt: 'Which person is the chapter author?',
             options: [
               { value: 'brooks', label: 'Janelle Brooks' },
-              { value: 'chen', label: 'Morgan Chen' },
-              { value: 'gomez', label: 'Felicia Gomez' }
+              { value: 'chen',   label: 'Morgan Chen' },
+              { value: 'gomez',  label: 'Felicia Gomez' }
             ],
             correct: 'brooks',
-            success: 'You identified the chapter author correctly. The chapter author wrote this specific chapter; the editors are responsible for the whole book.',
-            correction: 'Use the person who wrote the chapter, not the editors. Editors are listed later in the reference with \'(Eds.)\' — they do not go in the author position.'
+            success:    "You identified the chapter author correctly. The chapter author wrote this specific chapter; the editors are responsible for the whole book.",
+            correction: "Use the person who wrote the chapter, not the editors. Editors are listed later in the reference with '(Eds.)' — they do not go in the author position."
           },
           {
             id: 'editor_choice',
             prompt: 'Who are the editors of the book?',
             options: [
-              { value: 'editors', label: 'Morgan Chen and Felicia Gomez' },
-              { value: 'author', label: 'Janelle Brooks' },
+              { value: 'editors',   label: 'Morgan Chen and Felicia Gomez' },
+              { value: 'author',    label: 'Janelle Brooks' },
               { value: 'publisher', label: 'North Street Press' }
             ],
             correct: 'editors',
-            success: 'You identified the editors correctly. Editors are credited after \'In\' and before the book title, formatted with initials.',
-            correction: 'The editors are the people responsible for the whole book. Look for the word \'Edited by\' or \'Eds.\' on the book cover or title page.'
+            success:    "You identified the editors correctly. Editors are credited after 'In' and before the book title, formatted with initials.",
+            correction: "The editors are the people responsible for the whole book. Look for the word 'Edited by' or 'Eds.' on the book cover or title page."
           },
           {
             id: 'title_role_choice',
             prompt: 'Which title is the chapter title?',
             options: [
-              { value: 'chapter', label: 'Learning Through Worked Examples' },
-              { value: 'book', label: 'Teaching Writing Across Contexts' },
+              { value: 'chapter',        label: 'Learning Through Worked Examples' },
+              { value: 'book',           label: 'Teaching Writing Across Contexts' },
               { value: 'chapter_number', label: 'Chapter 4' }
             ],
             correct: 'chapter',
-            success: 'You distinguished the chapter title from the book title. The chapter title goes in the title element; the book title goes in the container element in italics.',
+            success:    'You distinguished the chapter title from the book title. The chapter title goes in the title element; the book title goes in the container element in italics.',
             correction: 'Use the chapter title for the chapter element and the book title for the container. These two titles serve different functions in the reference and are formatted differently.'
           }
         ],
         fields: [
           ['chapterAuthor', 'Chapter author', 'Enter the chapter author'],
-          ['year', 'Year', 'Enter the year'],
-          ['chapterTitle', 'Chapter title', 'Enter the chapter title'],
-          ['editors', 'Editors', 'Enter the editors'],
-          ['bookTitle', 'Book title', 'Enter the book title'],
-          ['pages', 'Page range', 'Enter the page range'],
-          ['publisher', 'Publisher', 'Enter the publisher']
+          ['year',          'Year',           'Enter the year'],
+          ['chapterTitle',  'Chapter title',  'Enter the chapter title'],
+          ['editors',       'Editors',        'Enter the editors (e.g., M. Chen & F. Gomez)'],
+          ['bookTitle',     'Book title',     'Enter the book title'],
+          ['pages',         'Page range',     'Enter the page range'],
+          ['publisher',     'Publisher',      'Enter the publisher']
         ],
         referencePreview: 'Brooks, J. (2022). Learning through worked examples. In M. Chen &amp; F. Gomez (Eds.), <span class="ital">Teaching writing across contexts</span> (pp. 77–101). North Street Press.'
       }
@@ -730,13 +682,14 @@
       }
     ];
 
-    /* CHANGE 1: Pattern explanations keyed by source type */
+    /* ─── Example Explanations ──────────────────────────────────────── */
+
     const exampleExplanations = {
-      journal: 'A journal article reference begins with the authors, followed by the year, then the article title in sentence case, then the italicized journal name, volume, and page range.',
-      webpage_author: 'A webpage with a named author begins with the author\'s last name and initials, followed by the full date, the page title in sentence case, the italicized site name, and the URL.',
-      book: 'A book reference begins with the author, followed by the year, the italicized title in sentence case, and the publisher — with no place of publication in APA 7.',
-      webpage_no_author: 'When no author is listed, the page title moves to the author position, followed by the date, the italicized site name, and the URL.',
-      chapter: 'A book chapter reference lists the chapter author first, then the year, the chapter title, \'In\' followed by the editors with (Eds.), the italicized book title with page range in parentheses, and the publisher.'
+      journal:          'A journal article reference begins with the authors, followed by the year, then the article title in sentence case, then the italicized journal name, volume, and page range.',
+      webpage_author:   "A webpage with a named author begins with the author's last name and initials, followed by the full date, the page title in sentence case, the italicized site name, and the URL.",
+      book:             'A book reference begins with the author, followed by the year, the italicized title in sentence case, and the publisher — with no place of publication in APA 7.',
+      webpage_no_author:'When no author is listed, the page title moves to the author position, followed by the date, the italicized site name, and the URL.',
+      chapter:          "A book chapter reference lists the chapter author first, then the year, the chapter title, 'In' followed by the editors with (Eds.), the italicized book title with page range in parentheses, and the publisher."
     };
 
     /* ─── Shuffle + Prepare Examples ───────────────────────────────── */
@@ -758,7 +711,7 @@
       return { ...item, id: `example_${index + 1}`, options };
     });
 
-    /* ─── CHANGE 5: localStorage persistence ───────────────────────── */
+    /* ─── localStorage Persistence ──────────────────────────────────── */
 
     const PERSIST_FIELDS = [
       'userName', 'currentExampleIndex', 'exampleResults',
@@ -792,7 +745,6 @@
       }
     }
 
-    /* Load saved state, then set a sensible starting view */
     loadState();
     if (appState.completionReady) {
       appState.currentView = 'completion';
@@ -881,8 +833,23 @@
       return (value || '').toLowerCase().replace(/\s/g, '');
     }
 
-    function initialsLikely(value) {
-      return /\b[A-Z]\./.test(String(value || ''));
+    /*
+     * FIX 1: authorInitialsLikely — requires APA inverted format "Last, F."
+     * Prevents false positives from middle initials like "John A. Smith".
+     */
+    function authorInitialsLikely(value) {
+      return /[A-Za-z]+,\s+[A-Z]\./.test(String(value || ''));
+    }
+
+    /*
+     * FIX 1: editorInitialsLikely — editors in chapter references use "F. Last" format.
+     * Accepts either "F. Last" style (forward) or "Last, F." style (inverted).
+     */
+    function editorInitialsLikely(value) {
+      const s = String(value || '');
+      const forwardStyle  = /(?:^|[,&]\s+)[A-Z]\./.test(s);   // M. Chen or & F. Gomez
+      const invertedStyle = /[A-Za-z]+,\s+[A-Z]\./.test(s);   // Chen, M.
+      return forwardStyle || invertedStyle;
     }
 
     function isLikelySentenceCase(value) {
@@ -897,8 +864,40 @@
       });
     }
 
+    /*
+     * FIX 4: isLikelyTitleCase — journal names use title case in APA 7.
+     * Minor words (a, an, the, conjunctions, short prepositions) may be lowercase
+     * except at the start.
+     */
+    function isLikelyTitleCase(value) {
+      const text = raw(value);
+      if (!text) return false;
+      const minorWords = new Set(['a','an','the','and','but','or','for','nor','on','at','to','by','in','of','up','as']);
+      const words = text.split(/\s+/);
+      return words.every((word, index) => {
+        const cleaned = word.replace(/[^A-Za-z]/g, '');
+        if (!cleaned) return true;
+        if (index === 0) return cleaned.charAt(0) === cleaned.charAt(0).toUpperCase();
+        if (minorWords.has(cleaned.toLowerCase())) return true;
+        return cleaned.charAt(0) === cleaned.charAt(0).toUpperCase();
+      });
+    }
+
     function dateNorm(value) {
       return raw(value).toLowerCase().replace(/[,()]/g, '').replace(/\s+/g, ' ');
+    }
+
+    /*
+     * FIX 5: normalizeUrl — strips protocol and trailing slash before comparing,
+     * so minor variations don't produce a Tier 3 error.
+     */
+    function normalizeUrl(value) {
+      return String(value || '')
+        .trim()
+        .toLowerCase()
+        .replace(/^https?:\/\//, '')
+        .replace(/^www\./, '')
+        .replace(/\/$/, '');
     }
 
     function escapeHtml(value) {
@@ -913,11 +912,12 @@
     /* ─── Evaluate Source ───────────────────────────────────────────── */
 
     function evaluateSource(sourceId) {
-      const values = getFormValues(sourceId);
+      const values    = getFormValues(sourceId);
       const decisions = getDecisionValues(sourceId);
-      const source = sourceData[sourceId];
+      const source    = sourceData[sourceId];
       const tier1 = [], tier2 = [], tier3 = [];
 
+      /* Decision checks */
       source.decisions.forEach(decision => {
         const userChoice = decisions[decision.id];
         if (userChoice === decision.correct) {
@@ -927,12 +927,14 @@
         }
       });
 
+      /* Field checks */
       if (sourceId === 'journal') {
         const rawAuthor = raw(values.author);
         const authorNorm = norm(rawAuthor);
         if (authorNorm.includes('smith') && authorNorm.includes('lee')) {
           tier1.push('You identified the correct authors.');
-          if (!initialsLikely(rawAuthor)) tier2.push('Use APA initials for the authors.');
+          if (!authorInitialsLikely(rawAuthor))
+            tier2.push('Format author names in APA style: Last, F. M. (e.g., Smith, J. A., & Lee, P. R.)');
         } else if (rawAuthor) {
           tier3.push('The author field does not identify the article authors correctly.');
         }
@@ -947,14 +949,18 @@
         const rawTitle = raw(values.title);
         if (norm(rawTitle).includes('interfacefriction')) {
           tier1.push('You identified the correct article title.');
-          if (!isLikelySentenceCase(rawTitle)) tier2.push('Convert the article title to sentence case.');
+          if (!isLikelySentenceCase(rawTitle))
+            tier2.push('Convert the article title to sentence case (only the first word and proper nouns capitalized).');
         } else if (rawTitle) {
           tier3.push('The article title is incorrect.');
         }
 
+        /* FIX 4: journal name requires title case */
         const rawJournal = raw(values.journal);
         if (norm(rawJournal).includes('digitalcommunicationreview')) {
           tier1.push('You identified the correct journal title.');
+          if (!isLikelyTitleCase(rawJournal))
+            tier2.push('Journal titles use title case in APA (capitalize each major word, e.g., Digital Communication Review).');
         } else if (rawJournal) {
           tier3.push('The journal title is incorrect.');
         }
@@ -963,7 +969,8 @@
         const v = volumeIssueNorm(rawVolume);
         if (v.includes('14') && v.includes('2')) {
           tier1.push('You identified the correct volume and issue.');
-          if (v !== '14(2)') tier2.push('You have the right volume and issue; format them in APA style as 14(2).');
+          if (v !== '14(2)')
+            tier2.push('You have the right volume and issue; format them in APA style as 14(2).');
         } else if (rawVolume) {
           tier3.push('The volume and issue do not match the source.');
         }
@@ -972,9 +979,8 @@
         const p = pagesNorm(rawPages);
         if (p.includes('123') && p.includes('135')) {
           tier1.push('You identified the correct page range.');
-          if (rawPages.includes('-') && !rawPages.includes('–')) {
+          if (rawPages.includes('-') && !rawPages.includes('–'))
             tier2.push('Use an en dash (–) instead of a hyphen (-) in the page range.');
-          }
         } else if (rawPages) {
           tier3.push('The page range is incorrect.');
         }
@@ -985,7 +991,8 @@
         const authorNorm = norm(rawAuthor);
         if (authorNorm.includes('maya') && authorNorm.includes('patel')) {
           tier1.push('You identified the correct webpage author.');
-          if (!initialsLikely(rawAuthor)) tier2.push('Use APA initials for the author.');
+          if (!authorInitialsLikely(rawAuthor))
+            tier2.push('Format the author name in APA style: Last, F. (e.g., Patel, M.)');
         } else if (rawAuthor) {
           tier3.push('The webpage author is incorrect.');
         }
@@ -995,7 +1002,8 @@
         if (normalizedDate.includes('2023') && normalizedDate.includes('july') && normalizedDate.includes('18')) {
           tier1.push('You identified the correct webpage date.');
           const looksApaDate = /^\d{4},\s*[A-Za-z]+\s+\d{1,2}$/.test(rawDate);
-          if (!looksApaDate) tier2.push('You have the right date; format it in APA date order.');
+          if (!looksApaDate)
+            tier2.push('You have the right date; format it in APA date order (e.g., 2023, July 18).');
         } else if (rawDate) {
           tier3.push('The date is incorrect for this webpage.');
         }
@@ -1003,7 +1011,8 @@
         const rawTitle = raw(values.title);
         if (norm(rawTitle).includes('studentsmisread')) {
           tier1.push('You identified the correct webpage title.');
-          if (!isLikelySentenceCase(rawTitle)) tier2.push('Use sentence case for the webpage title.');
+          if (!isLikelySentenceCase(rawTitle))
+            tier2.push('Use sentence case for the webpage title.');
         } else if (rawTitle) {
           tier3.push('The webpage title is incorrect.');
         }
@@ -1015,9 +1024,13 @@
           tier3.push('The website name is incorrect.');
         }
 
+        /* FIX 5: softened URL matching */
         const rawUrl = raw(values.url);
-        if (rawUrl === 'https://www.thelearninglab.org/teaching/why-students-misread-source-details') {
+        const correctUrl = 'https://www.thelearninglab.org/teaching/why-students-misread-source-details';
+        if (rawUrl && normalizeUrl(rawUrl) === normalizeUrl(correctUrl)) {
           tier1.push('You identified the correct URL.');
+          if (!rawUrl.toLowerCase().startsWith('https://'))
+            tier2.push('Include the complete URL beginning with https://');
         } else if (rawUrl) {
           tier3.push('The URL is incorrect.');
         }
@@ -1027,7 +1040,8 @@
         const rawAuthor = raw(values.author);
         if (norm(rawAuthor).includes('elena') && norm(rawAuthor).includes('martinez')) {
           tier1.push('You identified the correct book author.');
-          if (!initialsLikely(rawAuthor)) tier2.push('Use APA initials for the author.');
+          if (!authorInitialsLikely(rawAuthor))
+            tier2.push('Format the author name in APA style: Last, F. (e.g., Martinez, E.)');
         } else if (rawAuthor) {
           tier3.push('The book author is incorrect.');
         }
@@ -1042,7 +1056,8 @@
         const rawTitle = raw(values.title);
         if (norm(rawTitle).includes('writingresearch')) {
           tier1.push('You identified the correct book title.');
-          if (!isLikelySentenceCase(rawTitle)) tier2.push('Use sentence case for the book title.');
+          if (!isLikelySentenceCase(rawTitle))
+            tier2.push('Use sentence case for the book title (only first word and proper nouns capitalized).');
         } else if (rawTitle) {
           tier3.push('The book title is incorrect.');
         }
@@ -1059,7 +1074,8 @@
         const rawTitle = raw(values.title);
         if (norm(rawTitle).includes('referencelistchecklist')) {
           tier1.push('You identified the correct title for the author position.');
-          if (!isLikelySentenceCase(rawTitle)) tier2.push('Use sentence case for the title.');
+          if (!isLikelySentenceCase(rawTitle))
+            tier2.push('Use sentence case for the title.');
         } else if (rawTitle) {
           tier3.push('The title is incorrect for this no-author webpage reference.');
         }
@@ -1069,7 +1085,8 @@
         if (normalizedDate.includes('2024') && normalizedDate.includes('september') && normalizedDate.includes('2')) {
           tier1.push('You identified the correct webpage date.');
           const looksApaDate = /^\d{4},\s*[A-Za-z]+\s+\d{1,2}$/.test(rawDate);
-          if (!looksApaDate) tier2.push('You have the right date; format it in APA date order.');
+          if (!looksApaDate)
+            tier2.push('You have the right date; format it in APA date order (e.g., 2024, September 2).');
         } else if (rawDate) {
           tier3.push('The date is incorrect for this webpage.');
         }
@@ -1081,9 +1098,13 @@
           tier3.push('The website name is incorrect.');
         }
 
+        /* FIX 5: softened URL matching */
         const rawUrl = raw(values.url);
-        if (rawUrl === 'https://campuswritingcenter.edu/reference-list-checklist') {
+        const correctUrl = 'https://campuswritingcenter.edu/reference-list-checklist';
+        if (rawUrl && normalizeUrl(rawUrl) === normalizeUrl(correctUrl)) {
           tier1.push('You identified the correct URL.');
+          if (!rawUrl.toLowerCase().startsWith('https://'))
+            tier2.push('Include the complete URL beginning with https://');
         } else if (rawUrl) {
           tier3.push('The URL is incorrect.');
         }
@@ -1093,7 +1114,8 @@
         const rawChapterAuthor = raw(values.chapterAuthor);
         if (norm(rawChapterAuthor).includes('janelle') && norm(rawChapterAuthor).includes('brooks')) {
           tier1.push('You identified the correct chapter author.');
-          if (!initialsLikely(rawChapterAuthor)) tier2.push('Use APA initials for the chapter author.');
+          if (!authorInitialsLikely(rawChapterAuthor))
+            tier2.push('Format the chapter author in APA style: Last, F. (e.g., Brooks, J.)');
         } else if (rawChapterAuthor) {
           tier3.push('The chapter author is incorrect.');
         }
@@ -1108,16 +1130,20 @@
         const rawChapterTitle = raw(values.chapterTitle);
         if (norm(rawChapterTitle).includes('learningthroughworkedexamples')) {
           tier1.push('You identified the correct chapter title.');
-          if (!isLikelySentenceCase(rawChapterTitle)) tier2.push('Use sentence case for the chapter title.');
+          if (!isLikelySentenceCase(rawChapterTitle))
+            tier2.push('Use sentence case for the chapter title.');
         } else if (rawChapterTitle) {
           tier3.push('The chapter title is incorrect.');
         }
 
         const rawEditors = raw(values.editors);
         const editorsNorm = norm(rawEditors);
-        if (editorsNorm.includes('morgan') && editorsNorm.includes('chen') && editorsNorm.includes('felicia') && editorsNorm.includes('gomez')) {
+        if (editorsNorm.includes('morgan') && editorsNorm.includes('chen') &&
+            editorsNorm.includes('felicia') && editorsNorm.includes('gomez')) {
           tier1.push('You identified the correct editors.');
-          if (!initialsLikely(rawEditors)) tier2.push('Format the editors with APA initials.');
+          /* FIX 1: use editorInitialsLikely for forward-format editor names */
+          if (!editorInitialsLikely(rawEditors))
+            tier2.push('Format editors with initials in APA style (e.g., M. Chen & F. Gomez).');
         } else if (rawEditors) {
           tier3.push('The editors are incorrect.');
         }
@@ -1125,7 +1151,8 @@
         const rawBookTitle = raw(values.bookTitle);
         if (norm(rawBookTitle).includes('teachingwritingacrosscontexts')) {
           tier1.push('You identified the correct book title.');
-          if (!isLikelySentenceCase(rawBookTitle)) tier2.push('Use sentence case for the book title.');
+          if (!isLikelySentenceCase(rawBookTitle))
+            tier2.push('Use sentence case for the book title — APA 7 requires sentence case in the reference list even though the cover uses title case.');
         } else if (rawBookTitle) {
           tier3.push('The book title is incorrect.');
         }
@@ -1134,9 +1161,8 @@
         const p = pagesNorm(rawPages);
         if (p.includes('77') && p.includes('101')) {
           tier1.push('You identified the correct page range.');
-          if (rawPages.includes('-') && !rawPages.includes('–')) {
+          if (rawPages.includes('-') && !rawPages.includes('–'))
             tier2.push('Use an en dash (–) instead of a hyphen (-) in the page range.');
-          }
         } else if (rawPages) {
           tier3.push('The page range is incorrect.');
         }
@@ -1147,6 +1173,12 @@
         } else if (rawPublisher) {
           tier3.push('The publisher is incorrect.');
         }
+      }
+
+      /* FIX 2: Block completion if any field is left blank */
+      const allFilled = source.fields.every(([key]) => raw(values[key]).length > 0);
+      if (!allFilled) {
+        tier3.push('Fill in all reference fields before checking your work.');
       }
 
       return {
@@ -1163,7 +1195,7 @@
       const sourceId = getCurrentSourceId();
       const feedback = evaluateSource(sourceId);
       appState.feedbackBySource[sourceId] = feedback;
-      appState.verifyUnlocked[sourceId] = true; /* CHANGE 3 */
+      appState.verifyUnlocked[sourceId] = true;
 
       if (feedback.canComplete) {
         appState.builderProgress[sourceId] = true;
@@ -1197,10 +1229,10 @@
       const canvas = document.getElementById('badgeCanvas');
       if (!canvas) return;
 
-      const ctx = canvas.getContext('2d');
+      const ctx  = canvas.getContext('2d');
       const name = raw(appState.userName) || 'Student';
 
-      canvas.width = 900;
+      canvas.width  = 900;
       canvas.height = 900;
 
       const gradient = ctx.createLinearGradient(0, 0, 900, 900);
@@ -1229,21 +1261,21 @@
       ctx.moveTo(408, 288); ctx.lineTo(440, 322); ctx.lineTo(496, 252);
       ctx.stroke();
 
-      ctx.fillStyle = '#183153';
-      ctx.font = 'bold 44px Arial';
-      ctx.textAlign = 'center';
+      ctx.fillStyle  = '#183153';
+      ctx.font       = 'bold 44px Arial';
+      ctx.textAlign  = 'center';
       ctx.fillText('APA Reference Builder Lab', 450, 440);
 
       ctx.fillStyle = '#456086';
-      ctx.font = '28px Arial';
+      ctx.font      = '28px Arial';
       ctx.fillText('Completion Badge', 450, 488);
 
       ctx.fillStyle = '#23408e';
-      ctx.font = 'bold 38px Arial';
+      ctx.font      = 'bold 38px Arial';
       ctx.fillText(name, 450, 585);
 
       ctx.fillStyle = '#60708f';
-      ctx.font = '24px Arial';
+      ctx.font      = '24px Arial';
       ctx.fillText('Identified, classified, and formatted core APA references', 450, 640);
       ctx.fillText(new Date().toLocaleDateString(), 450, 680);
     }
@@ -1266,9 +1298,9 @@
 
     function downloadBadge() {
       const canvas = document.getElementById('badgeCanvas');
-      const link = document.createElement('a');
+      const link   = document.createElement('a');
       link.download = 'apa-reference-builder-badge.png';
-      link.href = canvas.toDataURL('image/png');
+      link.href     = canvas.toDataURL('image/png');
       link.click();
     }
 
@@ -1278,11 +1310,11 @@
         alert('Copy image is not supported in this browser. Use Download PNG instead.');
         return;
       }
-      canvas.toBlob(async (blob) => {
+      canvas.toBlob(async blob => {
         try {
           await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
           alert('Badge copied to clipboard.');
-        } catch (error) {
+        } catch (e) {
           alert('Copy failed in this browser. Use Download PNG instead.');
         }
       });
@@ -1291,9 +1323,9 @@
     /* ─── Progress ──────────────────────────────────────────────────── */
 
     function overallProgress() {
-      const total = preparedExamples.length + sourceOrder.length;
+      const total        = preparedExamples.length + sourceOrder.length;
       const examplesDone = Object.values(appState.exampleResults).filter(Boolean).length;
-      const builderDone = sourceOrder.filter(id => appState.builderProgress[id]).length;
+      const builderDone  = sourceOrder.filter(id => appState.builderProgress[id]).length;
       return Math.round(((examplesDone + builderDone) / total) * 100);
     }
 
@@ -1327,7 +1359,7 @@
       `;
     }
 
-    /* ─── Render: Orientation (CHANGE 5: reset button) ─────────────── */
+    /* ─── Render: Orientation ───────────────────────────────────────── */
 
     function renderOrientation() {
       return `
@@ -1372,23 +1404,30 @@
       `;
     }
 
-    /* ─── Render: Examples (CHANGE 1: red/green reveal + explanation) ── */
+    /* ─── Render: Examples (FIX 3: correct option always green) ─────── */
 
     function renderExamples() {
-      const example = preparedExamples[appState.currentExampleIndex];
+      const example  = preparedExamples[appState.currentExampleIndex];
       const selected = appState.exampleResponses[example.id];
-      const result = appState.exampleResults[example.id];
+      const result   = appState.exampleResults[example.id];
 
+      /*
+       * FIX 3: check isCorrect BEFORE checking selected index.
+       * This prevents a correct option from being shown in red when the student
+       * re-selects it after a wrong attempt.
+       */
       const optionsHtml = example.options.map((option, index) => {
         let extraStyle = '';
-        let badge = '';
+        let badge      = '';
         if (result === false) {
-          if (index === selected) {
+          if (option.isCorrect) {
+            extraStyle = 'border-color: #1f7a42; background: #e9f8ef;';
+            badge = index === selected
+              ? ' <strong style="color:#1f7a42; font-size:0.9rem;">[correct — selected ✓]</strong>'
+              : ' <strong style="color:#1f7a42; font-size:0.9rem;">[correct]</strong>';
+          } else if (index === selected) {
             extraStyle = 'border-color: #a4282a; background: #fdeeee;';
             badge = ' <strong style="color:#a4282a; font-size:0.9rem;">[your answer]</strong>';
-          } else if (option.isCorrect) {
-            extraStyle = 'border-color: #1f7a42; background: #e9f8ef;';
-            badge = ' <strong style="color:#1f7a42; font-size:0.9rem;">[correct]</strong>';
           }
         }
         return `
@@ -1420,7 +1459,8 @@
           <p>Complete all source types here first. The correct answer order is randomized each time the page loads.</p>
           <div class="progress">
             ${preparedExamples.map((item, index) => {
-              const cls = appState.exampleResults[item.id] === true ? 'done' : index === appState.currentExampleIndex ? 'active' : '';
+              const cls = appState.exampleResults[item.id] === true ? 'done'
+                        : index === appState.currentExampleIndex        ? 'active' : '';
               return `<div class="chip ${cls}">${index + 1}. ${escapeHtml(sourceData[item.sourceId].shortLabel)}</div>`;
             }).join('')}
           </div>
@@ -1439,15 +1479,15 @@
       `;
     }
 
-    /* ─── Render: Builder (CHANGE 3: gated Verify button) ──────────── */
+    /* ─── Render: Builder ───────────────────────────────────────────── */
 
     function renderBuilder() {
-      const sourceId = getCurrentSourceId();
-      const source = getCurrentSource();
-      const values = getFormValues(sourceId);
-      const decisions = getDecisionValues(sourceId);
-      const feedback = appState.feedbackBySource[sourceId];
-      const verifyUnlocked = !!appState.verifyUnlocked[sourceId]; /* CHANGE 3 */
+      const sourceId      = getCurrentSourceId();
+      const source        = getCurrentSource();
+      const values        = getFormValues(sourceId);
+      const decisions     = getDecisionValues(sourceId);
+      const feedback      = appState.feedbackBySource[sourceId];
+      const verifyUnlocked = !!appState.verifyUnlocked[sourceId];
 
       return `
         <div class="panel">
@@ -1455,7 +1495,8 @@
           <p>Inspect the source, make key decisions, and then build the reference. You can move on once your source understanding is correct, even if some APA formatting still needs refinement.</p>
           <div class="progress">
             ${sourceOrder.map((id, index) => {
-              const cls = appState.builderProgress[id] ? 'done' : index === appState.currentSourceIndex ? 'active' : '';
+              const cls = appState.builderProgress[id] ? 'done'
+                        : index === appState.currentSourceIndex ? 'active' : '';
               return `<div class="chip ${cls}">${index + 1}. ${escapeHtml(sourceData[id].shortLabel)}</div>`;
             }).join('')}
           </div>
@@ -1477,8 +1518,7 @@
                 <h4>${escapeHtml(decision.prompt)}</h4>
                 ${decision.options.map(option => `
                   <label class="option">
-                    <input
-                      type="radio"
+                    <input type="radio"
                       name="${escapeHtml(sourceId + '_' + decision.id)}"
                       data-source-id="${escapeHtml(sourceId)}"
                       data-decision-id="${escapeHtml(decision.id)}"
@@ -1519,21 +1559,27 @@
               ${appState.currentSourceIndex === sourceOrder.length - 1 ? 'Finish Lab' : 'Next Source'}
             </button>
           </div>
-          ${!verifyUnlocked ? '<p class="small" style="margin-top: 6px;">Verify with APA Style is available after your first attempt.</p>' : ''}
+          ${!verifyUnlocked ? '<p class="small" style="margin-top:6px;">Verify with APA Style is available after your first attempt.</p>' : ''}
 
           ${feedback ? `
             <div class="feedback-grid">
               <div class="feedback-card success">
                 <h4>Tier 1: Correct Identification</h4>
-                ${feedback.tier1.length ? `<ul>${feedback.tier1.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : '<p class="small">No correct identifications yet.</p>'}
+                ${feedback.tier1.length
+                  ? `<ul>${feedback.tier1.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
+                  : '<p class="small">No correct identifications yet.</p>'}
               </div>
               <div class="feedback-card warn">
                 <h4>Tier 2: APA Conversion Needed</h4>
-                ${feedback.tier2.length ? `<ul>${feedback.tier2.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : '<p class="small">No APA conversion issues flagged.</p>'}
+                ${feedback.tier2.length
+                  ? `<ul>${feedback.tier2.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
+                  : '<p class="small">No APA conversion issues flagged.</p>'}
               </div>
               <div class="feedback-card danger">
                 <h4>Tier 3: Incorrect Understanding</h4>
-                ${feedback.tier3.length ? `<ul>${feedback.tier3.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : '<p class="small">No blocking misunderstandings detected.</p>'}
+                ${feedback.tier3.length
+                  ? `<ul>${feedback.tier3.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
+                  : '<p class="small">No blocking misunderstandings detected.</p>'}
               </div>
             </div>
           ` : ''}
@@ -1553,7 +1599,7 @@
       `;
     }
 
-    /* ─── Render: Completion (CHANGE 4: summary panel) ─────────────── */
+    /* ─── Render: Completion ────────────────────────────────────────── */
 
     function renderCompletion() {
       const tier2Items = [...new Set(sourceOrder.flatMap(id => {
@@ -1575,7 +1621,7 @@
             <ul>
               ${sourceOrder.map(id => `
                 <li>
-                  <span style="color: var(--success); font-weight: bold;">✓</span>
+                  <span style="color:var(--success); font-weight:bold;">✓</span>
                   ${escapeHtml(sourceData[id].label)}
                 </li>
               `).join('')}
@@ -1586,7 +1632,7 @@
             <h4>APA formatting to revisit before your next paper</h4>
             ${tier2Items.length
               ? `<ul>${tier2Items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
-              : '<p class="small" style="margin-top: 8px;">No formatting issues flagged — your conversions were clean.</p>'
+              : '<p class="small" style="margin-top:8px;">No formatting issues flagged — your conversions were clean.</p>'
             }
           </div>
 
@@ -1640,9 +1686,10 @@
 
       document.querySelectorAll('input[data-example-id]').forEach(input => {
         input.addEventListener('change', e => {
-          const exampleId = e.target.getAttribute('data-example-id');
-          const optionIndex = Number(e.target.getAttribute('data-option-index'));
-          selectExampleOption(exampleId, optionIndex);
+          selectExampleOption(
+            e.target.getAttribute('data-example-id'),
+            Number(e.target.getAttribute('data-option-index'))
+          );
         });
       });
 
@@ -1651,18 +1698,21 @@
 
       document.querySelectorAll('input[data-decision-id]').forEach(input => {
         input.addEventListener('change', e => {
-          const sourceId = e.target.getAttribute('data-source-id');
-          const decisionId = e.target.getAttribute('data-decision-id');
-          const value = e.target.getAttribute('data-value');
-          updateDecision(sourceId, decisionId, value);
+          updateDecision(
+            e.target.getAttribute('data-source-id'),
+            e.target.getAttribute('data-decision-id'),
+            e.target.getAttribute('data-value')
+          );
         });
       });
 
       document.querySelectorAll('input[data-field-key]').forEach(input => {
         input.addEventListener('input', e => {
-          const sourceId = e.target.getAttribute('data-source-id');
-          const key = e.target.getAttribute('data-field-key');
-          updateField(sourceId, key, e.target.value);
+          updateField(
+            e.target.getAttribute('data-source-id'),
+            e.target.getAttribute('data-field-key'),
+            e.target.value
+          );
         });
       });
 
@@ -1691,7 +1741,7 @@
     /* ─── Render ────────────────────────────────────────────────────── */
 
     function render() {
-      saveState(); /* CHANGE 5 */
+      saveState();
 
       const app = document.getElementById('app');
 
