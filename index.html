@@ -4,32 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>APA Reference Builder Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f5f7fb;
+      --bg: #edf6f4;
       --panel: #ffffff;
-      --line: #d7deea;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --accent: #23408e;
-      --accent-2: #3b82f6;
-      --soft: #eaf1ff;
-      --success: #1f7a42;
-      --success-bg: #e9f8ef;
-      --warn: #9a6700;
-      --warn-bg: #fff6dd;
-      --danger: #a4282a;
-      --danger-bg: #fdeeee;
+      --line: #b8ddd7;
+      --text: #1a252f;
+      --muted: #4a6670;
+      --accent: #0891b2;
+      --accent-2: #06b6d4;
+      --soft: #e0f7fa;
+      --success: #0e7490;
+      --success-bg: #cffafe;
+      --warn: #854d0e;
+      --warn-bg: #fef9c3;
+      --danger: #c2410c;
+      --danger-bg: #fff1eb;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: 'Poppins', Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.45;
+      line-height: 1.5;
+    }
+
+    /* Yellow highlight — mirrors the video's key-term emphasis */
+    .hl {
+      background: #fde047;
+      color: #1a252f;
+      border-radius: 4px;
+      padding: 0 3px;
+      font-weight: 600;
     }
 
     a { color: var(--accent); }
@@ -71,7 +83,7 @@
       border: 1px solid var(--line);
       border-radius: 14px;
       padding: 16px;
-      background: #fbfcff;
+      background: #f0fbf9;
     }
 
     .btn {
@@ -111,14 +123,30 @@
     .chip {
       border: 1px solid var(--line);
       border-radius: 999px;
-      padding: 7px 11px;
-      font-size: 0.92rem;
-      background: #f8faff;
+      padding: 7px 13px;
+      font-size: 0.88rem;
+      background: #f0fbf9;
       color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .chip.active { background: var(--soft); color: var(--accent); font-weight: bold; }
-    .chip.done   { background: #ebfff3; color: var(--success); font-weight: bold; }
+    .chip.active {
+      background: var(--soft);
+      color: var(--accent);
+      font-weight: 600;
+      border-color: var(--accent-2);
+    }
+
+    .chip.done {
+      background: #fef9c3;
+      color: #854d0e;
+      font-weight: 600;
+      border-color: #fde047;
+    }
+
+    .chip-icon { font-size: 1rem; line-height: 1; }
 
     .builder-grid {
       display: grid;
@@ -129,7 +157,7 @@
     .artifact-wrap {
       border: 1px solid var(--line);
       border-radius: 14px;
-      background: #fbfcff;
+      background: #f0fbf9;
       padding: 16px;
     }
 
@@ -138,12 +166,13 @@
       margin-bottom: 10px;
       padding: 6px 10px;
       border-radius: 999px;
-      font-size: 0.85rem;
-      color: var(--accent);
-      background: #edf3ff;
-      border: 1px solid #d6e4ff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #0e7490;
+      background: #cffafe;
+      border: 1px solid #a5f3fc;
       text-transform: uppercase;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.05em;
     }
 
     .artifact { background: white; border: 1px solid #dfe5f0; border-radius: 12px; padding: 16px; }
@@ -205,18 +234,18 @@
       background: white;
     }
 
-    .feedback-card.success { background: var(--success-bg); border-color: #bce5cb; }
-    .feedback-card.warn    { background: var(--warn-bg);    border-color: #ead18d; }
-    .feedback-card.danger  { background: var(--danger-bg);  border-color: #efc0c2; }
+    .feedback-card.success { background: #cffafe; border-color: #67e8f9; }
+    .feedback-card.warn    { background: #fef9c3; border-color: #fde047; }
+    .feedback-card.danger  { background: #fff1eb; border-color: #fdba74; }
     .feedback-card h4      { margin-top: 0; }
     .feedback-card ul      { padding-left: 18px; margin-bottom: 0; }
 
     .verify-box {
       margin-top: 16px;
-      border: 1px dashed #b7c7e8;
+      border: 1px dashed #67e8f9;
       border-radius: 12px;
       padding: 14px;
-      background: #f8fbff;
+      background: #f0fbf9;
     }
 
     .reference-preview {
@@ -279,7 +308,7 @@
 
     .callout {
       border-left: 5px solid var(--accent);
-      background: #f7faff;
+      background: #e0f7fa;
       padding: 14px 16px;
       border-radius: 12px;
     }
@@ -1327,13 +1356,17 @@
     /* ─── Render: Orientation ───────────────────────────────────────── */
 
     function renderOrientation() {
+      const sourceIcons = {
+        journal: '📄', webpage_author: '🌐', book: '📚',
+        webpage_no_author: '🌐', chapter: '🔖'
+      };
       return `
         <div class="panel hero">
           <div class="hero-card">
             <h2>Practice Using APA Style</h2>
             <p>This lab helps you identify the right source information in realistic contexts and format that information into APA references.</p>
             <div class="callout">
-              You will move through three kinds of thinking in order: <strong>interpret</strong>, <strong>classify</strong>, and <strong>format</strong>.
+              You will move through three kinds of thinking in order: <span class="hl">interpret</span>, <span class="hl">classify</span>, and <span class="hl">format</span>.
             </div>
             <ul>
               <li><strong>First:</strong> complete all of the "Find the Right APA Example" items.</li>
@@ -1344,11 +1377,11 @@
           <div class="hero-card">
             <h3>How feedback works</h3>
             <ul>
-              <li><strong>Tier 1:</strong> you identified the correct source information.</li>
-              <li><strong>Tier 2:</strong> your source information is right, but the APA conversion still needs adjustment.</li>
-              <li><strong>Tier 3:</strong> you misunderstood a core source element.</li>
+              <li><span class="hl">Tier 1</span> — you identified the correct source information.</li>
+              <li><span class="hl">Tier 2</span> — your source information is right, but the APA conversion still needs adjustment.</li>
+              <li><span class="hl">Tier 3</span> — you misunderstood a core source element.</li>
             </ul>
-            <p><strong>Important:</strong> only Tier 3 blocks completion.</p>
+            <p>Only <span class="hl">Tier 3</span> blocks completion.</p>
             <div class="field" style="margin-top:14px;">
               <label for="studentName">Your name for the completion badge</label>
               <input id="studentName" value="${escapeHtml(appState.userName)}" placeholder="Enter your name" />
@@ -1359,7 +1392,11 @@
         <div class="panel">
           <h3>Source types in this lab</h3>
           <div class="progress">
-            ${sourceOrder.map(id => `<div class="chip">${escapeHtml(sourceData[id].label)}</div>`).join('')}
+            ${sourceOrder.map(id => `
+              <div class="chip">
+                <span class="chip-icon">${sourceIcons[id]}</span>
+                ${escapeHtml(sourceData[id].label)}
+              </div>`).join('')}
           </div>
           <div class="actions">
             <button class="btn btn-primary" id="startExamplesBtn">Start Example Practice</button>
@@ -1426,14 +1463,15 @@
             ${preparedExamples.map((item, index) => {
               const cls = appState.exampleResults[item.id] === true ? 'done'
                         : index === appState.currentExampleIndex        ? 'active' : '';
-              return `<div class="chip ${cls}">${index + 1}. ${escapeHtml(sourceData[item.sourceId].shortLabel)}</div>`;
+              const icons = { journal:'📄', webpage_author:'🌐', book:'📚', webpage_no_author:'🌐', chapter:'🔖' };
+              return `<div class="chip ${cls}"><span class="chip-icon">${icons[item.sourceId]}</span>${index + 1}. ${escapeHtml(sourceData[item.sourceId].shortLabel)}</div>`;
             }).join('')}
           </div>
         </div>
 
         <div class="example-card">
           <div class="prompt">${appState.currentExampleIndex + 1}. ${escapeHtml(example.prompt)}</div>
-          <p class="small"><strong>Source cue:</strong> ${escapeHtml(example.artifactSnippet)}</p>
+          <p class="small"><span class="hl">Source cue:</span> ${escapeHtml(example.artifactSnippet)}</p>
           ${optionsHtml}
           ${explanationHtml}
           ${statusHtml}
@@ -1462,7 +1500,8 @@
             ${sourceOrder.map((id, index) => {
               const cls = appState.builderProgress[id] ? 'done'
                         : index === appState.currentSourceIndex ? 'active' : '';
-              return `<div class="chip ${cls}">${index + 1}. ${escapeHtml(sourceData[id].shortLabel)}</div>`;
+              const icons = { journal:'📄', webpage_author:'🌐', book:'📚', webpage_no_author:'🌐', chapter:'🔖' };
+              return `<div class="chip ${cls}"><span class="chip-icon">${icons[id]}</span>${index + 1}. ${escapeHtml(sourceData[id].shortLabel)}</div>`;
             }).join('')}
           </div>
         </div>
@@ -1529,19 +1568,19 @@
           ${feedback ? `
             <div class="feedback-grid">
               <div class="feedback-card success">
-                <h4>Tier 1: Correct Identification</h4>
+                <h4><span class="hl">Tier 1</span> — Correct Identification</h4>
                 ${feedback.tier1.length
                   ? `<ul>${feedback.tier1.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
                   : '<p class="small">No correct identifications yet.</p>'}
               </div>
               <div class="feedback-card warn">
-                <h4>Tier 2: APA Conversion Needed</h4>
+                <h4><span class="hl">Tier 2</span> — APA Conversion Needed</h4>
                 ${feedback.tier2.length
                   ? `<ul>${feedback.tier2.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
                   : '<p class="small">No APA conversion issues flagged.</p>'}
               </div>
               <div class="feedback-card danger">
-                <h4>Tier 3: Incorrect Understanding</h4>
+                <h4><span class="hl">Tier 3</span> — Incorrect Understanding</h4>
                 ${feedback.tier3.length
                   ? `<ul>${feedback.tier3.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
                   : '<p class="small">No blocking misunderstandings detected.</p>'}
