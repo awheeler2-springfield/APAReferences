@@ -748,10 +748,13 @@
     loadState();
     if (appState.completionReady) {
       appState.currentView = 'completion';
+      appState.historyStack = ['orientation', 'builder'];
     } else if (appState.examplePhaseComplete) {
       appState.currentView = 'builder';
+      appState.historyStack = ['orientation'];
     } else if (Object.keys(appState.exampleResults).length > 0) {
       appState.currentView = 'examples';
+      appState.historyStack = ['orientation'];
     }
 
     /* ─── Navigation ────────────────────────────────────────────────── */
@@ -1611,6 +1614,10 @@
         <div class="panel">
           <h2>Completion Badge</h2>
           <p>You finished the lab. Generate a badge image with your name and either copy it or download it as a PNG.</p>
+          <div class="actions" style="margin-top: 12px;">
+            <button class="btn btn-secondary" id="returnToBuilderBtn">← Review Builder Lab</button>
+            <button class="reset-link" onclick="resetProgress()">Reset all progress</button>
+          </div>
         </div>
 
         <div class="panel">
@@ -1736,6 +1743,13 @@
 
       const copyBadgeBtn = document.getElementById('copyBadgeBtn');
       if (copyBadgeBtn) copyBadgeBtn.addEventListener('click', copyBadge);
+
+      const returnToBuilderBtn = document.getElementById('returnToBuilderBtn');
+      if (returnToBuilderBtn) returnToBuilderBtn.addEventListener('click', () => {
+        appState.currentView = 'builder';
+        appState.historyStack = ['orientation'];
+        render();
+      });
     }
 
     /* ─── Render ────────────────────────────────────────────────────── */
